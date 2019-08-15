@@ -37,6 +37,7 @@ public class Client : MonoBehaviour
             
 
             byte[] binary = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromClient));
+            simulator.SetCommandsSent();
             //manager.SetCommandSent(); server does this
             using (Stream postStream = request.GetRequestStream())
             {
@@ -44,7 +45,6 @@ public class Client : MonoBehaviour
                 postStream.Write(binary, 0, binary.Length);
                 postStream.Close();
             }
-            simulator.SetCommandsSent();
 
             // Get the response.  
             WebResponse response = request.GetResponse();

@@ -83,7 +83,7 @@ public class Simulator : MonoBehaviour
             }
         }
 
-        Debug.Log(targets[0].vx);
+//        Debug.Log(targets[0].vx);
     }
     float UnitDistance1(Unit u1, Unit u2)
     {

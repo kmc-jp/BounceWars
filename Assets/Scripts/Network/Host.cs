@@ -53,6 +53,7 @@ public class Host : MonoBehaviour
                 {
                     if (!fromClient.commands[i].sent)
                     {
+                        fromClient.commands[i].processed = false;
                         commands.Add(fromClient.commands[i]);
                     }
                     else
@@ -66,11 +67,13 @@ public class Host : MonoBehaviour
             {
                 Debug.Log("data error");
             }
+            //lag test
             //byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
             PayloadFromHost payload = new PayloadFromHost();
             payload.units = simulator.units;
             byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(payload));
             //context.Response.ContentLength64 = _responseArray.LongLength;
+            //Thread.Sleep(200);
             context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length); // write bytes to the output stream
             context.Response.Close(); // close the connection
             Debug.Log("Respone given to a request.");
