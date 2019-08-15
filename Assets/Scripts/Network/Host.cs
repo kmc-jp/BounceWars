@@ -11,6 +11,7 @@ public class Host : MonoBehaviour
     HttpListener _httpListener = new HttpListener();
     Thread _responseThread;
     public Simulator simulator;
+    static bool simulateLag=false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -43,6 +44,8 @@ public class Host : MonoBehaviour
             StreamReader reader = new StreamReader(context.Request.InputStream);
             //BattleData data = (BattleData)binaryFormatter.Deserialize(context.Request.InputStream);
             string resposeFromClient = reader.ReadToEnd();
+            if (simulateLag)
+                Thread.Sleep(500);
             //            Debug.Log(resposeFromClient);
             try
             {
@@ -71,9 +74,11 @@ public class Host : MonoBehaviour
             //byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
             PayloadFromHost payload = new PayloadFromHost();
             payload.units = simulator.units;
+            payload.time = simulator.time;
             byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(payload));
             //context.Response.ContentLength64 = _responseArray.LongLength;
-            //Thread.Sleep(200);
+            if(simulateLag)
+                Thread.Sleep(500);
             context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length); // write bytes to the output stream
             context.Response.Close(); // close the connection
             Debug.Log("Respone given to a request.");
@@ -84,4 +89,5 @@ public class Host : MonoBehaviour
 [System.Serializable]
 public class PayloadFromHost{
     public List<Unit> units;
+    public float time;
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Simulator : MonoBehaviour
 {
+    public float time;
     public List<GameObject> prefabs;
     List<UnitInfoTag> instances = new List<UnitInfoTag>();
     public List<Unit> units = new List<Unit>();
@@ -184,6 +185,7 @@ public class Simulator : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        time += Time.deltaTime;
         ProcessMyCommand();
         for (int i = 0; i < units.Count; i++)
         {
@@ -234,5 +236,9 @@ public class Simulator : MonoBehaviour
             }
         }
         return null;
+    }
+    public void OnGUI()
+    {
+        GUILayout.Box(time.ToString("F2"));
     }
 }
