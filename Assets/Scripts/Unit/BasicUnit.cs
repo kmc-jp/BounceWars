@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasicUnit: MonoBehaviour
+public class BasicUnit : MonoBehaviour
 {
     private float hp;
     private float mp;
@@ -12,6 +12,14 @@ public class BasicUnit: MonoBehaviour
 
     public GameObject damagePopup;
     public GameObject canvas;
+    public GameObject buttonsUI;
+    public GameObject buttons;
+
+    public float buttonsUICloseDelay = 0.3f;
+
+    private GameObject myButtons;
+
+    private bool mouseOn;
 
     public float HP
     {
@@ -47,7 +55,10 @@ public class BasicUnit: MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
+        myButtons.transform.SetParent(buttonsUI.transform);
+        myButtons.GetComponent<ButtonsUI>().Target = this;
+        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
     }
 
     // Update is called once per frame
@@ -74,5 +85,39 @@ public class BasicUnit: MonoBehaviour
         popup.GetComponent<DamagePopup>().Unit = this.gameObject;
         popup.GetComponent<DamagePopup>().Canvas = canvas.GetComponent<Canvas>();
         popup.GetComponent<DamagePopup>().Text = (-damage).ToString();
+    }
+
+    private void OnMouseEnter()
+    {
+        mouseOn = true;
+        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(true);
+    }
+
+    private void OnMouseExit()
+    {
+        mouseOn = false;
+        Invoke("DisableButtonsUI", buttonsUICloseDelay);
+    }
+
+    public void UpdateButtonsDelay(float delay)
+    {
+        Invoke("UpdateButtons", delay);
+    }
+
+    private void UpdateButtons()
+    {
+        if (!mouseOn)
+            Invoke("DisableButtonsUI", buttonsUICloseDelay);
+    }
+
+    private void DisableButtonsUI()
+    {
+        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
+    }
+
+    public void NotifyOperation(string operation, object args)
+    {
+        var opHandler = GetComponent<OperationHandlerBase>();
+        opHandler.OnMessage(operation, args);
     }
 }

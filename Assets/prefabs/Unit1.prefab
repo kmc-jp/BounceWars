@@ -763,6 +763,8 @@ MonoBehaviour:
   damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
     type: 3}
   canvas: {fileID: 4307218764190310259}
+  buttonsUI: {fileID: 0}
+  buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
 --- !u!54 &7760682452326880213
 Rigidbody:
   m_ObjectHideFlags: 0
