@@ -54,7 +54,10 @@ public class BasicUnit : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        // bind ButtonsUI OBJ Schin
+        buttonsUI = GameObject.Find("ButtonsUIObj");
+
         myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
         myButtons.transform.SetParent(buttonsUI.transform);
         myButtons.GetComponent<ButtonsUI>().Target = this;

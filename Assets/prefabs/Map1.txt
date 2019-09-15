@@ -1,0 +1,14 @@
+{ 
+	"id": 1, 
+	"mapType": 3,
+ 	"mapData":
+		[
+			[ { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 0}], 
+			[ { "type": 1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 1}, { "type": 0 }, { "type": 1}, {"type": 0}], 
+			[ { "type": 0 }, { "type": 1}, {"type": 1}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}], 
+			[ { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 1 }, { "type": 0}, {"type": 0}], 
+			[ { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 1}, {"type": 0}], 
+			[ { "type": 1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 0}], 
+			[ { "type": 1 }, { "type": 0}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 0}] 
+		] 
+}
