@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5949756245233818555}
   - component: {fileID: 5949756245232818555}
   m_Layer: 0
-  m_Name: hexagon2
+  m_Name: Tile_Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5949756245234747323}
-  m_Mesh: {fileID: 4300000, guid: b86bd156c58fa664e91e76eac263e12e, type: 3}
+  m_Mesh: {fileID: 4300000, guid: f27c95ece9454354db1ada378db826df, type: 3}
 --- !u!23 &5949756245232818555
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0a31459f789a459479dd88356e9c1b47, type: 2}
+  - {fileID: 2100000, guid: b3c9410ac363fd34997da494ef21e2eb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
