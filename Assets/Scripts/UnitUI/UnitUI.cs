@@ -54,4 +54,21 @@ public class UnitUI : MonoBehaviour
         get => transform.Find("MPSlider").GetComponent<Slider>().maxValue;
         set => transform.Find("MPSlider").GetComponent<Slider>().maxValue = value;
     }
+
+    public string WaitTimeText
+    {
+        set => transform.Find("WaitTime").GetComponent<TextMesh>().text = value;
+    }
+
+    public Color WaitTimeColor
+    {
+        set => transform.Find("WaitTime").GetComponent<TextMesh>().color = value;
+        get => transform.Find("WaitTime").GetComponent<TextMesh>().color;
+    }
+
+    public bool WaitTimeEnabled
+    {
+        set => transform.Find("WaitTime").gameObject.SetActive(value);
+        get => transform.Find("WaitTime").gameObject.activeSelf;
+    }
 }
