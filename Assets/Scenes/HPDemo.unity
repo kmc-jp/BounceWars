@@ -487,7 +487,7 @@ GameObject:
   - component: {fileID: 906504886}
   - component: {fileID: 906504885}
   m_Layer: 5
-  m_Name: UnitButtons
+  m_Name: ButtonsUIObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,7 +622,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 17236439bdc9d924eb5b214bb9a05c95, type: 2}
+  - {fileID: 2100000, guid: b3c9410ac363fd34997da494ef21e2eb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -681,7 +681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1007531323
 MonoBehaviour:
   m_ObjectHideFlags: 0
