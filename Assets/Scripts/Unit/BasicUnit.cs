@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Original author: Tinaxd
+// Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
     private float hp;
@@ -20,6 +22,43 @@ public class BasicUnit : MonoBehaviour
     private GameObject myButtons;
 
     private bool mouseOn;
+
+
+    // Tinaxd countdown timer
+    private float waitTime = 0;
+    public float WaitTime
+    {
+        get => waitTime;
+        set
+        {
+            waitTime = value;
+            UpdateWaitTimeText();   
+        }
+    }
+
+    public bool Locked
+    {
+        get => WaitTime > 0;
+    }
+
+    private CountDownBar countDownBar;
+
+    // relative to the resources directory
+    public string CountDownIconPath;
+
+    public float BaseCountDownTime = 8;
+
+    public bool Moved = false;
+    public bool LockdownPenalty = false;
+
+    public float LockdownPenaltyTime
+    {
+        get => 1.5f * (LastMoveTime - LockdownStartTime);
+    }
+
+    public float LockdownStartTime;
+    public float LastMoveTime;
+
 
     public float HP
     {
@@ -41,6 +80,20 @@ public class BasicUnit : MonoBehaviour
         }
     }
 
+    private void UpdateWaitTimeText()
+    {
+        if (!LockdownPenalty)
+        {
+            unitUI.WaitTimeText = string.Format("{0:0.#}s", WaitTime);
+            unitUI.WaitTimeColor = Color.black;
+        }
+        else
+        {
+            unitUI.WaitTimeText = string.Format("{0:0.#}s [LOCKDOWN +{1:0.0}s]", WaitTime, Time.time - LockdownStartTime);
+            unitUI.WaitTimeColor = Color.red;
+        }
+    }
+
     private void Awake()
     {
         unitUI = transform.Find("UnitUI").gameObject.GetComponent<UnitUI>();
@@ -50,6 +103,16 @@ public class BasicUnit : MonoBehaviour
         unitUI.MPMax = 100;
         HP = 50;
         MP = 100;
+
+        WaitTime = 0;
+
+        var iconTest = new string[]{ "archer", "fire", "gear", "scout", "shield" };
+        var iconTestIndex = Random.Range(0, 5);
+        CountDownIconPath = "test/" + iconTest[iconTestIndex];
+
+        // bind CountDownUI OBJ Tinaxd
+        countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
+
     }
 
     // Start is called before the first frame update
@@ -57,7 +120,7 @@ public class BasicUnit : MonoBehaviour
     {   
         // bind ButtonsUI OBJ Schin
         buttonsUI = GameObject.Find("ButtonsUIObj");
-
+        
         myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
         myButtons.transform.SetParent(buttonsUI.transform);
         myButtons.GetComponent<ButtonsUI>().Target = this;
@@ -67,7 +130,20 @@ public class BasicUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        float delta = Time.deltaTime;
+        if (Locked)
+        {
+            WaitTime -= delta;
+        }
+
+        // Lockdown
+        if (!LockdownPenalty && Input.GetKeyDown(KeyCode.L))
+            MarkLockdown();
+
+        if (LockdownPenalty)
+        {
+            UpdateWaitTimeText();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -93,7 +169,8 @@ public class BasicUnit : MonoBehaviour
     private void OnMouseEnter()
     {
         mouseOn = true;
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(true);
+        if (!Locked)
+            myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(true);
     }
 
     private void OnMouseExit()
@@ -122,5 +199,40 @@ public class BasicUnit : MonoBehaviour
     {
         var opHandler = GetComponent<OperationHandlerBase>();
         opHandler.OnMessage(operation, args);
+    }
+
+    // Tinaxd Call this method after moving this unit
+    public void MarkMoved()
+    {
+        if (!Locked)
+        {
+            Moved = true;
+            LastMoveTime = Time.time;
+            WaitTime += BaseCountDownTime;
+            if (LockdownPenalty)
+            {
+                WaitTime += LockdownPenaltyTime;
+                //Debug.Log("Lockdown penalty! New Time: " + WaitTime + " (penalty: " + LockdownPenaltyTime + ")");
+            }
+        }
+    }
+
+    public void MarkLockdown()
+    {
+        LockdownStartTime = Time.time;
+        LockdownPenalty = true;
+    }
+
+    public void UseCountDown(bool b)
+    {
+        if (b)
+        {
+            countDownBar.RegisterUnit(this, CountDownIconPath);
+        }
+        else
+        {
+            countDownBar.RemoveUnit(this);
+        }
+        unitUI.WaitTimeEnabled = b;
     }
 }

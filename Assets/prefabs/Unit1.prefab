@@ -715,7 +715,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 269798d011f3b8b44bb8981b3a78d327, type: 2}
+  - {fileID: 2100000, guid: b114118e94f808442a7aed8b15fa1ca8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -765,7 +765,6 @@ MonoBehaviour:
   canvas: {fileID: 4307218764190310259}
   buttonsUI: {fileID: 0}
   buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
-  buttonsUICloseDelay: 0.3
 --- !u!54 &7760682452326880213
 Rigidbody:
   m_ObjectHideFlags: 0
