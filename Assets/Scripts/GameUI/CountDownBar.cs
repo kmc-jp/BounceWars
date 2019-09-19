@@ -14,7 +14,7 @@ public class CountDownBar : MonoBehaviour
     private float barWidth;
 
     public float IconYOffset = 20;
-    public float TextYOffset = 30;
+    public float TextYOffset = 10;
 
     public float CountDownMax = 15;
 
@@ -36,6 +36,7 @@ public class CountDownBar : MonoBehaviour
     private void Update()
     {
         targets.ForEach(i => UpdateIconPosition(i));
+        AvoidOverlap();
     }
 
     private void UpdateIconPosition(CountDownUnitIcon cdui)
@@ -101,21 +102,32 @@ public class CountDownBar : MonoBehaviour
         }
     }
 
-    // TODO
-    private void DecideIconPosition(CountDownUnitIcon cdui)
+    private void SetYPosition(CountDownUnitIcon cdui, int posId)
     {
-        int rand = Random.Range(0, 2);
-        cdui.Position = rand;
-        var y = rand == 0 ? IconYOffset : -IconYOffset;
+        int[] candidates = { 1, -1, 2, -2, 3 };
+        var y = candidates[posId] * IconYOffset;
 
         cdui.Icon.transform.localPosition = new Vector3(cdui.Icon.transform.localPosition.x, y, 0);
 
-        Vector2 textOffset;
-        if (rand == 0)
-            textOffset = new Vector2(0, TextYOffset);
-        else
-            textOffset = new Vector2(0, -TextYOffset);
+        Vector2 textOffset = y > 0 ? new Vector2(0, TextYOffset) : new Vector2(0, -TextYOffset);
         cdui.Icon.GetComponent<CountDownIcon>().SetTextPosition(textOffset);
+    }
+
+    // TODO
+    private void DecideIconPosition(CountDownUnitIcon cdui)
+    {
+        var posId = Random.Range(0, 2);
+        SetYPosition(cdui, posId);
+    }
+
+    // TODO
+    private void AvoidOverlap()
+    {
+        var unlocked = targets.Where(t => !t.Unit.Locked).ToArray();
+        for (int i=0; i<unlocked.Length; i++)
+        {
+            SetYPosition(unlocked[i], i);
+        }
     }
 }
 
