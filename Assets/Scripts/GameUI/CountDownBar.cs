@@ -14,7 +14,7 @@ public class CountDownBar : MonoBehaviour
     private float barWidth;
 
     public float IconYOffset = 20;
-    public float TextYOffset = 10;
+    public float TextYOffset = 5;
 
     public float CountDownMax = 15;
 
@@ -108,7 +108,8 @@ public class CountDownBar : MonoBehaviour
         var y = candidates[posId] * IconYOffset;
 
         cdui.Icon.transform.localPosition = new Vector3(cdui.Icon.transform.localPosition.x, y, 0);
-
+        //Schin change y>0 condition to (0,0) so that text is not too high
+        // Also add canvas to Text of Countdown Icon to make time text always visible
         Vector2 textOffset = y > 0 ? new Vector2(0, TextYOffset) : new Vector2(0, -TextYOffset);
         cdui.Icon.GetComponent<CountDownIcon>().SetTextPosition(textOffset);
     }
