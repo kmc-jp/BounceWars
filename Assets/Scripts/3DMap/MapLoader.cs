@@ -26,9 +26,7 @@ public class MapLoader
                 float offset = 0;
                 if(q % 2 == 0) offset = 1;
                 int type = map.mapData[q][p].type;
-                // put map tiles inside Dummy_MapGen object
-                GameObject mapGenObj = GameObject.Find("Dummy_MapGen");
-                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,-0.5f,q*1.5f*1.1547f), Quaternion.Euler(90,0,0), mapGenObj.transform);
+                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,0.0f,q*1.5f*1.1547f), Quaternion.Euler(90,0,0));
             }
         }
     }
