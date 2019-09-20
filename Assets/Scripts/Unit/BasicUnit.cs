@@ -21,7 +21,7 @@ public class BasicUnit : MonoBehaviour
 
     private GameObject myButtons;
 
-    private bool mouseOn;
+    public bool MouseOn;
 
 
     // Tinaxd countdown timer
@@ -124,7 +124,7 @@ public class BasicUnit : MonoBehaviour
         myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
         myButtons.transform.SetParent(buttonsUI.transform);
         myButtons.GetComponent<ButtonsUI>().Target = this;
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
+        myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     // Update is called once per frame
@@ -168,31 +168,15 @@ public class BasicUnit : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        mouseOn = true;
+        MouseOn = true;
         if (!Locked)
-            myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(true);
+            myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     private void OnMouseExit()
     {
-        mouseOn = false;
-        Invoke("DisableButtonsUI", buttonsUICloseDelay);
-    }
-
-    public void UpdateButtonsDelay(float delay)
-    {
-        Invoke("UpdateButtons", delay);
-    }
-
-    private void UpdateButtons()
-    {
-        if (!mouseOn)
-            Invoke("DisableButtonsUI", buttonsUICloseDelay);
-    }
-
-    private void DisableButtonsUI()
-    {
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
+        MouseOn = false;
+        myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     public void NotifyOperation(string operation, object args)
