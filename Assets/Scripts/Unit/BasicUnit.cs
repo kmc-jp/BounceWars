@@ -235,4 +235,10 @@ public class BasicUnit : MonoBehaviour
         }
         unitUI.WaitTimeEnabled = b;
     }
+
+    // Emotion Icon Tinaxd
+    public void ShowEmotion(string emotionName, float length)
+    {
+        unitUI.ShowEmotion(emotionName, length);
+    }
 }

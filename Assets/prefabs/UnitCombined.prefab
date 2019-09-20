@@ -783,6 +783,12 @@ MonoBehaviour:
     type: 3}
   buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
   buttonsUICloseDelay: 0.3
+  CountDownIconPath: 
+  BaseCountDownTime: 8
+  Moved: 0
+  LockdownPenalty: 0
+  LockdownStartTime: 0
+  LastMoveTime: 0
 --- !u!54 &7760682452326880213
 Rigidbody:
   m_ObjectHideFlags: 0
