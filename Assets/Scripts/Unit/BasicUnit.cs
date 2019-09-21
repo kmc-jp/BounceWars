@@ -219,6 +219,7 @@ public class BasicUnit : MonoBehaviour
         LockdownPenalty = true;
     }
 
+    /* // Tinaxd removed method
     public void UseCountDown(bool b)
     {
         if (b)
@@ -230,7 +231,7 @@ public class BasicUnit : MonoBehaviour
             countDownBar.RemoveUnit(this);
         }
         unitUI.WaitTimeEnabled = b;
-    }
+    }*/
 
     // Emotion Icon Tinaxd
     public void ShowEmotion(string emotionName, float length)
