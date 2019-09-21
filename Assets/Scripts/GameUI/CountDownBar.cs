@@ -44,17 +44,27 @@ public class CountDownBar : MonoBehaviour
 
             if (!targets[i].Unit.Locked && !targets[i].Unlocked)
             {
-                var nextPos = targets[i].Unit.Owned ? -1 : 4;
+                var candidates = new bool[5];
+
                 for (int k=0; k<len; k++)
                 {
                     if (targets[k].Unit.Owned == targets[i].Unit.Owned && targets[k].Unlocked)
                     {
-                        if (nextPos < targets[k].Position)
-                            nextPos = targets[k].Position;
+                        candidates[targets[k].Position - (targets[i].Unit.Owned ? 0 : 5)] = true;
                     }
                 }
-                nextPos++;
 
+                int nextPos = 0;
+                for (int j=0; j<5; j++)
+                {
+                    if (!candidates[j])
+                    {
+                        nextPos = j;
+                        break;
+                    }
+                }
+
+                nextPos += targets[i].Unit.Owned ? 0 : 5;
                 var cdui = targets[i];
                 cdui.Position = nextPos;
                 SetYPosition(cdui, nextPos);
