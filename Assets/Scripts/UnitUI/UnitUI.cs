@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UnitUI : MonoBehaviour
 {
+    private List<GameObject> showingEmotions = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -70,5 +71,21 @@ public class UnitUI : MonoBehaviour
     {
         set => transform.Find("WaitTime").gameObject.SetActive(value);
         get => transform.Find("WaitTime").gameObject.activeSelf;
+    }
+
+    // Show Emotion Icon Tinaxd
+    public void ShowEmotion(string emotionName, float length)
+    {
+        showingEmotions.ForEach(i => Destroy(i));
+
+        var sprite = (Sprite)Resources.Load("Emotions/" + emotionName, typeof(Sprite));
+        var icon = (GameObject) Instantiate(Resources.Load("EmotionIcon"));
+        icon.transform.SetParent(this.transform);
+        icon.transform.localPosition = new Vector3(1.62f, 0, 0);
+        icon.transform.localRotation = Quaternion.identity;
+        icon.GetComponent<Image>().sprite = sprite;
+        showingEmotions.Add(icon);
+
+        Destroy(icon, length);
     }
 }
