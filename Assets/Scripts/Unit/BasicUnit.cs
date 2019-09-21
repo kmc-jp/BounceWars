@@ -219,4 +219,9 @@ public class BasicUnit : MonoBehaviour
         }
         unitUI.WaitTimeEnabled = b;
     }
+
+    public void CollisionEvent(CollisionInfo info)
+    {
+        Debug.Log("CollisionEvent");
+    }
 }
