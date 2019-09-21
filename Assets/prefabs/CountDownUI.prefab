@@ -160,7 +160,7 @@ MonoBehaviour:
   IconYOffset: 20
   TextYOffset: 30
   CountDownMax: 15
-  Threshold: 0.5
+  Threshold: 1
 --- !u!114 &3151633784483175003
 MonoBehaviour:
   m_ObjectHideFlags: 0

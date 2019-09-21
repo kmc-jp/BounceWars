@@ -59,6 +59,7 @@ public class BasicUnit : MonoBehaviour
     public float LockdownStartTime;
     public float LastMoveTime;
 
+    public bool Owned;
 
     public float HP
     {
@@ -125,6 +126,9 @@ public class BasicUnit : MonoBehaviour
         myButtons.transform.SetParent(buttonsUI.transform);
         myButtons.GetComponent<ButtonsUI>().Target = this;
         myButtons.GetComponent<ButtonsUI>().UpdateActive();
+
+        // Tinaxd register units to CountDownBar
+        countDownBar.RegisterUnit(this, CountDownIconPath);
     }
 
     // Update is called once per frame

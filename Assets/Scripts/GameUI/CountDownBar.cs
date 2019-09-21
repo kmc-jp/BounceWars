@@ -20,6 +20,8 @@ public class CountDownBar : MonoBehaviour
 
     public float Threshold = 2.0f;
 
+    private int myUnlockedUnitsPos = 0;
+
     private GameObject modelIcon;
 
     private void Awake()
@@ -35,8 +37,32 @@ public class CountDownBar : MonoBehaviour
 
     private void Update()
     {
-        targets.ForEach(i => UpdateIconPosition(i));
-        AvoidOverlap();
+        int len = targets.Count();
+        for (int i = 0; i < len; i++)
+        {
+            UpdateIconPosition(targets[i]);
+
+            if (!targets[i].Unit.Locked && !targets[i].Unlocked)
+            {
+                var nextPos = targets[i].Unit.Owned ? -1 : 4;
+                for (int k=0; k<len; k++)
+                {
+                    if (targets[k].Unit.Owned == targets[i].Unit.Owned && targets[k].Unlocked)
+                    {
+                        if (nextPos < targets[k].Position)
+                            nextPos = targets[k].Position;
+                    }
+                }
+                nextPos++;
+
+                var cdui = targets[i];
+                cdui.Position = nextPos;
+                SetYPosition(cdui, nextPos);
+                cdui.Unlocked = true;
+                targets[i] = cdui;
+            }
+        }
+        Debug.Assert(targets.Where(i => !i.Unit.Owned).All(i => i.Position >= 5));
     }
 
     private void UpdateIconPosition(CountDownUnitIcon cdui)
@@ -61,6 +87,7 @@ public class CountDownBar : MonoBehaviour
             cdui.Unit.Moved = false;
 
             DecideIconPosition(cdui);
+            cdui.Unlocked = false;
         }
     }
 
@@ -104,7 +131,7 @@ public class CountDownBar : MonoBehaviour
 
     private void SetYPosition(CountDownUnitIcon cdui, int posId)
     {
-        int[] candidates = { 1, -1, 2, -2, 3 };
+        int[] candidates = { 1, 2, 3, 4, 5, -1, -2, -3, -4, -5 };
         Debug.Log("posID" + posId);
         var y = candidates[posId] * IconYOffset;
 
@@ -115,27 +142,50 @@ public class CountDownBar : MonoBehaviour
         cdui.Icon.GetComponent<CountDownIcon>().SetTextPosition(textOffset);
     }
 
-    // TODO
     private void DecideIconPosition(CountDownUnitIcon cdui)
     {
-        var posId = Random.Range(0, 2);
-        SetYPosition(cdui, posId);
+        var pos = cdui.Unit.Owned ? 0 : 5;
+        cdui.Position = pos;
+        SetYPosition(cdui, pos);
+        AvoidOverlap();
     }
 
-    // TODO
     private void AvoidOverlap()
     {
-        var unlocked = targets.Where(t => !t.Unit.Locked).ToArray();
-        for (int i=0; i<unlocked.Length; i++)
+        var myUnits = targets.Where(i => i.Unit.Owned).OrderBy(i => i.Unit.WaitTime).ToArray<CountDownUnitIcon>();
+        var enemyUnits = targets.Where(i => !i.Unit.Owned && i.Unit.Locked).OrderBy(i => i.Unit.WaitTime).ToArray<CountDownUnitIcon>();
+
+        void solve(CountDownUnitIcon[] array, bool owned)
         {
-            SetYPosition(unlocked[i], i);
+            int len = array.Length;
+
+            for (int i=0; i<len-1; i++)
+            {
+                for (int j = i+1; j < len; j++)
+                {
+                    Debug.Log(array[i].Position);
+                    if (array[j].Unit.Locked && array[i].Position == array[j].Position)
+                    {
+                        float diff = array[j].Unit.WaitTime - array[i].Unit.WaitTime;
+                        if (diff < Threshold)
+                        {
+                            array[j].Position++;
+                            SetYPosition(array[j], array[j].Position);
+                        }
+                    }
+                }
+            }
         }
+
+        solve(myUnits, true);
+        solve(enemyUnits, false);
     }
 }
 
-struct CountDownUnitIcon
+class CountDownUnitIcon
 {
     public BasicUnit Unit;
     public GameObject Icon;
     public int Position;
+    public bool Unlocked;
 }
