@@ -233,7 +233,7 @@ public class BasicUnit : MonoBehaviour
         Debug.Log("CollisionEvent");
 
         Debug.Log("Attacked!");
-        float damage = Random.Range(5, 25);
+        float damage =Mathf.Abs(info.normalVelocity);
         HP = HP - damage;
         PopupDamage(damage);
     }
