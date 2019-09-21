@@ -7,6 +7,8 @@ using UnityEngine.UI;
 // Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
+    public Unit unit;
+
     private float hp;
     private float mp;
 
@@ -67,6 +69,7 @@ public class BasicUnit : MonoBehaviour
         set
         {
             this.hp = value;
+            this.unit.HP = value;
             unitUI.HP = value;
         }
     }
@@ -77,6 +80,7 @@ public class BasicUnit : MonoBehaviour
         set
         {
             this.mp = value;
+            this.unit.MP = value;
             unitUI.MP = value;
         }
     }
@@ -102,8 +106,6 @@ public class BasicUnit : MonoBehaviour
 
         unitUI.HPMax = 50;
         unitUI.MPMax = 100;
-        HP = 50;
-        MP = 100;
 
         WaitTime = 0;
 
@@ -119,6 +121,8 @@ public class BasicUnit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        HP = 50;
+        MP = 100;
         // bind ButtonsUI OBJ Schin
         buttonsUI = GameObject.Find("ButtonsUIObj");
 
@@ -134,6 +138,9 @@ public class BasicUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HP = unit.HP;
+        MP = unit.MP;
+
         float delta = Time.deltaTime;
         if (Locked)
         {
@@ -152,10 +159,11 @@ public class BasicUnit : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        /*
         Debug.Log("Attacked!");
         float damage = Random.Range(5, 25);
         HP = HP - damage;
-        PopupDamage(damage);
+        PopupDamage(damage);*/
     }
 
 
@@ -228,5 +236,14 @@ public class BasicUnit : MonoBehaviour
     public void ShowEmotion(string emotionName, float length)
     {
         unitUI.ShowEmotion(emotionName, length);
+    }
+    public void CollisionEvent(CollisionInfo info)
+    {
+        Debug.Log("CollisionEvent");
+
+        Debug.Log("Attacked!");
+        float damage =Mathf.Abs(info.normalVelocity);
+        HP = HP - damage;
+        PopupDamage(damage);
     }
 }

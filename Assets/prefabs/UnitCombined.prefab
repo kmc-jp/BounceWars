@@ -765,6 +765,7 @@ MonoBehaviour:
   uuid: 0
   red: {fileID: 2100000, guid: 71ab69d3403fd46008bfe4869e354d8a, type: 2}
   owned: 0
+  basicUnit: {fileID: 5987305005303747637}
 --- !u!114 &5987305005303747637
 MonoBehaviour:
   m_ObjectHideFlags: 0
