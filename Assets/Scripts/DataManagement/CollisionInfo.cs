@@ -11,4 +11,5 @@ public class CollisionInfo
     public float vz1;//me
     public float vx2;//other
     public float vz2;//other
+    public float normalVelocity;
 }
