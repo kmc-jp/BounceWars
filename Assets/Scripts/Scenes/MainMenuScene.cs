@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : IntersceneBehaviour
+public class MainMenuScene : IntersceneBehaviour
 {
     private GameObject nameInputPanel;
     private GameObject errorText;
@@ -44,7 +44,7 @@ public class MainMenu : IntersceneBehaviour
     public void onNameConfirmClick()
     {
         string inputName = nameInputPanel.GetComponentInChildren<InputField>().text;
-        Debug.Log("inputName " + inputName);
+        //Debug.Log("inputName " + inputName);
         if (!isNameLegal(inputName))
         {
             return;
