@@ -12,7 +12,7 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
-        SceneManager.LoadScene("Host");
+        SceneManager.LoadScene("Host_c");
     }
     public void onReturnBtnClick()
     {
