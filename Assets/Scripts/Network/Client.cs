@@ -3,7 +3,7 @@
     void Awake()    {        _responseThread = new Thread(ResponseThread);        _responseThread.Start(); // start the response thread
     }    private void OnApplicationQuit()    {        _responseThread.Abort();    }    void ResponseThread()    {        while (true)        {            WebRequest request = WebRequest.Create("http://localhost:5000");
             // If required by the server, set the credentials.  
-            request.Credentials = CredentialCache.DefaultCredentials;            request.ContentType = "text/json";            request.Method = "POST";            PayloadFromClient fromClient = new PayloadFromClient(simulator.commands);            //fromClient.commands = simulator.commands;//            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();            timer.Start();            if (fromClient.commandsJson.Count > 0)
+            request.Credentials = CredentialCache.DefaultCredentials;            request.ContentType = "text/json";            request.Method = "POST";            CommandJsonList fromClient = new CommandJsonList(simulator.commands);            //fromClient.commands = simulator.commands;//            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();            timer.Start();            if (fromClient.commandsJson.Count > 0)
             {
                 //Debug.Log(JsonUtility.ToJson(fromClient.commands[0]));
             }            byte[] binary = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromClient));            simulator.SetCommandsSent();
@@ -24,17 +24,4 @@
                 PayloadFromHost data = JsonUtility.FromJson<PayloadFromHost>(responseFromServer);                if (data == null)                {                    Debug.Log("null");                }                else                {                    timer.Stop();                    simulator.units = data.units;                    simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;                }            }
 
             // Close the response.  
-            response.Close();        }    }}[System.Serializable]public class PayloadFromClient{    public List<string> commandsJson;    public List<int> type;    public PayloadFromClient()
-    {
-        commandsJson = new List<string>();
-        type = new List<int>();
-    }    public PayloadFromClient(List<Command> commands)
-    {
-        commandsJson = new List<string>();
-        type = new List<int>();
-        for (int i = 0; i < commands.Count; i++)
-        {
-            commandsJson.Add(JsonUtility.ToJson(commands[i]));
-            type.Add(commands[i].type);
-        }
-    }}
+            response.Close();        }    }}

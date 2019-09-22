@@ -49,7 +49,7 @@ public class DragAndFire : MonoBehaviour
                 targetPlane.Raycast(ray, out enter);
                 Debug.Log(localOrigin - ray.GetPoint(enter));
                 Vector3 vel = localOrigin - ray.GetPoint(enter);
-                UnitUpdateCmd c = new UnitUpdateCmd();
+                UnitMovedCmd c = new UnitMovedCmd();
                 c.sent = false;
                 c.vx = vel.x;
                 c.vz = vel.z;
