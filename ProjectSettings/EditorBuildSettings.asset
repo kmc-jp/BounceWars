@@ -15,10 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/ClientLobby.unity
     guid: 235041afd5400e245bd81200accbc094
   - enabled: 1
-    path: Assets/Scenes/Host.unity
+    path: Assets/Scenes/Host_c.unity
     guid: 7ee213ce11baa224d82abafefdbd0e10
   - enabled: 1
-    path: Assets/Scenes/Client.unity
+    path: Assets/Scenes/Client_c.unity
     guid: eaea157609cb20d4ab1f2e60ad7698ac
   - enabled: 1
     path: Assets/Scenes/Result.unity

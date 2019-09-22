@@ -12,11 +12,16 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
-        SceneManager.LoadScene("Host");
+        //this.GetComponent<HostLobby>().stopPort();
+        SceneManager.LoadScene("Host_c");
     }
     public void onReturnBtnClick()
     {
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void setOppoUsername(string name)
+    {
+
+    }
 }
