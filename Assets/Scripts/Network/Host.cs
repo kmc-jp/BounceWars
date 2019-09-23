@@ -42,7 +42,7 @@ public class Host : MonoBehaviour
     {
         while (true)
         {
-            CommandJsonList returnList = new CommandJsonList();
+            CommandJsonList fromHost = new CommandJsonList();
 
             HttpListenerContext context = _httpListener.GetContext(); // get a context
                                                                       /*                                                         // Now, you'll find the request URL in context.Request.Url
@@ -108,18 +108,22 @@ public class Host : MonoBehaviour
 
                 }
                 //Debug.Log((UnitUpdateCmd)commands[0]);
-                simulator.commands.AddRange(commands);
+                simulator.commands.AddRange(commands);//use getcommands later
             }
             catch
             {
                 Debug.Log("data error");
             }
+            fromHost.AddRange(simulator.GetCommandsFromHost());
             //lag test
             //byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+            /*
             PayloadFromHost payload = new PayloadFromHost();
             payload.units = simulator.units;
-            payload.time = simulator.time;
-            byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(payload));
+            payload.time = simulator.time;*/
+            //byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(payload));
+            byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromHost));
+
             //context.Response.ContentLength64 = _responseArray.LongLength;
             if (simulateLag)
                 Thread.Sleep(500);
@@ -163,5 +167,40 @@ public class CommandJsonList
     {
         commandsJson.Add(JsonUtility.ToJson(c));
         type.Add(c.type);
+    }
+    public void AddRange(List<Command> cs)
+    {
+        for (int i = 0; i < cs.Count; i++)
+        {
+            Command c = cs[i];
+            commandsJson.Add(JsonUtility.ToJson(c));
+            type.Add(c.type);
+        }
+    }
+    public List<Command> GetCommands()
+    {
+        List<Command> commands = new List<Command>();
+        for (int i = 0; i < commandsJson.Count; i++)
+        {
+            Command c = null;
+            switch (type[i])
+            {
+                case 0:
+                    c = (JsonUtility.FromJson<UnitMovedCmd>(commandsJson[i]));
+                    break;
+                case -1:
+                    c = (JsonUtility.FromJson<UnitUpdateCmd>(commandsJson[i]));
+                    break;
+            }
+            if (c == null) continue;
+            if (!(c.sent))
+            {
+                c.processed = false;
+                commands.Add(c);
+                //Debug.Log(((UnitMovedCmd)c).vx);
+            }
+
+        }
+        return commands;
     }
 }

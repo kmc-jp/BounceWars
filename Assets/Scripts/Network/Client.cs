@@ -21,7 +21,12 @@
             // The using block ensures the stream is automatically closed. 
             using (Stream dataStream = response.GetResponseStream())            {                StreamReader reader = new StreamReader(dataStream);                string responseFromServer = reader.ReadToEnd();
                 //Debug.Log(responseFromServer);
-                PayloadFromHost data = JsonUtility.FromJson<PayloadFromHost>(responseFromServer);                if (data == null)                {                    Debug.Log("null");                }                else                {                    timer.Stop();                    simulator.units = data.units;                    simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;                }            }
+                //PayloadFromHost data = JsonUtility.FromJson<PayloadFromHost>(responseFromServer);
+                CommandJsonList fromHost = JsonUtility.FromJson<CommandJsonList>(responseFromServer);                //Debug.Log(JsonUtility.ToJson(fromHost));                if (fromHost == null)                {                    Debug.Log("null");                }                else                {                    timer.Stop();                    simulator.commands.AddRange(fromHost.GetCommands());
+                    //simulator.commands.AddRange()
+                    //simulator.units = data.units;
+                    //simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;
+                }            }
 
             // Close the response.  
             response.Close();        }    }}

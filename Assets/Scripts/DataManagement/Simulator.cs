@@ -239,6 +239,13 @@ public class Simulator : MonoBehaviour
                 u.vz = c.vz;
                 c.processed = true;
             }
+            if(c1 is UnitUpdateCmd)
+            {
+                UnitUpdateCmd c = (UnitUpdateCmd)c1;
+                //Debug.Log(c.vx);
+                units = c.units;
+                c.processed = true;
+            }
         }
         List<Command> remains = new List<Command>();
         for (int i = 0; i < commands.Count; i++)
@@ -282,5 +289,14 @@ public class Simulator : MonoBehaviour
     public void OnGUI()
     {
         GUILayout.Box(time.ToString("F2"));
+    }
+    public List<Command> GetCommandsFromHost()
+    {
+        List<Command> cs = new List<Command>();
+        //unitupdatecmd
+        UnitUpdateCmd unitUpdateCmd = new UnitUpdateCmd();
+        unitUpdateCmd.units = units;
+        cs.Add((Command)unitUpdateCmd);
+        return cs;
     }
 }
