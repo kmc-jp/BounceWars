@@ -65,29 +65,11 @@ public class Host : MonoBehaviour
                 List<Command> commands = new List<Command>();
                 if (fromClient.commandsJson.Count != 0)
                 {
-                    Debug.Log(resposeFromClient);
+                    //Debug.Log(resposeFromClient);
                 }
+                /*
                 for (int i = 0; i < fromClient.commandsJson.Count; i++)
                 {
-                    /*
-                    if (!fromClient.commands[i].sent)
-                    {
-                        fromClient.commands[i].processed = false;
-                        commands.Add(fromClient.commands[i]);
-                        try
-                        {
-                            Debug.Log(fromClient.commands[i].processed);
-                            Debug.Log(((UnitUpdateCmd)fromClient.commands[i]).vx);
-                        }
-                        catch (System.Exception e)
-                        {
-                            Debug.Log(e.Message);
-                        }
-                    }
-                    else
-                    {
-                        //Debug.Log("wrong command");
-                    }*/
                     Command c = null;
                     switch (fromClient.type[i])
                     {
@@ -106,9 +88,10 @@ public class Host : MonoBehaviour
                         Debug.Log(((UnitMovedCmd)c).vx);
                     }
 
-                }
+                }*/
                 //Debug.Log((UnitUpdateCmd)commands[0]);
-                simulator.commands.AddRange(commands);//use getcommands later
+                //simulator.commands.AddRange(commands);
+                simulator.commands.AddRange(fromClient.GetCommands());//use getcommands later
             }
             catch
             {

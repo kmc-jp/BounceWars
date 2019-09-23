@@ -10,6 +10,7 @@ public class Simulator : MonoBehaviour
     public List<Unit> units = new List<Unit>();
     public int isClient = 0;
     public List<Command> commands = new List<Command>();
+
     private void Awake()
     {
 
@@ -243,8 +244,12 @@ public class Simulator : MonoBehaviour
             {
                 UnitUpdateCmd c = (UnitUpdateCmd)c1;
                 //Debug.Log(c.vx);
-                units = c.units;
+                if (isClient>0)
+                {
+                    units = c.units;
+                }
                 c.processed = true;
+                c.sent = true;
             }
         }
         List<Command> remains = new List<Command>();
