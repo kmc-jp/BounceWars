@@ -10,6 +10,9 @@ public class UnitUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Schin  set TextMesh layer to avoid render layer issue
+        transform.Find("WaitTime").GetComponent<MeshRenderer>().sortingLayerName = "UserGUI";
+        transform.Find("WaitTime").GetComponent<MeshRenderer>().sortingOrder = 0;
         //rectTransform = GetComponent<RectTransform>();
     }
 
