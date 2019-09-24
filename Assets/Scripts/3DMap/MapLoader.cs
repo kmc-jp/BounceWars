@@ -42,7 +42,8 @@ public class MapLoader
                 GameObject mapGenObj = GameObject.Find("Obelisk");
                 UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), Quaternion.Euler(-90,0,0), mapGenObj.transform);
                 GameObject curBuilding = buildings[curTile.buildingType];
-                if(curBuilding != null) UnityEngine.Object.Instantiate(curBuilding, new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), new Quaternion(0,0,0,0));
+                if(curBuilding != null)
+                    UnityEngine.Object.Instantiate(curBuilding, new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), new Quaternion(0,0,0,0), mapGenObj.transform);
                 
             }
         }
