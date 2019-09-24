@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -17,7 +17,11 @@ public class MapLoader
 
     public static void generateTiles(GameMap map){
         // CubeプレハブをGameObject型で取得
-        GameObject[] tiles = { (GameObject)Resources.Load ("Tile_Grass"), (GameObject)Resources.Load ("Tile_Sea") };
+        GameObject[] tiles = { (GameObject)Resources.Load ("Tile_Grass"), (GameObject)Resources.Load ("Tile_Sea"),
+                (GameObject)Resources.Load ("Tile_Sand"), (GameObject)Resources.Load ("Tile_Brick"),
+                (GameObject)Resources.Load ("Tile_Clay"), (GameObject)Resources.Load ("Tile_Lava") };
+        GameObject[] buildings = { null, (GameObject)Resources.Load ("Building_Forest"), (GameObject)Resources.Load ("Building_Stones_1"),
+                (GameObject)Resources.Load ("Building_Stones_2"), (GameObject)Resources.Load ("Building_Stones_3"),};
         // Cubeプレハブを元に、インスタンスを生成、
         //Object.Instantiate(obj, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
 
@@ -25,10 +29,13 @@ public class MapLoader
             for(int p = 0; p < map.mapData[q].Length; p++){
                 float offset = 0;
                 if(q % 2 == 0) offset = 1;
-                int type = map.mapData[q][p].type;
-                // put map tiles inside Dummy_MapGen object
+                Tile curTile = map.mapData[q][p];
+                int type = curTile.type;
                 GameObject mapGenObj = GameObject.Find("Dummy_MapGen");
-                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p * 2 + offset - 10, -0.5f, q * 1.5f * 1.1547f), Quaternion.Euler(90, 0, 0), mapGenObj.transform);
+                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), Quaternion.Euler(-90,0,0), mapGenObj.transform);
+                GameObject curBuilding = buildings[curTile.buildingType];
+                if(curBuilding != null) UnityEngine.Object.Instantiate(curBuilding, new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), new Quaternion(0,0,0,0));
+                
             }
         }
     }
