@@ -12,4 +12,6 @@ public class GameMap {
 [System.Serializable]
 public class Tile {
     public int type;
+    public int buildingType = 0;    //タイルの上にあるもの(森、石など)のタイプ(何もなければ0)
+    public double height = 0.0;
 }
