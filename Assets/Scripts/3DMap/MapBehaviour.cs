@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Main : MonoBehaviour
+public class MapBehaviour : MonoBehaviour
 {
     //public string jsonData = "{\"id\": 1, \"mapType\": 3, \"mapData\":[[{\"type\": 1}, {\"type\": 1}, {\"type\": 1}], [{\"type\": 1}, {\"type\": 1}, {\"type\": 1}], [{\"type\": 1}, {\"type\": 1}, {\"type\": 1}]]}";
     //public string jsonData = "{\"id\": 1, \"mapType\": 3}";
