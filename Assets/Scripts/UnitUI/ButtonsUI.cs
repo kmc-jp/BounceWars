@@ -32,9 +32,18 @@ public class ButtonsUI : MonoBehaviour
     public void SetActive(bool active)
     {
         this.active = active;
-        if(!active)
+        UpdateActive();
+    }
+
+    public void UpdateActive()
+    {
+        if (active || target.MouseOn)
         {
-            Target.UpdateButtonsDelay(0.1f);
+            SetVisibilityForce(true);
+        }
+        else
+        {
+            Invoke("_setInvisible", 0.2f);
         }
     }
 
@@ -62,7 +71,7 @@ public class ButtonsUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetVisibilityForce(false);
     }
 
     // Update is called once per frame

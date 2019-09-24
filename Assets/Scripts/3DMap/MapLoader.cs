@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -31,7 +31,8 @@ public class MapLoader
                 if(q % 2 == 0) offset = 1;
                 Tile curTile = map.mapData[q][p];
                 int type = curTile.type;
-                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), Quaternion.Euler(-90,0,0));
+                GameObject mapGenObj = GameObject.Find("Dummy_MapGen");
+                UnityEngine.Object.Instantiate(tiles[type], new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), Quaternion.Euler(-90,0,0), mapGenObj.transform);
                 GameObject curBuilding = buildings[curTile.buildingType];
                 if(curBuilding != null) UnityEngine.Object.Instantiate(curBuilding, new Vector3(p*2 + offset - 10,-0.5f + (float)curTile.height,q*1.5f*1.1547f), new Quaternion(0,0,0,0));
                 

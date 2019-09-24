@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Original author: Tinaxd
+// Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
+    public Unit unit;
+
     private float hp;
     private float mp;
 
@@ -19,7 +23,45 @@ public class BasicUnit : MonoBehaviour
 
     private GameObject myButtons;
 
-    private bool mouseOn;
+    public bool MouseOn;
+
+
+    // Tinaxd countdown timer
+    private float waitTime = 0;
+    public float WaitTime
+    {
+        get => waitTime;
+        set
+        {
+            waitTime = value;
+            UpdateWaitTimeText();
+        }
+    }
+
+    public bool Locked
+    {
+        get => WaitTime > 0;
+    }
+
+    private CountDownBar countDownBar;
+
+    // relative to the resources directory
+    public string CountDownIconPath;
+
+    public float BaseCountDownTime = 8;
+
+    public bool Moved = false;
+    public bool LockdownPenalty = false;
+
+    public float LockdownPenaltyTime
+    {
+        get => 1.5f * (LastMoveTime - LockdownStartTime);
+    }
+
+    public float LockdownStartTime;
+    public float LastMoveTime;
+
+    public bool Owned;
 
     public float HP
     {
@@ -27,6 +69,7 @@ public class BasicUnit : MonoBehaviour
         set
         {
             this.hp = value;
+            this.unit.HP = value;
             unitUI.HP = value;
         }
     }
@@ -37,7 +80,22 @@ public class BasicUnit : MonoBehaviour
         set
         {
             this.mp = value;
+            this.unit.MP = value;
             unitUI.MP = value;
+        }
+    }
+
+    private void UpdateWaitTimeText()
+    {
+        if (!LockdownPenalty)
+        {
+            unitUI.WaitTimeText = string.Format("{0:0.#}s", WaitTime);
+            unitUI.WaitTimeColor = Color.black;
+        }
+        else
+        {
+            unitUI.WaitTimeText = string.Format("{0:0.#}s [LOCKDOWN +{1:0.0}s]", WaitTime, Time.time - LockdownStartTime);
+            unitUI.WaitTimeColor = Color.red;
         }
     }
 
@@ -48,41 +106,71 @@ public class BasicUnit : MonoBehaviour
 
         unitUI.HPMax = 50;
         unitUI.MPMax = 100;
-        HP = 50;
-        MP = 100;
+
+        WaitTime = 0;
+
+        var iconTest = new string[] { "archer", "fire", "gear", "scout", "shield" };
+        var iconTestIndex = Random.Range(0, 5);
+        CountDownIconPath = "test/" + iconTest[iconTestIndex];
+
+        // bind CountDownUI OBJ Tinaxd
+        countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
+
     }
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
+        HP = 50;
+        MP = 100;
         // bind ButtonsUI OBJ Schin
         buttonsUI = GameObject.Find("ButtonsUIObj");
 
         myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
         myButtons.transform.SetParent(buttonsUI.transform);
         myButtons.GetComponent<ButtonsUI>().Target = this;
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
+        myButtons.GetComponent<ButtonsUI>().UpdateActive();
+
+        // Tinaxd register units to CountDownBar
+        countDownBar.RegisterUnit(this, CountDownIconPath);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        HP = unit.HP;
+        MP = unit.MP;
+
+        float delta = Time.deltaTime;
+        if (Locked)
+        {
+            WaitTime -= delta;
+        }
+
+        // Lockdown
+        if (!LockdownPenalty && Input.GetKeyDown(KeyCode.L))
+            MarkLockdown();
+
+        if (LockdownPenalty)
+        {
+            UpdateWaitTimeText();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        /*
         Debug.Log("Attacked!");
         float damage = Random.Range(5, 25);
         HP = HP - damage;
-        PopupDamage(damage);
+        PopupDamage(damage);*/
     }
 
 
     private void PopupDamage(float damage)
     {
         Debug.Log("HP: " + HP);
-        
+
         GameObject popup = Instantiate(damagePopup, Vector3.zero, Quaternion.identity);
         popup.transform.SetParent(canvas.transform);
         popup.GetComponent<DamagePopup>().Unit = this.gameObject;
@@ -92,35 +180,71 @@ public class BasicUnit : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        mouseOn = true;
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(true);
+        MouseOn = true;
+        if (!Locked)
+            myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     private void OnMouseExit()
     {
-        mouseOn = false;
-        Invoke("DisableButtonsUI", buttonsUICloseDelay);
-    }
-
-    public void UpdateButtonsDelay(float delay)
-    {
-        Invoke("UpdateButtons", delay);
-    }
-
-    private void UpdateButtons()
-    {
-        if (!mouseOn)
-            Invoke("DisableButtonsUI", buttonsUICloseDelay);
-    }
-
-    private void DisableButtonsUI()
-    {
-        myButtons.GetComponent<ButtonsUI>().SetVisibilityForce(false);
+        MouseOn = false;
+        myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     public void NotifyOperation(string operation, object args)
     {
         var opHandler = GetComponent<OperationHandlerBase>();
         opHandler.OnMessage(operation, args);
+    }
+
+    // Tinaxd Call this method after moving this unit
+    public void MarkMoved()
+    {
+        if (!Locked)
+        {
+            Moved = true;
+            LastMoveTime = Time.time;
+            WaitTime += BaseCountDownTime;
+            if (LockdownPenalty)
+            {
+                WaitTime += LockdownPenaltyTime;
+                //Debug.Log("Lockdown penalty! New Time: " + WaitTime + " (penalty: " + LockdownPenaltyTime + ")");
+            }
+        }
+    }
+
+    public void MarkLockdown()
+    {
+        LockdownStartTime = Time.time;
+        LockdownPenalty = true;
+    }
+
+    /* // Tinaxd removed method
+    public void UseCountDown(bool b)
+    {
+        if (b)
+        {
+            countDownBar.RegisterUnit(this, CountDownIconPath);
+        }
+        else
+        {
+            countDownBar.RemoveUnit(this);
+        }
+        unitUI.WaitTimeEnabled = b;
+    }*/
+
+    // Emotion Icon Tinaxd
+    public void ShowEmotion(string emotionName, float length)
+    {
+        unitUI.ShowEmotion(emotionName, length);
+    }
+    public void CollisionEvent(CollisionInfo info)
+    {
+        Debug.Log("CollisionEvent");
+
+        Debug.Log("Attacked!");
+        float damage =Mathf.Abs(info.normalVelocity);
+        HP = HP - damage;
+        PopupDamage(damage);
     }
 }
