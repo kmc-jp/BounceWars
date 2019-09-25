@@ -12,7 +12,7 @@ public class ClientLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
-        SceneManager.LoadScene("Client");
+        SceneManager.LoadScene("Client_c");
     }
     public void onReturnBtnClick()
     {
