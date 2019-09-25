@@ -166,13 +166,6 @@ public class Simulator : MonoBehaviour
                 }
                 units.Add(u);
 
-
-
-
-
-
-
-
                 /*
                 GameObject g = Instantiate(prefabs[0]);
                 UnitInfoTag tag = g.GetComponent<UnitInfoTag>();

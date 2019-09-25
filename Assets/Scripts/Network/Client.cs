@@ -1,32 +1,108 @@
-﻿using System.Collections;using System.Collections.Generic;using System.IO;using System.Net;using System.Text;using System.Threading;using UnityEngine;public class Client : MonoBehaviour{    Thread _responseThread;    public Simulator simulator;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using UnityEngine;
+
+public class Client : MonoBehaviour
+{
+    //Remember to bind the Simulator script here, if you've moved the Host object.
+    public Simulator simulator;
+
+    Thread _responseThread;
     // Start is called before the first frame update
-    void Awake()    {        _responseThread = new Thread(ResponseThread);        _responseThread.Start(); // start the response thread
-    }    private void OnApplicationQuit()    {        _responseThread.Abort();    }    void ResponseThread()    {        while (true)        {            WebRequest request = WebRequest.Create("http://localhost:5000");
+    void Awake()
+    {
+        // start a response thread 
+        _responseThread = new Thread(ResponseThread);
+        _responseThread.Start();
+    }
+    private void OnApplicationQuit()
+    {
+        _responseThread.Abort();
+    }
+    void ResponseThread()
+    {
+        while (true)
+        {
+            ////        Sending HTTP Request        ////
+            //                                        //
+            // Establish an http request
+            WebRequest request = WebRequest.Create("http://localhost:5000");
             // If required by the server, set the credentials.  
-            request.Credentials = CredentialCache.DefaultCredentials;            request.ContentType = "text/json";            request.Method = "POST";            CommandJsonList fromClient = new CommandJsonList(simulator.commands);            //fromClient.commands = simulator.commands;//            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();            timer.Start();            if (fromClient.commandsJson.Count > 0)
+            request.Credentials = CredentialCache.DefaultCredentials;
+            request.ContentType = "text/json";
+            request.Method = "POST";
+
+            //create a request JsonList
+            CommandJsonList fromClient = new CommandJsonList();
+            //collect requests here//
+            //collect requests from simulator
+            fromClient.AddRange(simulator.commands);
+            simulator.SetCommandsSent();
+
+            //fromClient.AddRange(List<Command>);
+
+
+            //System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            //timer.Start();
+
+            //after collecting all the requests, convert them into binary stream
+            byte[] binary = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromClient));
+            // Send the requests
+            using (Stream postStream = request.GetRequestStream())
             {
-                //Debug.Log(JsonUtility.ToJson(fromClient.commands[0]));
-            }            byte[] binary = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromClient));            simulator.SetCommandsSent();
-            //manager.SetCommandSent(); server does this
-            using (Stream postStream = request.GetRequestStream())            {
-                // Send the data.
-                postStream.Write(binary, 0, binary.Length);                postStream.Close();            }
+                postStream.Write(binary, 0, binary.Length);
+                postStream.Close();
+            }
 
-            // Get the response.  
+            ////        receiving HTTP Request        ////
+            //                                          //
             WebResponse response = request.GetResponse();
-            // Display the status.  
-            //Debug.Log(((HttpWebResponse)response).StatusDescription);
-
             // Get the stream containing content returned by the server. 
             // The using block ensures the stream is automatically closed. 
-            using (Stream dataStream = response.GetResponseStream())            {                StreamReader reader = new StreamReader(dataStream);                string responseFromServer = reader.ReadToEnd();
-                //Debug.Log(responseFromServer);
-                //PayloadFromHost data = JsonUtility.FromJson<PayloadFromHost>(responseFromServer);
-                CommandJsonList fromHost = JsonUtility.FromJson<CommandJsonList>(responseFromServer);                //Debug.Log(JsonUtility.ToJson(fromHost));                if (fromHost == null)                {                    Debug.Log("null");                }                else                {                    timer.Stop();                    Debug.Log(JsonUtility.ToJson( fromHost.GetCommands()[0]));                    simulator.commands.AddRange(fromHost.GetCommands());
-                    //simulator.commands.AddRange()
-                    //simulator.units = data.units;
-                    //simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;
-                }            }
+            using (Stream dataStream = response.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(dataStream);
+                string responseFromServer = reader.ReadToEnd();
+                //depack the Json into CommandJsonList object
+                CommandJsonList fromHost = JsonUtility.FromJson<CommandJsonList>(responseFromServer);
+                // If the response Json is empty, there's a big chance the host is down.
+                if (fromHost != null)
+                    for (int i = 0; i < fromHost.commandsJson.Count; i++)
+                    {
+                        Command c = null;
+                        //For Command subclass types, refer to Command.cs comments
+                        switch (fromHost.type[i])
+                        {
+                            //UnitUpdateCmd
+                            case -1:
+                                c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
+                                simulator.commands.Add(c);
+                                break;
+                            //case other:
+                            //Dump Unknown type Command
+                            default:
+                                Debug.LogWarning("Unknown Command");
+                                Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                                break;
+                        }
+                        //Debug
+                        //timer.Stop();
+                        //simulator.commands.AddRange()
+                        //simulator.units = data.units;
+                        //simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;
+                    }
+            }
 
             // Close the response.  
-            response.Close();        }    }}
+            response.Close();
+        }
+    }
+}
+
+

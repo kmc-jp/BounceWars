@@ -13,6 +13,9 @@ public class UnitMovedCmd : Command
  //   public float hp;
  //   public float mp;
 
-    public int uuid;
     public int owner;//1 or 0
+    public UnitMovedCmd()
+    {
+        type = 1;
+    }
 }
