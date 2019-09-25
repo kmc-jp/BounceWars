@@ -83,7 +83,6 @@ public class DragAndFire : MonoBehaviour
             targetPlane.Raycast(ray, out enter);
             var point = ray.GetPoint(enter);
             basicUnit.NotifyDragUpdate(point);
-            Debug.Log("Update " + point);
         }
     }
 }
