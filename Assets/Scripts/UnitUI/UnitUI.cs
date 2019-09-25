@@ -16,7 +16,7 @@ public class UnitUI : MonoBehaviour
         //rectTransform = GetComponent<RectTransform>();
 
         // Tinaxd Drag UI
-        DragUI = transform.Find("DragUI").GetComponent<DragUI>();
+        DragUI = transform.parent.Find("DragUI").GetComponent<DragUI>();
     }
 
     // Update is called once per frame

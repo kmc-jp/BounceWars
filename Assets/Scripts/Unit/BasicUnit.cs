@@ -252,12 +252,15 @@ public class BasicUnit : MonoBehaviour
     public void NotifyDragStart()
     {
         unitUI.DragUI.ShowDragUI(true);
+        // close ButtonsUI
+        MouseOn = false;
+        myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     public void NotifyDragUpdate(Vector3 worldPos)
     {
         var radius = Vector3.Distance(transform.position, worldPos);
-        var dir = new Vector2(worldPos.x - transform.position.x, worldPos.y - transform.position.y);
+        var dir = new Vector2(worldPos.x - transform.position.x, worldPos.z - transform.position.z);
         unitUI.DragUI.ArrowLockAt(dir);
     }
 
