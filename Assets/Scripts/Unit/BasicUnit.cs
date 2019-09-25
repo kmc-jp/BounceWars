@@ -247,4 +247,22 @@ public class BasicUnit : MonoBehaviour
         HP = HP - damage;
         PopupDamage(damage);
     }
+
+    // Tinaxd DragUI
+    public void NotifyDragStart()
+    {
+        unitUI.DragUI.ShowDragUI(true);
+    }
+
+    public void NotifyDragUpdate(Vector3 worldPos)
+    {
+        var radius = Vector3.Distance(transform.position, worldPos);
+        var dir = new Vector2(worldPos.x - transform.position.x, worldPos.y - transform.position.y);
+        unitUI.DragUI.ArrowLockAt(dir);
+    }
+
+    public void NotifyDragEnd()
+    {
+        unitUI.DragUI.ShowDragUI(false);
+    }
 }

@@ -37,6 +37,8 @@ public class DragAndFire : MonoBehaviour
                         target = null;
                         targetScript = null;
                     }
+                    // Tinaxd show DragUI
+                    target.GetComponent<BasicUnit>().NotifyDragStart();
                 }
             }
         }
@@ -69,7 +71,19 @@ public class DragAndFire : MonoBehaviour
 
                 targetScript.command = c;*/
                 grabbing = false;
+                target.GetComponent<BasicUnit>().NotifyDragEnd(); // Tinaxd disable DragUI
             }
+        }
+        // Tinaxd update DragUI
+        if (grabbing)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var basicUnit = target.GetComponent<BasicUnit>();
+            float enter = 0;
+            targetPlane.Raycast(ray, out enter);
+            var point = ray.GetPoint(enter);
+            basicUnit.NotifyDragUpdate(point);
+            Debug.Log("Update " + point);
         }
     }
 }

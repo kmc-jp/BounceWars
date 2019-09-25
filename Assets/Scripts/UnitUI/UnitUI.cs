@@ -14,6 +14,9 @@ public class UnitUI : MonoBehaviour
         transform.Find("WaitTime").GetComponent<MeshRenderer>().sortingLayerName = "UserGUI";
         transform.Find("WaitTime").GetComponent<MeshRenderer>().sortingOrder = 0;
         //rectTransform = GetComponent<RectTransform>();
+
+        // Tinaxd Drag UI
+        DragUI = transform.Find("DragUI").GetComponent<DragUI>();
     }
 
     // Update is called once per frame
@@ -91,4 +94,7 @@ public class UnitUI : MonoBehaviour
 
         Destroy(icon, length);
     }
+
+    // Tinaxd Drag UI
+    public DragUI DragUI;
 }
