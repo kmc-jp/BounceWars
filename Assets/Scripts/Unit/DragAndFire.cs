@@ -37,8 +37,10 @@ public class DragAndFire : MonoBehaviour
                         target = null;
                         targetScript = null;
                     }
-                    // Tinaxd show DragUI
-                    target.GetComponent<BasicUnit>().NotifyDragStart();
+                    else // Tinaxd show DragUI
+                    {
+                        target.GetComponent<BasicUnit>().NotifyDragStart();
+                    }
                 }
             }
         }
