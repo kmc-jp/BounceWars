@@ -19,7 +19,7 @@ public class DragUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ShowDragUI(true);
+        ShowDragUI(false);
     }
 
     // Update is called once per frame
@@ -34,19 +34,19 @@ public class DragUI : MonoBehaviour
         arrowImgWrapper.SetActive(b);
     }
 
-    private void UpdateArrowRotation(Vector2 vec)
+    private void UpdateArrowRotation(Vector3 vec)
     {
-        arrowImgWrapper.GetComponent<RectTransform>().localRotation = Quaternion.LookRotation(new Vector3(vec.y, 0, vec.x), Vector3.up);
+        arrowImgWrapper.transform.rotation = Quaternion.FromToRotation(new Vector3(0, 1, 0), vec);
         // Adjust arrow position
         //var x = (arrowImg.rectTransform.sizeDelta.x / 2) * (1 - Mathf.Cos(rad));
         //var y = -(arrowImg.rectTransform.sizeDelta.x / 2) * Mathf.Sin(rad);
         //arrowImg.rectTransform.localPosition = new Vector2(-x, -y);
     }
 
-    public void ArrowLockAt(Vector2 vec)
+    public void ArrowDrag(Vector3 vec)
     {
-        print(vec);
-        UpdateArrowRotation(new Vector2(-vec.x, -vec.y));
+        //print(vec);
+        UpdateArrowRotation(new Vector3(-vec.x, vec.y, -vec.z));
         
     }
 }
