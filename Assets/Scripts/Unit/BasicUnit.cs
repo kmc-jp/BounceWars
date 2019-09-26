@@ -260,7 +260,7 @@ public class BasicUnit : MonoBehaviour
     public void NotifyDragUpdate(Vector3 worldPos)
     {
         var radius = Vector3.Distance(transform.position, worldPos);
-        var dir = new Vector3(worldPos.x - transform.position.x, transform.position.y, worldPos.z - transform.position.z);
+        var dir = worldPos - transform.position;
         unitUI.DragUI.ArrowDrag(dir);
     }
 
