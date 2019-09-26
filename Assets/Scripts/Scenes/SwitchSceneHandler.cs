@@ -8,7 +8,9 @@ public class IntersceneBehaviour : MonoBehaviour
     // Inter-Scene data
     private static bool g_isHost;
     private static string g_username;
+    private static List<Unit> units;
 
     public static bool G_isHost { get => g_isHost; set => g_isHost = value; }
     public static string G_username { get => g_username; set => g_username = value; }
+    public static List<Unit> Units { get => units; set => units = value; }
 }

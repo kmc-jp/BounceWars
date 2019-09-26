@@ -18,3 +18,7 @@ public class Unit
     public float HP;
     public float MP;
 }
+
+//Type:
+//0 for elf_sword, use sword cion
+//1 for dragon_archer, use archer icon

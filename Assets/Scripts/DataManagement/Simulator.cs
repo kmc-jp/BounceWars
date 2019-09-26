@@ -155,6 +155,8 @@ public class Simulator : MonoBehaviour
                 u.z = i * 1.5f;
                 u.x1 = u.x;
                 u.z1 = u.z;
+                //Schin set unit type
+                u.type = Random.Range(0,2);
                 u.uuid = Random.Range(int.MinValue, int.MaxValue);
                 if (n == -1)
                 {

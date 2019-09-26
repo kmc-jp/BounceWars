@@ -33,14 +33,20 @@ public class DragUI : MonoBehaviour
         arrowImgWrapper.SetActive(b);
     }
 
-    private void UpdateArrowRotation(Vector3 vec)
+    private void UpdateArrow(Vector3 vec)
     {
         arrowImgWrapper.transform.rotation = Quaternion.LookRotation(vec, new Vector3(0, 1, 0));
+        // Schin change the position of Arrow
+        float rad = vec.magnitude < 2f ? 0f : vec.magnitude-2f;
+        vec = vec.normalized * rad;
+        arrowImgWrapper.transform.localPosition = new Vector3(vec.x, vec.z,0);
     }
 
-    public void ArrowDrag(Vector3 vec)
+    public void UpdateDragUI(Vector3 vec)
     {
         //print(vec);
-        UpdateArrowRotation(new Vector3(-vec.x, vec.y, -vec.z));
+        float rad = vec.magnitude < 2f ? 2f : vec.magnitude;
+        UpdateArrow(new Vector3(-vec.x, vec.y, -vec.z));
+        circleImg.rectTransform.localScale = new Vector2(rad, rad);
     }
 }
