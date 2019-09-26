@@ -109,9 +109,9 @@ public class BasicUnit : MonoBehaviour
 
         WaitTime = 0;
 
-        var iconTest = new string[] { "archer", "fire", "gear", "scout", "shield" };
-        var iconTestIndex = Random.Range(0, 5);
-        CountDownIconPath = "test/" + iconTest[iconTestIndex];
+        var iconNames = new string[] { "sword", "archer" };
+        var unitType = unit.type;
+        CountDownIconPath = "test/" + iconNames[unitType];
 
         // bind CountDownUI OBJ Tinaxd
         countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
