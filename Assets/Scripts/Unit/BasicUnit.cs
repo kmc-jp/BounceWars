@@ -171,8 +171,9 @@ public class BasicUnit : MonoBehaviour
     {
         Debug.Log("HP: " + HP);
 
-        GameObject popup = Instantiate(damagePopup, Vector3.zero, Quaternion.identity);
+        GameObject popup = Instantiate(damagePopup);
         popup.transform.SetParent(canvas.transform);
+        popup.transform.localPosition = new Vector3(0, 1, 0);
         popup.GetComponent<DamagePopup>().Unit = this.gameObject;
         popup.GetComponent<DamagePopup>().Canvas = canvas.GetComponent<Canvas>();
         popup.GetComponent<DamagePopup>().Text = (-damage).ToString();
