@@ -11,6 +11,8 @@ public class Simulator : MonoBehaviour
     public int isClient = 0;
     public List<Command> commands = new List<Command>();
 
+    public List<Command> unitTimerRequests = new List<Command>();
+
     private void Awake()
     {
 
@@ -234,6 +236,18 @@ public class Simulator : MonoBehaviour
                 u.vx = c.vx;
                 u.vz = c.vz;
                 c.processed = true;
+                // Tinaxd update CountdownUI (Host only)
+                // Generate a UnitTimerCommand
+                if (isClient == 0)
+                {
+                    var basicUnit = GetBasicUnit(c.uuid);
+                    UnitTimerCmd utc = new UnitTimerCmd();
+                    utc.penalty = basicUnit.WaitTimePenaltyTime;
+                    utc.timerType = UnitTimerCmd.MOVED;
+                    utc.uuid = c.uuid;
+                    unitTimerRequests.Add(utc);
+                    commands.Add(utc);
+                }
             }
             if(c1 is UnitUpdateCmd)
             {
@@ -245,6 +259,15 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
                 c.sent = true;
+            }
+            if (c1 is UnitTimerCmd)
+            {
+                print("Process UnitTimerCmd");
+                UnitTimerCmd c = (UnitTimerCmd)c1;
+                var basicUnit = GetBasicUnit(c.uuid);
+                basicUnit.MarkMoved();
+                if (isClient > 0)
+                    c.processed = true;
             }
         }
         List<Command> remains = new List<Command>();
@@ -298,5 +321,25 @@ public class Simulator : MonoBehaviour
         unitUpdateCmd.units = units;
         cs.Add((Command)unitUpdateCmd);
         return cs;
+    }
+
+    public UnitInfoTag GetUnitInfoTag(int uuid)
+    {
+        for (int i=0; i<instances.Count; i++)
+        {
+            if (instances[i].uuid == uuid)
+            {
+                return instances[i];
+            }
+        }
+        return null;
+    }
+
+    public BasicUnit GetBasicUnit(int uuid)
+    {
+        UnitInfoTag tag = GetUnitInfoTag(uuid);
+        if (tag != null)
+            return tag.basicUnit;
+        return null;
     }
 }

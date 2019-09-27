@@ -58,6 +58,11 @@ public class BasicUnit : MonoBehaviour
         get => 1.5f * (LastMoveTime - LockdownStartTime);
     }
 
+    public float WaitTimePenaltyTime
+    {
+        get => LockdownPenalty ? LockdownPenaltyTime : 0;
+    }
+
     public float LockdownStartTime;
     public float LastMoveTime;
 

@@ -84,6 +84,12 @@ public class Client : MonoBehaviour
                                 c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
                                 simulator.commands.Add(c);
                                 break;
+                            //UnitTimerCmd
+                            case 2:
+                                print("Received UnitTimerCmd");
+                                c = (JsonUtility.FromJson<UnitTimerCmd>(fromHost.commandsJson[i]));
+                                simulator.commands.Add(c);
+                                break;
                             //case other:
                             //Dump Unknown type Command
                             default:
