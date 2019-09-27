@@ -233,7 +233,7 @@ public class Simulator : MonoBehaviour
                 UnitMovedCmd c = (UnitMovedCmd)c1;
                 var basicUnit = GetBasicUnit(c.uuid);
                 //Debug.Log(c.vx);
-                if (!basicUnit.MovementLocked) // lockdown check
+                if (!basicUnit.MovementLocked && !basicUnit.Locked) // lockdown and waittime check
                 {
                     Unit u = GetUnit(c.uuid);
                     u.vx = c.vx;
