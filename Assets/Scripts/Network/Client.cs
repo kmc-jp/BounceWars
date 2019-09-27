@@ -86,7 +86,6 @@ public class Client : MonoBehaviour
                                 break;
                             //UnitTimerCmd
                             case 2:
-                                print("Received UnitTimerCmd");
                                 c = (JsonUtility.FromJson<UnitTimerCmd>(fromHost.commandsJson[i]));
                                 simulator.commands.Add(c);
                                 break;

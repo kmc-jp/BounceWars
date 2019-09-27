@@ -152,10 +152,6 @@ public class BasicUnit : MonoBehaviour
             WaitTime -= delta;
         }
 
-        // Lockdown
-        if (!LockdownPenalty && Input.GetKeyDown(KeyCode.L))
-            MarkLockdown();
-
         if (LockdownPenalty)
         {
             UpdateWaitTimeText();
@@ -224,6 +220,8 @@ public class BasicUnit : MonoBehaviour
         LockdownStartTime = Time.time;
         LockdownPenalty = true;
     }
+
+    public bool MovementLocked = false;
 
     /* // Tinaxd removed method
     public void UseCountDown(bool b)

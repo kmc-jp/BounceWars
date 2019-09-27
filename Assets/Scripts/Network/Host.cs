@@ -68,7 +68,12 @@ public class Host : MonoBehaviour
                             break;
                         //UnitTimerCmd
                         case 2:
-                            break; // Ignore UnitTimerCmd from clients
+                            c = (JsonUtility.FromJson<UnitTimerCmd>(fromClient.commandsJson[i]));
+                            if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
+                            {
+                                simulator.commands.Add(c);
+                            }
+                            break;
                         //case other:
                         //Dump Unknown type Command
                         default:

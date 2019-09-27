@@ -231,23 +231,27 @@ public class Simulator : MonoBehaviour
             if (c1 is UnitMovedCmd)
             {
                 UnitMovedCmd c = (UnitMovedCmd)c1;
+                var basicUnit = GetBasicUnit(c.uuid);
                 //Debug.Log(c.vx);
-                Unit u = GetUnit(c.uuid);
-                u.vx = c.vx;
-                u.vz = c.vz;
-                c.processed = true;
-                // Tinaxd update CountdownUI (Host only)
-                // Generate a UnitTimerCommand
-                if (isClient == 0)
+                if (!basicUnit.MovementLocked) // lockdown check
                 {
-                    var basicUnit = GetBasicUnit(c.uuid);
-                    UnitTimerCmd utc = new UnitTimerCmd();
-                    utc.penalty = basicUnit.WaitTimePenaltyTime;
-                    utc.timerType = UnitTimerCmd.MOVED;
-                    utc.uuid = c.uuid;
-                    unitTimerRequests.Add(utc);
-                    commands.Add(utc);
+                    Unit u = GetUnit(c.uuid);
+                    u.vx = c.vx;
+                    u.vz = c.vz;
+
+                    // Tinaxd update CountdownUI (Host only)
+                    // Generate a UnitTimerCommand
+                    if (isClient == 0)
+                    {
+                        UnitTimerCmd utc = new UnitTimerCmd();
+                        utc.penalty = basicUnit.WaitTimePenaltyTime;
+                        utc.timerType = UnitTimerCmd.MOVED;
+                        utc.uuid = c.uuid;
+                        unitTimerRequests.Add(utc);
+                        commands.Add(utc);
+                    }
                 }
+                c.processed = true;
             }
             if(c1 is UnitUpdateCmd)
             {
@@ -262,10 +266,63 @@ public class Simulator : MonoBehaviour
             }
             if (c1 is UnitTimerCmd)
             {
-                print("Process UnitTimerCmd");
                 UnitTimerCmd c = (UnitTimerCmd)c1;
-                var basicUnit = GetBasicUnit(c.uuid);
-                basicUnit.MarkMoved();
+                switch (c.timerType)
+                {
+                    case 0: // MOVED
+                        var basicUnit = GetBasicUnit(c.uuid);
+                        basicUnit.MarkMoved();
+                        // Lockdown ends
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (bu.Owned != basicUnit.Owned)
+                            {
+                                bu.MovementLocked = false;
+                            }
+                        }
+                        break;
+                    case 1: // HOST LOCKDOWN
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (isClient > 0)
+                            {
+                                if (bu.Owned)
+                                    bu.MovementLocked = true;
+                                else
+                                    bu.MarkLockdown();
+                            }
+                            else
+                            {
+                                if (bu.Owned)
+                                    bu.MarkLockdown();
+                                else
+                                    bu.MovementLocked = true;
+                            }
+                        }
+                        break;
+                    case 2: // CLIENT LOCKDOWN
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (isClient > 0)
+                            {
+                                if (bu.Owned)
+                                    bu.MarkLockdown();
+                                else
+                                    bu.MovementLocked = true;
+                            }
+                            else
+                            {
+                                if (bu.Owned)
+                                    bu.MovementLocked = true;
+                                else
+                                    bu.MarkLockdown();
+                            }
+                        }
+                        break;
+                }
                 if (isClient > 0)
                     c.processed = true;
             }
