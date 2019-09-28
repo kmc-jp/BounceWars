@@ -12,14 +12,18 @@ public class Client : MonoBehaviour
 {
     //Remember to bind the Simulator script here, if you've moved the Host object.
     public Simulator simulator;
+    public ClientLobbyScene clientLobbyScene;
 
-    Thread _responseThread;
+    static Thread _responseThread;
     // Start is called before the first frame update
     void Awake()
     {
         // start a response thread 
-        _responseThread = new Thread(ResponseThread);
-        _responseThread.Start();
+        if (_responseThread == null)
+        {
+            _responseThread = new Thread(ResponseThread);
+            _responseThread.Start();
+        }
     }
     private void OnApplicationQuit()
     {
@@ -42,7 +46,9 @@ public class Client : MonoBehaviour
             CommandJsonList fromClient = new CommandJsonList();
             //collect requests here//
             //collect requests from simulator
-            fromClient.AddRange(simulator.commands);
+            if (simulator != null) fromClient.AddRange(simulator.commands);
+            if (clientLobbyScene != null) fromClient.AddRange(clientLobbyScene.getCmd());
+
             simulator.SetCommandsSent();
 
             //fromClient.AddRange(List<Command>);
@@ -76,26 +82,44 @@ public class Client : MonoBehaviour
                     for (int i = 0; i < fromHost.commandsJson.Count; i++)
                     {
                         Command c = null;
-                        //For Command subclass types, refer to Command.cs comments
-                        switch (fromHost.type[i])
+
+                        try
                         {
-                            //UnitUpdateCmd
-                            case -1:
-                                c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
-                                simulator.commands.Add(c);
-                                break;
-                            //case other:
-                            //Dump Unknown type Command
-                            default:
-                                Debug.LogWarning("Unknown Command");
-                                Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
-                                break;
+                            //For Command subclass types, refer to Command.cs comments
+                            switch (fromHost.type[i])
+                            {
+                                //UnitUpdateCmd
+                                case -1:
+                                    c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
+                                    simulator.commands.Add(c);
+                                    break;
+                                //LobbyReadyCmd
+                                case 101:
+                                    c = (JsonUtility.FromJson<LobbyReadyCmd>(fromHost.commandsJson[i]));
+                                    clientLobbyScene.commands.Add(c);
+                                    break;
+                                //LobbyStartgameCmd
+                                case 105:
+                                    c = (JsonUtility.FromJson<LobbyStartgameCmd>(fromHost.commandsJson[i]));
+                                    clientLobbyScene.commands.Add(c);
+                                    break;
+                                //case other:
+                                //Dump Unknown type Command
+                                default:
+                                    Debug.LogWarning("Unknown Command");
+                                    Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                                    break;
+                            }
+                            //Debug
+                            //timer.Stop();
+                            //simulator.commands.AddRange()
+                            //simulator.units = data.units;
+                            //simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;
                         }
-                        //Debug
-                        //timer.Stop();
-                        //simulator.commands.AddRange()
-                        //simulator.units = data.units;
-                        //simulator.time = data.time + timer.ElapsedMilliseconds * 0.001f * 0.5f;
+                        catch (System.Exception e)
+                        {
+                            Debug.LogWarning(e);
+                        }
                     }
             }
 

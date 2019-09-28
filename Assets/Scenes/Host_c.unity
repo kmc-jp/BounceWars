@@ -561,6 +561,7 @@ GameObject:
   - component: {fileID: 1048880349}
   - component: {fileID: 1048880348}
   - component: {fileID: 1048880351}
+  - component: {fileID: 1048880353}
   - component: {fileID: 1048880352}
   m_Layer: 0
   m_Name: Obelisk
@@ -627,6 +628,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 1048880349}
+  hostLobbyScene: {fileID: 0}
+  hostBattleScene: {fileID: 1048880353}
 --- !u!114 &1048880352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -637,6 +640,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 646015b928ca6dd48a99c7d19c71db40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapname: Map_Grassland
+--- !u!114 &1048880353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048880347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077d7b760a253884cb397573c5c06f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1919098716
