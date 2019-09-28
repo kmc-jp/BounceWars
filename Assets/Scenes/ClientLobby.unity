@@ -1160,6 +1160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1979631126}
   - component: {fileID: 1979631127}
+  - component: {fileID: 1979631128}
   m_Layer: 5
   m_Name: SceneManager
   m_TagString: Untagged
@@ -1198,6 +1199,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d978185deff1a4e8fc89f426478901, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  commands: []
+--- !u!114 &1979631128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979631125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702f333f70dfe40cfa3a10603369330f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulator: {fileID: 0}
+  clientLobbyScene: {fileID: 1979631127}
 --- !u!1 &1996204817
 GameObject:
   m_ObjectHideFlags: 0

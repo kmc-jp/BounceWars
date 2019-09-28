@@ -16,6 +16,8 @@ public class MainMenuScene : IntersceneBehaviour
     {
         nameInputPanel = GameObject.Find("NameInputPanel");
         errorText = GameObject.Find("IllegalNameWarning");
+        //If Http port is on, close it
+        CloseHttpListener();
     }
 
     void Start()

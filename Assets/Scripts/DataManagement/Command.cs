@@ -26,3 +26,11 @@ public class Command
 //UnitUpdateCmd [-1]
 //Continuously updated by Simulator, contains a list of all current unit states.
 //C>H H>C
+
+//LobbyReadyCmd [101]
+//ClientLobby ready, or HostLobby reply client as comfirm.
+//C>H H>C
+
+//LobbyStartgameCmd [105]
+//Host tells client to start the game.
+//H>C

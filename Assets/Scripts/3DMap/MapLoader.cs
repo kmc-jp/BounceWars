@@ -18,12 +18,13 @@ public class MapLoader
     public static void generateTiles(GameMap map){
         // CubeプレハブをGameObject型で取得
         GameObject[] tiles = {
-                (GameObject)Resources.Load ("Tile_Grass"),
-                (GameObject)Resources.Load ("Tile_Sea"),
-                (GameObject)Resources.Load ("Tile_Sand"),
-                (GameObject)Resources.Load ("Tile_Brick"),
-                (GameObject)Resources.Load ("Tile_Clay"),
-                (GameObject)Resources.Load ("Tile_Lava") };
+                (GameObject)Resources.Load ("Tile_Grass"),  //0
+                (GameObject)Resources.Load ("Tile_Sea"),    //1
+                (GameObject)Resources.Load ("Tile_Sand"),   //2
+                (GameObject)Resources.Load ("Tile_Brick"),  //3
+                (GameObject)Resources.Load ("Tile_Clay"),   //4
+                (GameObject)Resources.Load ("Tile_Lava"),   //5
+                (GameObject)Resources.Load ("Tile_Rock") }; //6
         GameObject[] buildings = {
                 null,
                 (GameObject)Resources.Load ("Building_Forest"),

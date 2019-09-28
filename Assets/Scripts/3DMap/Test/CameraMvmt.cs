@@ -34,7 +34,6 @@ public class CameraMvmt : MonoBehaviour
         // camera movement
         if (Input.GetKey("w") || (Input.mousePosition.y >= Screen.height - panBorder && mouseOperationEnabled))
         {
-            Debug.Log("aaa");
             pos.z += panSpeed * Time.deltaTime;
         }
         if (Input.GetKey("s") || (Input.mousePosition.y <= panBorder && mouseOperationEnabled))

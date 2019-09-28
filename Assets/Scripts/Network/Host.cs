@@ -5,115 +5,141 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Host : MonoBehaviour
 {
     //Remember to bind the Simulator script here, if you've moved the Host object.
     public Simulator simulator;
+    public IntersceneBehaviour interScene;
 
-    HttpListener _httpListener = new HttpListener();
-    Thread _responseThread;
+    static HttpListener _httpListener;
+    static Thread _responseThread;
 
-    static bool simulateLag = false;
+    static bool simulateLag = true;
+
+    private static CommandJsonList inList;
+    private static CommandJsonList outList;
 
     // Start is called before the first frame update
     void Awake()
     {
+        // Bind a childclass of IntersceneBehaviour in current scene
+        interScene = GetComponent<IntersceneBehaviour>();
         // Start http server and establish a response thread
-        Debug.Log("Starting server...");
+        // get http server
+        _httpListener = interScene.GetHttpListener();
         // Set network address here
-        _httpListener.Prefixes.Add("http://localhost:5000/");
-        _httpListener.Start();
-        Debug.Log("Server started.");
+        if(_httpListener == null)
+            _httpListener = interScene.StartHttpListener("http://localhost:5000/");
+        // A scene change detector
+        SceneManager.sceneUnloaded += RefreshThread;
+        // start a response thread 
+        Debug.Log("Starting thread...");
+        closeResponseThread();
         _responseThread = new Thread(ResponseThread);
         _responseThread.Start();
     }
+    private void RefreshThread(Scene s)
+    {
+        closeResponseThread();
+    }
+
+    public void closeResponseThread()
+    {
+        if (_responseThread != null && _responseThread.IsAlive)
+            _responseThread.Abort();
+    }
     private void OnApplicationQuit()
     {
-        _responseThread.Abort();
-        _httpListener.Close();
+        closeResponseThread();
+        interScene.CloseHttpListener();
     }
     void ResponseThread()
     {
         while (true)
         {
-            try
+            //Simulate Lag
+            if (simulateLag)
+                Thread.Sleep(5);
+            ////    Receiving HTTP Request    ////
+            //                                  //
+            if (_httpListener == null || !_httpListener.IsListening)
+                break;
+            //Receive HTTP request from client as a stream
+            HttpListenerContext context = _httpListener.GetContext();
+            StreamReader reader = new StreamReader(context.Request.InputStream);
+            string resposeFromClient = reader.ReadToEnd();
+            //depack the Json into CommandJsonList object
+            CommandJsonList fromClient = JsonUtility.FromJson<CommandJsonList>(resposeFromClient);
+            //get the commands inside CommandJsonList
+            List<Command> cmds = fromClient.GetCommands();
+            //check the type of each command, inside CommandJsonList
+            for (int i = 0; i < cmds.Count; i++)
             {
-                ////    Receiving HTTP Request    ////
-                //                                  //
-                //Receive HTTP request from client as a stream
-                HttpListenerContext context = _httpListener.GetContext();
-                StreamReader reader = new StreamReader(context.Request.InputStream);
-                string resposeFromClient = reader.ReadToEnd();
-                if (simulateLag)
-                    Thread.Sleep(500);
-                //depack the Json into CommandJsonList object
-                CommandJsonList fromClient = JsonUtility.FromJson<CommandJsonList>(resposeFromClient);
-                //check the type of each command, inside CommandJsonList
-                for (int i = 0; i < fromClient.commandsJson.Count; i++)
+                Command c = cmds[i];
+                try
                 {
-                    Command c = null;
-                    //For Command subclass types, refer to Command.cs comments
-                    switch (fromClient.type[i])
+                    //Schin check the classes of Commands
+                    switch (c.GetType().ToString())
                     {
-                        //UnitUpdateCmd
-                        case -1:
-                            c = (JsonUtility.FromJson<UnitUpdateCmd>(fromClient.commandsJson[i]));
+                        case "UnitUpdateCmd":
+                        case "UnitMovedCmd":
                             simulator.commands.Add(c);
                             break;
-                        //UnitMovedCmd
-                        case 1:
-                            c = (JsonUtility.FromJson<UnitMovedCmd>(fromClient.commandsJson[i]));
-                            simulator.commands.Add(c);
-                            break;
-                        //UnitTimerCmd
-                        case 2:
-                            c = (JsonUtility.FromJson<UnitTimerCmd>(fromClient.commandsJson[i]));
+                        case "UnitTimerCmd":
                             if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
                             {
                                 simulator.commands.Add(c);
                             }
                             break;
+                        case "LobbyReadyCmd":
+                        case "ClientJoinedCmd":
+                            interScene.AddCmd(c);
+                            break;
                         //case other:
                         //Dump Unknown type Command
                         default:
-                            Debug.LogWarning("Unknown Command");
-                            Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                            Debug.LogWarning("Unknown Command" + c.GetType());
+                            Debug.Log(c);
                             break;
                     }
                 }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning(e);
+                }
+            }
 
-                ////    Responding HTTP Request    ////
-                //                                   //
-                //create a response JsonList
-                CommandJsonList fromHost = new CommandJsonList();
+            ////    Responding HTTP Request    ////
+            //                                   //
+            //create a response JsonList
+            CommandJsonList fromHost = new CommandJsonList();
 
-                //collect requests here//
-                //collect requests from simulator
+            //collect requests here//
+            //collect requests from simulator
+            if (simulator != null)
+            {
                 fromHost.AddRange(simulator.GetCommandsFromHost());
                 //collect TimerResetCmd Tinaxd
                 fromHost.AddRange(simulator.unitTimerRequests);
                 simulator.unitTimerRequests.Clear();
-
-                //fromHost.AddRange(List<Command>);
-
-
-                //after collecting all the responses, convert them into binary stream
-                byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromHost));
-
-                //write the response 
-                if (simulateLag)
-                    Thread.Sleep(500);
-                context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length);
-                context.Response.Close();
-
-
-                //Debug.Log("Respone given to a request.");
             }
-            catch(System.Exception e)
+            if (interScene != null)
             {
-                Debug.LogWarning(e);
+                List<Command> tst = interScene.GetCmd();
+                fromHost.AddRange(tst);
             }
+            //fromHost.AddRange(List<Command>);
+
+
+            //after collecting all the responses, convert them into binary stream
+            byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromHost));
+            context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length);
+            context.Response.Close();
+
+
+            //Debug.Log("Respone given to a request.");
         }
     }
 }
