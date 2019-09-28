@@ -105,40 +105,30 @@ public class Client : MonoBehaviour
                     CommandJsonList fromHost = JsonUtility.FromJson<CommandJsonList>(responseFromServer);
                     // If the response Json is empty, there's a big chance the host is down.
                     if (fromHost != null)
-                        for (int i = 0; i < fromHost.commandsJson.Count; i++)
+                    {
+                        //get the commands inside CommandJsonList
+                        List<Command> cmds = fromHost.GetCommands();
+                        for (int i = 0; i < cmds.Count; i++)
                         {
-                            Command c = null;
+                            Command c = cmds[i];
                             try
                             {
-                                //For Command subclass types, refer to Command.cs comments
-                                Debug.Log(fromHost.type[i]);
-                                switch (fromHost.type[i])
+                                //Schin check the classes of Commands
+                                switch (c.GetType().ToString())
                                 {
-                                    //UnitUpdateCmd
-                                    case -1:
-                                        c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
+                                    case "UnitUpdateCmd":
+                                    case "UnitTimerCmd":
                                         simulator.commands.Add(c);
                                         break;
-                                    //UnitTimerCmd
-                                    case 2:
-                                        c = (JsonUtility.FromJson<UnitTimerCmd>(fromHost.commandsJson[i]));
-                                        simulator.commands.Add(c);
-                                        break;
-                                    //LobbyReadyCmd
-                                    case 101:
-                                        c = (JsonUtility.FromJson<LobbyReadyCmd>(fromHost.commandsJson[i]));
-                                        interScene.AddCmd(c);
-                                        break;
-                                    //LobbyStartgameCmd
-                                    case 105:
-                                        c = (JsonUtility.FromJson<LobbyStartgameCmd>(fromHost.commandsJson[i]));
+                                    case "LobbyReadyCmd":
+                                    case "LobbyStartgameCmd":
                                         interScene.AddCmd(c);
                                         break;
                                     //case other:
                                     //Dump Unknown type Command
                                     default:
-                                        Debug.LogWarning("Unknown Command" + fromHost.type[i]);
-                                        Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                                        Debug.LogWarning("Unknown Command" + c.GetType());
+                                        Debug.Log(c);
                                         break;
                                 }
                                 //Debug
@@ -153,6 +143,7 @@ public class Client : MonoBehaviour
 
                             }
                         }
+                    }
                 }
             }
             catch(TimeoutException we)

@@ -72,48 +72,36 @@ public class Host : MonoBehaviour
             string resposeFromClient = reader.ReadToEnd();
             //depack the Json into CommandJsonList object
             CommandJsonList fromClient = JsonUtility.FromJson<CommandJsonList>(resposeFromClient);
+            //get the commands inside CommandJsonList
+            List<Command> cmds = fromClient.GetCommands();
             //check the type of each command, inside CommandJsonList
-            for (int i = 0; i < fromClient.commandsJson.Count; i++)
+            for (int i = 0; i < cmds.Count; i++)
             {
-                Command c = null;
+                Command c = cmds[i];
                 try
                 {
-                    //For Command subclass types, refer to Command.cs comments
-                    switch (fromClient.type[i])
+                    //Schin check the classes of Commands
+                    switch (c.GetType().ToString())
                     {
-                        //UnitUpdateCmd
-                        case -1:
-                            c = (JsonUtility.FromJson<UnitUpdateCmd>(fromClient.commandsJson[i]));
+                        case "UnitUpdateCmd":
+                        case "UnitMovedCmd":
                             simulator.commands.Add(c);
                             break;
-                        //UnitMovedCmd
-                        case 1:
-                            c = (JsonUtility.FromJson<UnitMovedCmd>(fromClient.commandsJson[i]));
-                            simulator.commands.Add(c);
-                            break;
-                        //LobbyReadyCmd
-                        case 101:
-                            c = (JsonUtility.FromJson<LobbyReadyCmd>(fromClient.commandsJson[i]));
-                            interScene.AddCmd(c);
-                            break;
-                        //ClientJoinedCmd
-                        case 106:
-                            c = (JsonUtility.FromJson<ClientJoinedCmd>(fromClient.commandsJson[i]));
-                            interScene.AddCmd(c);
-                            break;
-                        //UnitTimerCmd
-                        case 2:
-                            c = (JsonUtility.FromJson<UnitTimerCmd>(fromClient.commandsJson[i]));
+                        case "UnitTimerCmd":
                             if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
                             {
                                 simulator.commands.Add(c);
                             }
                             break;
+                        case "LobbyReadyCmd":
+                        case "ClientJoinedCmd":
+                            interScene.AddCmd(c);
+                            break;
                         //case other:
                         //Dump Unknown type Command
                         default:
-                            Debug.LogWarning("Unknown Command");
-                            Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                            Debug.LogWarning("Unknown Command" + c.GetType());
+                            Debug.Log(c);
                             break;
                     }
                 }
