@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,17 @@ public class CommandJsonList
             type.Add(c.type);
         }
     }
+    //Schin Merge another CommandJsonList
+    public void MergeJsonList(CommandJsonList newCJL)
+    {
+        List<string> newCmds = newCJL.commandsJson;
+        List<int> newTypes = newCJL.type;
+        for (int i = 0; i < (newCmds).Count; i++)
+        {
+            commandsJson.Add(newCmds[i]);
+            type.Add(newTypes[i]);
+        }
+    }
     public List<Command> GetCommands()
     {
         List<Command> commands = new List<Command>();
@@ -59,5 +71,11 @@ public class CommandJsonList
 
         }
         return commands;
+    }
+    public int Count()
+    {
+        if (commandsJson.Count != type.Count)
+            Debug.LogWarning("CommandJsonList Json and type number don't match");
+        return type.Count;
     }
 }

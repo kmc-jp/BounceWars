@@ -10,6 +10,8 @@ public class LobbyStartgameCmd : Command
 
     public LobbyStartgameCmd()
     {
+        //set type
+        type = 105;
         mapID = 0;
         hostUnits = new List<Unit>();
         clientUnits = new List<Unit>();

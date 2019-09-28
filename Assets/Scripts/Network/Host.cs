@@ -5,53 +5,71 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Host : MonoBehaviour
 {
     //Remember to bind the Simulator script here, if you've moved the Host object.
     public Simulator simulator;
-    public HostLobbyScene hostLobbyScene;
+    public IntersceneBehaviour interScene;
 
-    static HttpListener _httpListener = new HttpListener();
+    static HttpListener _httpListener;
     static Thread _responseThread;
 
-    static bool simulateLag = false;
+    static bool simulateLag = true;
+
+    private static CommandJsonList inList;
+    private static CommandJsonList outList;
 
     // Start is called before the first frame update
     void Awake()
     {
+        // Bind a childclass of IntersceneBehaviour in current scene
+        interScene = GetComponent<IntersceneBehaviour>();
         // Start http server and establish a response thread
-        Debug.Log("Starting server...");
+        // get http server
+        _httpListener = interScene.GetHttpListener();
         // Set network address here
-        if (_httpListener == null)
-        {
-            _httpListener.Prefixes.Add("http://localhost:5000/");
-            _httpListener.Start();
-        }
-        Debug.Log("Server started.");
-        if (_responseThread == null)
-        {
-            _responseThread = new Thread(ResponseThread);
-            _responseThread.Start();
-        }
+        if(_httpListener == null)
+            _httpListener = interScene.StartHttpListener("http://localhost:5000/");
+        // A scene change detector
+        SceneManager.sceneUnloaded += RefreshThread;
+        // start a response thread 
+        Debug.Log("Starting thread...");
+        closeResponseThread();
+        _responseThread = new Thread(ResponseThread);
+        _responseThread.Start();
+    }
+    private void RefreshThread(Scene s)
+    {
+        closeResponseThread();
+    }
+
+    public void closeResponseThread()
+    {
+        if (_responseThread != null && _responseThread.IsAlive)
+            _responseThread.Abort();
     }
     private void OnApplicationQuit()
     {
-        _responseThread.Abort();
-        _httpListener.Close();
+        closeResponseThread();
+        interScene.CloseHttpListener();
     }
     void ResponseThread()
     {
         while (true)
         {
+            //Simulate Lag
+            if (simulateLag)
+                Thread.Sleep(5);
             ////    Receiving HTTP Request    ////
             //                                  //
+            if (_httpListener == null || !_httpListener.IsListening)
+                break;
             //Receive HTTP request from client as a stream
             HttpListenerContext context = _httpListener.GetContext();
             StreamReader reader = new StreamReader(context.Request.InputStream);
             string resposeFromClient = reader.ReadToEnd();
-            if (simulateLag)
-                Thread.Sleep(500);
             //depack the Json into CommandJsonList object
             CommandJsonList fromClient = JsonUtility.FromJson<CommandJsonList>(resposeFromClient);
             //check the type of each command, inside CommandJsonList
@@ -76,7 +94,13 @@ public class Host : MonoBehaviour
                         //LobbyReadyCmd
                         case 101:
                             c = (JsonUtility.FromJson<LobbyReadyCmd>(fromClient.commandsJson[i]));
-                            simulator.commands.Add(c);
+                            interScene.AddCmd(c);
+                            break;
+                        //ClientJoinedCmd
+                        case 106:
+                            c = (JsonUtility.FromJson<ClientJoinedCmd>(fromClient.commandsJson[i]));
+                            interScene.AddCmd(c);
+                            break;
                         //UnitTimerCmd
                         case 2:
                             c = (JsonUtility.FromJson<UnitTimerCmd>(fromClient.commandsJson[i]));
@@ -93,7 +117,7 @@ public class Host : MonoBehaviour
                             break;
                     }
                 }
-                catch(System.Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogWarning(e);
                 }
@@ -113,16 +137,16 @@ public class Host : MonoBehaviour
                 fromHost.AddRange(simulator.unitTimerRequests);
                 simulator.unitTimerRequests.Clear();
             }
-            if (hostLobbyScene != null) fromHost.AddRange(hostLobbyScene.GetCommandsFromHost());
+            if (interScene != null)
+            {
+                List<Command> tst = interScene.GetCmd();
+                fromHost.AddRange(tst);
+            }
             //fromHost.AddRange(List<Command>);
 
 
             //after collecting all the responses, convert them into binary stream
             byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromHost));
-
-            //write the response 
-            if (simulateLag)
-                Thread.Sleep(500);
             context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length);
             context.Response.Close();
 

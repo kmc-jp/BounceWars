@@ -8,9 +8,11 @@ public class LobbyReadyCmd : Command
     public LobbyReadyCmd()
     {
         isReady = 0;
+        type = 101;
     }
     public LobbyReadyCmd(int r)
     {
         isReady = r;
+        type = 101;
     }
 }

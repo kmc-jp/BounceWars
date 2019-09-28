@@ -6,18 +6,14 @@ using UnityEngine.UI;
 
 public class HostLobbyScene : IntersceneBehaviour
 {
-    public List<Command> commands;
-    private List<Command> cmdFromHost;
 
     private GameObject startGameButton;
     private int isClientReady;
 
-    private void OnEnable()
+    void OnEnable()
     {
         startGameButton = GameObject.Find("StartGameBtn");
         startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
-        commands = new List<Command>();
-        cmdFromHost = new List<Command>();
 
         isClientReady = 0;
     }
@@ -29,21 +25,23 @@ public class HostLobbyScene : IntersceneBehaviour
     void Update()
     {
         //Check cmmands
-        for (int i = commands.Count - 1; i >= 0; i--)
+        for (int i = receivedCmds.Count - 1; i >= 0; i--)
         {
-            Command cTemp = commands[i];
+            Command cTemp = receivedCmds[i];
             if (cTemp is LobbyReadyCmd)
             {
                 LobbyReadyCmd c = (LobbyReadyCmd)cTemp;
                 isClientReady = c.isReady;
-                if(isClientReady>0)
-                    startGameButton.GetComponentInChildren<Text>().color = new Color(1,1,1);
+                if (isClientReady > 0)
+                    startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
                 // return this cmd back to Client for checking
-                cmdFromHost.Add((Command)c);
+                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady)));
             }
-            commands.RemoveAt(i);
+            else
+                continue;
+            receivedCmds.RemoveAt(i);
         }
     }
     public void onStartGameBtnClick()
@@ -57,11 +55,5 @@ public class HostLobbyScene : IntersceneBehaviour
     public void onReturnBtnClick()
     {
         SceneManager.LoadScene("MainMenu");
-    }
-    public List<Command> GetCommandsFromHost()
-    {
-        List<Command> outCmdTmp = cmdFromHost.ConvertAll(cmd => new Command());
-        cmdFromHost = new List<Command>();
-        return outCmdTmp;
     }
 }

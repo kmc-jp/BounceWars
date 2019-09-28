@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class ClientLobbyScene : IntersceneBehaviour
 {
-    private List<Command> cmdToHost;
-    public List<Command> commands;
 
     private GameObject startGameButton;
     private int isClientReady;
@@ -17,9 +15,6 @@ public class ClientLobbyScene : IntersceneBehaviour
     {
         startGameButton = GameObject.Find("StartGameBtn");
         //startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
-
-        cmdToHost = new List<Command>();
-        commands = new List<Command>();
 
         isClientReady = 0;
         isReadyRequest = 0;
@@ -33,9 +28,9 @@ public class ClientLobbyScene : IntersceneBehaviour
     private void Update()
     {
         //Check cmmands
-        for (int i = commands.Count - 1; i >= 0; i--)
+        for (int i = receivedCmds.Count - 1; i >= 0; i--)
         {
-            Command cTemp = commands[i];
+            Command cTemp = receivedCmds[i];
             if (cTemp is LobbyReadyCmd)
             {
                 LobbyReadyCmd c = (LobbyReadyCmd)cTemp;
@@ -43,24 +38,17 @@ public class ClientLobbyScene : IntersceneBehaviour
                 if (isClientReady > 0)
                     startGameButton.GetComponentInChildren<Text>().color = new Color(1, 0, 0);
                 else
-                    startGameButton.GetComponentInChildren<Text>().color = new Color(1,1,1);
+                    startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
             }
             else if (cTemp is LobbyStartgameCmd)
             {
-
                 SceneManager.LoadScene("Client_c");
             }
-            commands.RemoveAt(i);
+            // The unprocessed commands are saved for other child of IntersceneBehaviour
+            else
+                continue;
+            receivedCmds.RemoveAt(i);
         }
-    }
-    public List<Command> getCmd()
-    {
-        List<Command> outCmdTmp = cmdToHost.ConvertAll(cmd => new Command());
-        if (isClientReady != isReadyRequest)
-        {
-            outCmdTmp.Add((Command)(new LobbyReadyCmd(isClientReady)));
-        }
-        return outCmdTmp;
     }
     public void onStartGameBtnClick()
     {
@@ -70,5 +58,15 @@ public class ClientLobbyScene : IntersceneBehaviour
     public void onReturnBtnClick()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+    public override List<Command> GetCmd()
+    {
+        List<Command> outCmdTmp = new List<Command>(tosendCmds);
+        tosendCmds = new List<Command>();
+        if (isClientReady != isReadyRequest)
+        {
+            outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest)));
+        }
+        return outCmdTmp;
     }
 }

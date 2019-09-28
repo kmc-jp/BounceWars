@@ -119,7 +119,7 @@ public class BasicUnit : MonoBehaviour
         CountDownIconPath = "test/" + iconNames[unitType];
 
         // bind CountDownUI OBJ Tinaxd
-        countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
+        countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();
 
     }
 
