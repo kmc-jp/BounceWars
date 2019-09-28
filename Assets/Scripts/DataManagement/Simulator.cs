@@ -11,6 +11,8 @@ public class Simulator : MonoBehaviour
     public int isClient = 0;
     public List<Command> commands = new List<Command>();
 
+    public List<Command> unitTimerRequests = new List<Command>();
+
     private void Awake()
     {
 
@@ -229,10 +231,26 @@ public class Simulator : MonoBehaviour
             if (c1 is UnitMovedCmd)
             {
                 UnitMovedCmd c = (UnitMovedCmd)c1;
+                var basicUnit = GetBasicUnit(c.uuid);
                 //Debug.Log(c.vx);
-                Unit u = GetUnit(c.uuid);
-                u.vx = c.vx;
-                u.vz = c.vz;
+                if (!basicUnit.MovementLocked && !basicUnit.Locked) // lockdown and waittime check
+                {
+                    Unit u = GetUnit(c.uuid);
+                    u.vx = c.vx;
+                    u.vz = c.vz;
+
+                    // Tinaxd update CountdownUI (Host only)
+                    // Generate a UnitTimerCommand
+                    if (isClient == 0)
+                    {
+                        UnitTimerCmd utc = new UnitTimerCmd();
+                        utc.penalty = basicUnit.WaitTimePenaltyTime;
+                        utc.timerType = UnitTimerCmd.MOVED;
+                        utc.uuid = c.uuid;
+                        unitTimerRequests.Add(utc);
+                        commands.Add(utc);
+                    }
+                }
                 c.processed = true;
             }
             if(c1 is UnitUpdateCmd)
@@ -245,6 +263,68 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
                 c.sent = true;
+            }
+            if (c1 is UnitTimerCmd)
+            {
+                UnitTimerCmd c = (UnitTimerCmd)c1;
+                switch (c.timerType)
+                {
+                    case 0: // MOVED
+                        var basicUnit = GetBasicUnit(c.uuid);
+                        basicUnit.MarkMoved();
+                        // Lockdown ends
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (bu.Owned != basicUnit.Owned)
+                            {
+                                bu.MovementLocked = false;
+                            }
+                        }
+                        break;
+                    case 1: // HOST LOCKDOWN
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (isClient > 0)
+                            {
+                                if (bu.Owned)
+                                    bu.MovementLocked = true;
+                                else
+                                    bu.MarkLockdown();
+                            }
+                            else
+                            {
+                                if (bu.Owned)
+                                    bu.MarkLockdown();
+                                else
+                                    bu.MovementLocked = true;
+                            }
+                        }
+                        break;
+                    case 2: // CLIENT LOCKDOWN
+                        foreach (var instance in instances)
+                        {
+                            var bu = instance.basicUnit;
+                            if (isClient > 0)
+                            {
+                                if (bu.Owned)
+                                    bu.MarkLockdown();
+                                else
+                                    bu.MovementLocked = true;
+                            }
+                            else
+                            {
+                                if (bu.Owned)
+                                    bu.MovementLocked = true;
+                                else
+                                    bu.MarkLockdown();
+                            }
+                        }
+                        break;
+                }
+                if (isClient > 0)
+                    c.processed = true;
             }
         }
         List<Command> remains = new List<Command>();
@@ -298,5 +378,25 @@ public class Simulator : MonoBehaviour
         unitUpdateCmd.units = units;
         cs.Add((Command)unitUpdateCmd);
         return cs;
+    }
+
+    public UnitInfoTag GetUnitInfoTag(int uuid)
+    {
+        for (int i=0; i<instances.Count; i++)
+        {
+            if (instances[i].uuid == uuid)
+            {
+                return instances[i];
+            }
+        }
+        return null;
+    }
+
+    public BasicUnit GetBasicUnit(int uuid)
+    {
+        UnitInfoTag tag = GetUnitInfoTag(uuid);
+        if (tag != null)
+            return tag.basicUnit;
+        return null;
     }
 }

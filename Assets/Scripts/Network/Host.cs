@@ -77,6 +77,13 @@ public class Host : MonoBehaviour
                         case 101:
                             c = (JsonUtility.FromJson<LobbyReadyCmd>(fromClient.commandsJson[i]));
                             simulator.commands.Add(c);
+                        //UnitTimerCmd
+                        case 2:
+                            c = (JsonUtility.FromJson<UnitTimerCmd>(fromClient.commandsJson[i]));
+                            if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
+                            {
+                                simulator.commands.Add(c);
+                            }
                             break;
                         //case other:
                         //Dump Unknown type Command
@@ -99,7 +106,13 @@ public class Host : MonoBehaviour
 
             //collect requests here//
             //collect requests from simulator
-            if (simulator != null) fromHost.AddRange(simulator.GetCommandsFromHost());
+            if (simulator != null)
+            {
+                fromHost.AddRange(simulator.GetCommandsFromHost());
+                //collect TimerResetCmd Tinaxd
+                fromHost.AddRange(simulator.unitTimerRequests);
+                simulator.unitTimerRequests.Clear();
+            }
             if (hostLobbyScene != null) fromHost.AddRange(hostLobbyScene.GetCommandsFromHost());
             //fromHost.AddRange(List<Command>);
 

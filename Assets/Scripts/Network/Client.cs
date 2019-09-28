@@ -118,7 +118,22 @@ public class Client : MonoBehaviour
                         }
                         catch (System.Exception e)
                         {
-                            Debug.LogWarning(e);
+                            //UnitUpdateCmd
+                            case -1:
+                                c = (JsonUtility.FromJson<UnitUpdateCmd>(fromHost.commandsJson[i]));
+                                simulator.commands.Add(c);
+                                break;
+                            //UnitTimerCmd
+                            case 2:
+                                c = (JsonUtility.FromJson<UnitTimerCmd>(fromHost.commandsJson[i]));
+                                simulator.commands.Add(c);
+                                break;
+                            //case other:
+                            //Dump Unknown type Command
+                            default:
+                                Debug.LogWarning("Unknown Command");
+                                Debug.Log((JsonUtility.FromJson<Command>(fromClient.commandsJson[i])));
+                                break;
                         }
                     }
             }
