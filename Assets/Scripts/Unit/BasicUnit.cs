@@ -58,6 +58,11 @@ public class BasicUnit : MonoBehaviour
         get => 1.5f * (LastMoveTime - LockdownStartTime);
     }
 
+    public float WaitTimePenaltyTime
+    {
+        get => LockdownPenalty ? LockdownPenaltyTime : 0;
+    }
+
     public float LockdownStartTime;
     public float LastMoveTime;
 
@@ -109,9 +114,9 @@ public class BasicUnit : MonoBehaviour
 
         WaitTime = 0;
 
-        var iconTest = new string[] { "archer", "fire", "gear", "scout", "shield" };
-        var iconTestIndex = Random.Range(0, 5);
-        CountDownIconPath = "test/" + iconTest[iconTestIndex];
+        var iconNames = new string[] { "sword", "archer" };
+        var unitType = unit.type;
+        CountDownIconPath = "test/" + iconNames[unitType];
 
         // bind CountDownUI OBJ Tinaxd
         countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
@@ -146,10 +151,6 @@ public class BasicUnit : MonoBehaviour
         {
             WaitTime -= delta;
         }
-
-        // Lockdown
-        if (!LockdownPenalty && Input.GetKeyDown(KeyCode.L))
-            MarkLockdown();
 
         if (LockdownPenalty)
         {
@@ -219,6 +220,8 @@ public class BasicUnit : MonoBehaviour
         LockdownStartTime = Time.time;
         LockdownPenalty = true;
     }
+
+    public bool MovementLocked = false;
 
     /* // Tinaxd removed method
     public void UseCountDown(bool b)
