@@ -88,6 +88,17 @@ public class Simulator : MonoBehaviour
             px += targets[i].vx;
             pz += targets[i].vz;
         }
+        //TODO 
+        // if HP is zero, and Unit is stopped
+        // Unit.cs isDead
+        // if units.isDeadあり and !isClient
+        // UnitDied()
+        //TODO
+        // if client全滅・Host全滅 and !isClient
+        // GameOverCmd = new
+        // Pause(500)
+        //SceneManager.LoadScene("Result");
+        //clientBattleScene, isHostWin = GameSetCmd.isHostWin
 
         //        Debug.Log(targets[0].vx);
         //Debug.Log(string.Format("E={0},p=({1},{2})", E, px, pz));
@@ -259,6 +270,8 @@ public class Simulator : MonoBehaviour
                 //Debug.Log(c.vx);
                 if (isClient>0)
                 {
+                    //TODO if units.isDeadあり
+                    //UnitDied()
                     units = c.units;
                 }
                 c.processed = true;
@@ -323,6 +336,9 @@ public class Simulator : MonoBehaviour
                         }
                         break;
                 }
+                //TODO if c is GameSetCmd
+                //SceneManager.LoadScene("Result");
+                //clientBattleScene, isHostWin = GameSetCmd.isHostWin
                 if (isClient > 0)
                     c.processed = true;
             }

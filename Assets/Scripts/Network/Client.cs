@@ -118,6 +118,7 @@ public class Client : MonoBehaviour
                                 {
                                     case "UnitUpdateCmd":
                                     case "UnitTimerCmd":
+                                    case "GameSetCmd":
                                         simulator.commands.Add(c);
                                         break;
                                     case "LobbyReadyCmd":

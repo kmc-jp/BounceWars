@@ -249,6 +249,8 @@ public class BasicUnit : MonoBehaviour
         Debug.Log("Attacked!");
         float damage =Mathf.Abs(info.normalVelocity);
         HP = HP - damage;
+        //TODO if HP<0, Hp=0
+        //Also check UI update
         PopupDamage(damage);
     }
 
