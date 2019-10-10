@@ -124,7 +124,7 @@ public class BasicUnit : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         HP = 50;
         MP = 100;
@@ -141,7 +141,7 @@ public class BasicUnit : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         HP = unit.HP;
         MP = unit.MP;
