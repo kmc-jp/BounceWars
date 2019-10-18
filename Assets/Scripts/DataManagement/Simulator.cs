@@ -160,6 +160,9 @@ public class Simulator : MonoBehaviour
                 //Schin set unit type
                 u.type = Random.Range(0,2);
                 u.uuid = Random.Range(int.MinValue, int.MaxValue);
+                // Tinaxd set HP/MP here
+                u.HP = 50;   // TODO
+                u.MP = 100;  // TODO
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -200,6 +203,7 @@ public class Simulator : MonoBehaviour
                 UnitInfoTag tag = g.GetComponent<UnitInfoTag>();
                 tag.sim = this;
                 tag.Apply(units[i]);
+                tag.InitializeBasicUnit(units[i]);
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }

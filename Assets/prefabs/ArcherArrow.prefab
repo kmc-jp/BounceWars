@@ -92,8 +92,8 @@ GameObject:
   - component: {fileID: 6491018936299758984}
   - component: {fileID: 3971167819769589303}
   - component: {fileID: 5223351277152420448}
-  - component: {fileID: 5987305005303747637}
   - component: {fileID: 7760682452326880213}
+  - component: {fileID: 6493691085379079662}
   m_Layer: 0
   m_Name: ArcherArrow
   m_TagString: Unit
@@ -189,50 +189,8 @@ MonoBehaviour:
   uuid: 0
   red: {fileID: 2100000, guid: 71ab69d3403fd46008bfe4869e354d8a, type: 2}
   owned: 0
-  basicUnit: {fileID: 5987305005303747637}
+  basicUnit: {fileID: 6493691085379079662}
   sim: {fileID: 0}
---- !u!114 &5987305005303747637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5987305005303747642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722ed425a9729444688e55f0d91bfdbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unit:
-    x: 0
-    z: 0
-    x1: 0
-    z1: 0
-    vx: 0
-    vz: 0
-    vx1: 0
-    vz1: 0
-    uuid: 0
-    type: 0
-    owner: 0
-    HP: 0
-    MP: 0
-  damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
-    type: 3}
-  canvas: {fileID: 0}
-  buttonsUI: {fileID: 8144059138035865704, guid: 2c005143ca31ba7468a0016e61d2a4c8,
-    type: 3}
-  buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
-  buttonsUICloseDelay: 0.3
-  MouseOn: 0
-  CountDownIconPath: 
-  BaseCountDownTime: 8
-  Moved: 0
-  LockdownPenalty: 0
-  LockdownStartTime: 0
-  LastMoveTime: 0
-  Owned: 0
-  MovementLocked: 0
 --- !u!54 &7760682452326880213
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,3 +207,43 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6493691085379079662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987305005303747642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b79edf12ffee457e869e8b64e36ec3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit:
+    x: 0
+    z: 0
+    x1: 0
+    z1: 0
+    vx: 0
+    vz: 0
+    vx1: 0
+    vz1: 0
+    uuid: 0
+    type: 0
+    owner: 0
+    HP: 0
+    MP: 0
+  damagePopup: {fileID: 0}
+  canvas: {fileID: 0}
+  buttonsUI: {fileID: 0}
+  buttons: {fileID: 0}
+  buttonsUICloseDelay: 0.3
+  MouseOn: 0
+  CountDownIconPath: 
+  BaseCountDownTime: 8
+  Moved: 0
+  LockdownPenalty: 0
+  LockdownStartTime: 0
+  LastMoveTime: 0
+  Owned: 0
+  MovementLocked: 0
