@@ -13,6 +13,8 @@ public class Host : MonoBehaviour
     public Simulator simulator;
     public IntersceneBehaviour interScene;
 
+    //public static Host host { get => host; }
+
     static HttpListener _httpListener;
     static Thread _responseThread;
 
@@ -20,6 +22,8 @@ public class Host : MonoBehaviour
 
     private static CommandJsonList inList;
     private static CommandJsonList outList;
+
+    public readonly bool debugflag = true;
 
     // Start is called before the first frame update
     void Awake()
@@ -66,6 +70,7 @@ public class Host : MonoBehaviour
             //                                  //
             if (_httpListener == null || !_httpListener.IsListening)
                 break;
+
             //Receive HTTP request from client as a stream
             HttpListenerContext context = _httpListener.GetContext();
             StreamReader reader = new StreamReader(context.Request.InputStream);
@@ -130,8 +135,6 @@ public class Host : MonoBehaviour
                 List<Command> tst = interScene.GetCmd();
                 fromHost.AddRange(tst);
             }
-            //fromHost.AddRange(List<Command>);
-
 
             //after collecting all the responses, convert them into binary stream
             byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromHost));

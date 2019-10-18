@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
@@ -67,4 +68,10 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     {
         return SceneManager.GetActiveScene().buildIndex;
     }
+
+    public static void SetWinner(bool p)
+    {
+        isHostWin = p;
+    }
+
 }

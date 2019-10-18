@@ -20,6 +20,8 @@ public class UnitInfoTag : MonoBehaviour
         transform.position = new Vector3(u.x, 0, u.z);
         uuid = u.uuid;
         basicUnit.unit = sim.GetUnit(uuid);
+        this.gameObject.SetActive(!u.isDead);
+        basicUnit.isDead = u.isDead;
     }
     public void SetOwned(bool b)
     {

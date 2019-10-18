@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class GameSetCmd : Command
 {
-    public int isHostWin;
-    public GameSetCmd()
-    {
+    public bool isHostWin;
 
-    }
-    public GameSetCmd(int iHW)
+    public GameSetCmd(bool iHW)
     {
         isHostWin = iHW;
     }
