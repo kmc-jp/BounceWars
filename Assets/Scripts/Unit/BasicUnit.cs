@@ -25,6 +25,7 @@ public class BasicUnit : MonoBehaviour
 
     public bool MouseOn;
 
+    public Tile currentTile;
 
     // Tinaxd countdown timer
     private float waitTime = 0;
