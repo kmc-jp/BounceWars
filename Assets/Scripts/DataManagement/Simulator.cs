@@ -17,6 +17,7 @@ public class Simulator : MonoBehaviour
     {
 
     }
+    
     void SimulateCollision(List<Unit> targets)
     {
         //Debug.Log(targets[0].vx);
