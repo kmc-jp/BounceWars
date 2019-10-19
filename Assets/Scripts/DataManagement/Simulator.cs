@@ -77,6 +77,27 @@ public class Simulator : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Unit u = targets[i];
+            Vector2 pos = new Vector2(u.x1, u.z1);
+
+            Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
+            if (t==null||t.buildingType == 0)
+            {
+                continue;
+            }
+            Vector2 tPos = new Vector2(t.position.x, t.position.z);
+            Vector2 diff = pos - tPos;
+            if (diff.sqrMagnitude < 1)
+            {
+                clean[i] = false;
+                Vector2 normal = diff.normalized;
+                u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x*2;
+                u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y*2;
+            }
+        }
         for (int i = 0; i < infos.Count; i++)
         {
             CollisionInfo collision = infos[i];
@@ -130,8 +151,8 @@ public class Simulator : MonoBehaviour
             {
                 friction = mapPhysicsMaterials[tile.type].friction;
             }
-            float fx = -u.vx / v*friction;
-            float fz = -u.vz / v*friction;
+            float fx = -u.vx / v * friction;
+            float fz = -u.vz / v * friction;
             float fxdt = fx * dt;
             float fzdt = fz * dt;
             float vx1 = u.vx + fxdt;
@@ -173,7 +194,7 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = Random.Range(0,2);
+                u.type = Random.Range(0, 2);
                 u.uuid = Random.Range(int.MinValue, int.MaxValue);
                 if (n == -1)
                 {
@@ -268,11 +289,11 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
             }
-            if(c1 is UnitUpdateCmd)
+            if (c1 is UnitUpdateCmd)
             {
                 UnitUpdateCmd c = (UnitUpdateCmd)c1;
                 //Debug.Log(c.vx);
-                if (isClient>0)
+                if (isClient > 0)
                 {
                     units = c.units;
                 }
@@ -397,7 +418,7 @@ public class Simulator : MonoBehaviour
 
     public UnitInfoTag GetUnitInfoTag(int uuid)
     {
-        for (int i=0; i<instances.Count; i++)
+        for (int i = 0; i < instances.Count; i++)
         {
             if (instances[i].uuid == uuid)
             {
