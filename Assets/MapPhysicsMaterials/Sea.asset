@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a73a5604ac2204f1dbb7d9f5df4a257a, type: 3}
   m_Name: Sea
   m_EditorClassIdentifier: 
-  friction: 10
+  friction: 4
