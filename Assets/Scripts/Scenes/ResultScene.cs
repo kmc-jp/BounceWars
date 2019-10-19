@@ -26,7 +26,7 @@ public class ResultScene : IntersceneBehaviour
             else text.text = "You Win!";
         }
 
-            if (IntersceneBehaviour.g_isHost) networkSetUp();
+            //if (IntersceneBehaviour.g_isHost) networkSetUp();
             //TODO judge g_isHost, isHostWin
             //Change text
         }
@@ -35,7 +35,7 @@ public class ResultScene : IntersceneBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    private void networkSetUp()
+    /*private void networkSetUp()
     {
         // Bind a childclass of IntersceneBehaviour in current scene
         IntersceneBehaviour interScene = GetComponent<IntersceneBehaviour>();
@@ -62,5 +62,5 @@ public class ResultScene : IntersceneBehaviour
         byte[] _responseArray = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new Command[] { new GameSetCmd(isHostWin) }));
         context.Response.OutputStream.Write(_responseArray, 0, _responseArray.Length);
         context.Response.Close();
-    }
+    }*/
 }
