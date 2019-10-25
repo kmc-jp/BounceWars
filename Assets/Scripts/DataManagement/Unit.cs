@@ -15,8 +15,9 @@ public class Unit
     public int uuid;
     public int type;
     public int owner;
-    public float HP;
+    public float HP = 999;
     public float MP;
+    public bool isDead = false;
 }
 
 //Type:

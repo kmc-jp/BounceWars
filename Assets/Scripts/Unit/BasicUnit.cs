@@ -9,6 +9,7 @@ public class BasicUnit : MonoBehaviour
 {
     public Unit unit;
 
+    public bool isDead = false;
     protected float hp;
     protected float mp;
 
@@ -262,6 +263,10 @@ public class BasicUnit : MonoBehaviour
         Debug.Log("Attacked!");
         float damage =Mathf.Abs(info.normalVelocity);
         HP = HP - damage;
+
+        if (HP < 0) HP = 0;
+        //TODO check UI update
+
         PopupDamage(damage);
     }
 

@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Simulator : MonoBehaviour
 {
@@ -14,6 +17,8 @@ public class Simulator : MonoBehaviour
     public int isClient = 0;
     [HideInInspector]
     public List<Command> commands = new List<Command>();
+    public bool isCommandProcessingDone = false;
+    public GameSetCmd cmdGameSet = null;
 
     [HideInInspector]
     public List<Command> unitTimerRequests = new List<Command>();
@@ -128,15 +133,33 @@ public class Simulator : MonoBehaviour
         float pz = 0;
         for (int i = 0; i < targets.Count; i++)
         {
-            targets[i].vx = targets[i].vx1;
-            targets[i].vz = targets[i].vz1;
-            E += targets[i].vx * targets[i].vx + targets[i].vz * targets[i].vz;
-            px += targets[i].vx;
-            pz += targets[i].vz;
+            Unit curUnit = targets[i];
+            curUnit.vx = curUnit.vx1;
+            curUnit.vz = curUnit.vz1;
+            E += curUnit.vx * curUnit.vx + curUnit.vz * curUnit.vz;
+            px += curUnit.vx;
+            pz += curUnit.vz;
+
+            //死亡判定
+            if (isClient == 0 && !curUnit.isDead)
+            {
+                // if HP is zero, and Unit is stopped
+                if (curUnit.HP == 0 && curUnit.vx < 0.05 && curUnit.vz < 0.05)
+                {
+                    curUnit.isDead = true;
+                    checkGameSet();
+                }
+                else if (isOutOfBounds(curUnit))     //ユニットが範囲外に出たときの死亡判定
+                {
+                    curUnit.isDead = true;
+                    checkGameSet();
+                }
+            }
         }
 
         //        Debug.Log(targets[0].vx);
         //Debug.Log(string.Format("E={0},p=({1},{2})", E, px, pz));
+
         for (int i = 0; i < targets.Count; i++)
         {
             if (clean[i])
@@ -152,6 +175,61 @@ public class Simulator : MonoBehaviour
 
         //        Debug.Log(targets[0].vx);
     }
+
+    private bool isOutOfBounds(Unit curUnit)
+    {
+        int xnum = 20;
+        int ynum = 12;
+        if(curUnit.x < -0.5 - 10 || curUnit.x > 2*xnum + 0.5 - 10 || curUnit.z < -1.3 || curUnit.z > 1.3 * 1.1547*ynum + 1.3)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //ゲームが決着したかどうかの判定
+    void checkGameSet()
+    {
+        bool isHostAlive = false, isClientAlive = false;
+        //それぞれのチームで生存しているユニットがいるかどうかを調べる
+        for(int i = 0; i < units.Count; i++)
+        {
+            if (!units[i].isDead)
+            {
+                if (units[i].owner == 0) isHostAlive = true;
+                if (units[i].owner == 1) isClientAlive = true;
+                if (isHostAlive && isClientAlive) break;
+            }
+        }
+        if (!isHostAlive)
+        {
+            sendGameSetCmd(false);
+            openResultScene(false);
+        }
+        else if (!isClientAlive)
+        {
+            sendGameSetCmd(true);
+            openResultScene(true);
+        }
+    }
+
+    //HostからClientにゲームが決着したことを知らせるコマンドを送る
+    private void sendGameSetCmd(bool didHostWin)
+    {
+        cmdGameSet = new GameSetCmd(didHostWin);
+        Thread.Sleep(500);      //送り終わるまで待つ
+    }
+
+    public void openResultScene(bool didHostWin)
+    {
+        IntersceneBehaviour.SetWinner(didHostWin);
+        SceneManager.LoadScene("Result");
+    }
+
+
     float UnitDistance1(Unit u1, Unit u2)
     {
         //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
@@ -318,6 +396,8 @@ public class Simulator : MonoBehaviour
                 //Debug.Log(c.vx);
                 if (isClient > 0)
                 {
+                    //TODO if units.isDeadあり
+                    //UnitDied()
                     units = c.units;
                 }
                 c.processed = true;
@@ -382,6 +462,9 @@ public class Simulator : MonoBehaviour
                         }
                         break;
                 }
+                //TODO if c is GameSetCmd
+                //SceneManager.LoadScene("Result");
+                //clientBattleScene, isHostWin = GameSetCmd.isHostWin
                 if (isClient > 0)
                     c.processed = true;
             }
@@ -438,6 +521,11 @@ public class Simulator : MonoBehaviour
     public List<Command> GetCommandsFromHost()
     {
         List<Command> cs = new List<Command>();
+        if(cmdGameSet != null)
+        {
+            cs.Add(cmdGameSet);     //add GameSetCmd
+            cmdGameSet = null;
+        }
         //unitupdatecmd
         UnitUpdateCmd unitUpdateCmd = new UnitUpdateCmd();
         unitUpdateCmd.units = units;

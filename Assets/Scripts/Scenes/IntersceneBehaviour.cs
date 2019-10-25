@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
@@ -10,6 +11,7 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     protected static bool g_isHost;
     protected static string g_username;
     protected static List<Unit> units;
+    protected static bool isHostWin;
 
     //For network
     static HttpListener _httpListener;
@@ -66,4 +68,10 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     {
         return SceneManager.GetActiveScene().buildIndex;
     }
+
+    public static void SetWinner(bool p)
+    {
+        isHostWin = p;
+    }
+
 }

@@ -586,6 +586,7 @@ MonoBehaviour:
   units: []
   isClient: 0
   commands: []
+  isCommandProcessingDone: 0
   unitTimerRequests: []
   mapPhysicsMaterials:
   - {fileID: 11400000, guid: 54b812222b0bc430d9e8f65decc2ad4f, type: 2}

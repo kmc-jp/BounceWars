@@ -120,6 +120,9 @@ public class Client : MonoBehaviour
                                     case "UnitTimerCmd":
                                         simulator.commands.Add(c);
                                         break;
+                                    case "GameSetCmd":
+                                        simulator.openResultScene(((GameSetCmd)c).isHostWin);
+                                        break;
                                     case "LobbyReadyCmd":
                                     case "LobbyStartgameCmd":
                                         interScene.AddCmd(c);
