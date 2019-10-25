@@ -60,10 +60,29 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    u1.vx1 = u1.vx + dx * sizeVertical;
-                    u1.vz1 = u1.vz + dz * sizeVertical;
-                    u2.vx1 = u2.vx - dx * sizeVertical;
-                    u2.vz1 = u2.vz - dz * sizeVertical;
+                    if (u1.type == 2) // tinaxd u1 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
+                        u1.HP = 0;
+                        u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
+                    }
+                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
+                        u2.vx1 = u2.vx + dx * 0.95f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.95f * sizeVertical;
+                        u2.HP = 0;
+                    }
+                    else // neither u1 nor u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * sizeVertical;
+                        u1.vz1 = u1.vz + dz * sizeVertical;
+                        u2.vx1 = u2.vx - dx * sizeVertical;
+                        u2.vz1 = u2.vz - dz * sizeVertical;
+                    }
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
                     clean[i] = false;
