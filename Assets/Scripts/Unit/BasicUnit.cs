@@ -10,10 +10,10 @@ public class BasicUnit : MonoBehaviour
     public Unit unit;
 
     public bool isDead = false;
-    private float hp;
-    private float mp;
+    protected float hp;
+    protected float mp;
 
-    private UnitUI unitUI;
+    protected UnitUI unitUI;
 
     public GameObject damagePopup;
     public GameObject canvas;
@@ -26,6 +26,7 @@ public class BasicUnit : MonoBehaviour
 
     public bool MouseOn;
 
+    public Tile currentTile;
 
     // Tinaxd countdown timer
     private float waitTime = 0;
@@ -69,7 +70,7 @@ public class BasicUnit : MonoBehaviour
 
     public bool Owned;
 
-    public float HP
+    public virtual float HP
     {
         get => hp;
         set
@@ -80,7 +81,7 @@ public class BasicUnit : MonoBehaviour
         }
     }
 
-    public float MP
+    public virtual float MP
     {
         get => mp;
         set
@@ -89,6 +90,18 @@ public class BasicUnit : MonoBehaviour
             this.unit.MP = value;
             unitUI.MP = value;
         }
+    }
+
+    public virtual float MaxHP
+    {
+        get => unitUI.HPMax;
+        set => unitUI.HPMax = value;
+    }
+
+    public virtual float MaxMP
+    {
+        get => unitUI.MPMax;
+        set => unitUI.MPMax = value;
     }
 
     private void UpdateWaitTimeText()
@@ -105,13 +118,13 @@ public class BasicUnit : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         unitUI = transform.Find("UnitUI").gameObject.GetComponent<UnitUI>();
         //Debug.Log(transform.Find("UnitUI").gameObject.GetComponent<UnitUI>());
 
-        unitUI.HPMax = 50;
-        unitUI.MPMax = 100;
+        //unitUI.HPMax = 50;
+        //unitUI.MPMax = 100;
 
         WaitTime = 0;
 
@@ -125,10 +138,10 @@ public class BasicUnit : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        HP = 50;
-        MP = 100;
+        //HP = 50;
+        //MP = 100;
         // bind ButtonsUI OBJ Schin
         buttonsUI = GameObject.Find("ButtonsUIObj");
 
@@ -142,7 +155,7 @@ public class BasicUnit : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         HP = unit.HP;
         MP = unit.MP;

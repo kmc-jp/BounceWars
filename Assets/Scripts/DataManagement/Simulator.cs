@@ -9,19 +9,25 @@ public class Simulator : MonoBehaviour
 {
     public float time;
     public List<GameObject> prefabs;
+
     List<UnitInfoTag> instances = new List<UnitInfoTag>();
+    [HideInInspector]
     public List<Unit> units = new List<Unit>();
+    [HideInInspector]
     public int isClient = 0;
+    [HideInInspector]
     public List<Command> commands = new List<Command>();
     public bool isCommandProcessingDone = false;
     public GameSetCmd cmdGameSet = null;
 
+    [HideInInspector]
     public List<Command> unitTimerRequests = new List<Command>();
 
-    private void Awake()
-    {
+    public List<MapPhysicsMaterial> mapPhysicsMaterials;
 
-    }
+    public MapBehaviour mapBehaviour;
+    GameMap gameMap;
+
     void SimulateCollision(List<Unit> targets)
     {
         //Debug.Log(targets[0].vx);
@@ -65,15 +71,55 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    u1.vx1 = u1.vx + dx * sizeVertical;
-                    u1.vz1 = u1.vz + dz * sizeVertical;
-                    u2.vx1 = u2.vx - dx * sizeVertical;
-                    u2.vz1 = u2.vz - dz * sizeVertical;
+                    if (u1.type == 2) // tinaxd u1 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
+                        u1.HP = 0;
+                        u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
+                    }
+                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
+                        u2.vx1 = u2.vx + dx * 0.95f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.95f * sizeVertical;
+                        u2.HP = 0;
+                    }
+                    else // neither u1 nor u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * sizeVertical;
+                        u1.vz1 = u1.vz + dz * sizeVertical;
+                        u2.vx1 = u2.vx - dx * sizeVertical;
+                        u2.vz1 = u2.vz - dz * sizeVertical;
+                    }
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
                     clean[i] = false;
                     clean[j] = false;
                 }
+            }
+        }
+
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Unit u = targets[i];
+            Vector2 pos = new Vector2(u.x1, u.z1);
+
+            Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
+            if (t==null||t.buildingType == 0)
+            {
+                continue;
+            }
+            Vector2 tPos = new Vector2(t.position.x, t.position.z);
+            Vector2 diff = pos - tPos;
+            if (diff.sqrMagnitude < 1)
+            {
+                clean[i] = false;
+                Vector2 normal = diff.normalized;
+                u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x*2;
+                u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y*2;
             }
         }
         for (int i = 0; i < infos.Count; i++)
@@ -189,13 +235,21 @@ public class Simulator : MonoBehaviour
         //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
         return Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1));
     }
+
     void SimulateIntegral(Unit u, float dt)
     {
         float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
         if (v > 0)
         {
-            float fx = -u.vx / v;
-            float fz = -u.vz / v;
+            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 0, u.z));
+            float friction = 1;
+            Debug.Log(tile);
+            if (tile != null)
+            {
+                friction = mapPhysicsMaterials[tile.type].friction;
+            }
+            float fx = -u.vx / v * friction;
+            float fz = -u.vz / v * friction;
             float fxdt = fx * dt;
             float fzdt = fz * dt;
             float vx1 = u.vx + fxdt;
@@ -222,6 +276,7 @@ public class Simulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameMap = mapBehaviour.map;
         if (isClient > 0)
         {
             return;
@@ -236,8 +291,11 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = UnityEngine.Random.Range(0,2);
-                u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                u.type = Random.Range(0, 2);
+                u.uuid = Random.Range(int.MinValue, int.MaxValue);
+                // Tinaxd set HP/MP here
+                u.HP = 50;   // TODO
+                u.MP = 100;  // TODO
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -274,10 +332,11 @@ public class Simulator : MonoBehaviour
             }
             if (!found)
             {
-                GameObject g = Instantiate(prefabs[0]);
+                GameObject g = Instantiate(prefabs[units[i].type]); // Tinaxd
                 UnitInfoTag tag = g.GetComponent<UnitInfoTag>();
                 tag.sim = this;
                 tag.Apply(units[i]);
+                tag.InitializeBasicUnit(units[i]);
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }
@@ -331,11 +390,11 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
             }
-            if(c1 is UnitUpdateCmd)
+            if (c1 is UnitUpdateCmd)
             {
                 UnitUpdateCmd c = (UnitUpdateCmd)c1;
                 //Debug.Log(c.vx);
-                if (isClient>0)
+                if (isClient > 0)
                 {
                     //TODO if units.isDeadあり
                     //UnitDied()
@@ -409,6 +468,12 @@ public class Simulator : MonoBehaviour
                 if (isClient > 0)
                     c.processed = true;
             }
+            if (c1 is NewUnitCmd)
+            {
+                NewUnitCmd c = (NewUnitCmd)c1;
+                CreateArrow(GetUnit(c.fromUnitId), c.to);
+                c.processed = true;
+            }
         }
         List<Command> remains = new List<Command>();
         for (int i = 0; i < commands.Count; i++)
@@ -470,7 +535,7 @@ public class Simulator : MonoBehaviour
 
     public UnitInfoTag GetUnitInfoTag(int uuid)
     {
-        for (int i=0; i<instances.Count; i++)
+        for (int i = 0; i < instances.Count; i++)
         {
             if (instances[i].uuid == uuid)
             {
@@ -486,5 +551,32 @@ public class Simulator : MonoBehaviour
         if (tag != null)
             return tag.basicUnit;
         return null;
+    }
+
+    // Tinaxd Used by host only 
+    private void CreateArrow(Unit fromUnit, Vector3 to)
+    {
+        Debug.Log("Creating arrow");
+        Unit u = new Unit();
+        // Set velocity
+        var vel = new Vector3(to.x - fromUnit.x, 0, to.z - fromUnit.z).normalized;
+        u.vx = vel.x * 30;
+        u.vz = vel.z * 30;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
+        //Debug.Log("Velocity: " + vel);
+        // Set position
+        u.x = fromUnit.x + vel.x;
+        u.z = fromUnit.z + vel.z;
+        u.x1 = u.x;
+        u.z1 = u.z;
+        u.HP = 0.1f; // TODO
+        u.MP = 0;    //
+
+        u.type = 2; // Set unit type to "arrow"
+        u.uuid = Random.Range(int.MinValue, int.MaxValue);
+        u.owner = fromUnit.owner;
+        units.Add(u);
     }
 }
