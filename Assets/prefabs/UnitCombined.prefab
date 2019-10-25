@@ -816,8 +816,8 @@ GameObject:
   - component: {fileID: 6491018936299758984}
   - component: {fileID: 3971167819769589303}
   - component: {fileID: 5223351277152420448}
+  - component: {fileID: 6355398127440424377}
   - component: {fileID: 5987305005303747637}
-  - component: {fileID: 6431284918042249863}
   - component: {fileID: 7760682452326880213}
   m_Layer: 0
   m_Name: UnitCombined
@@ -918,6 +918,18 @@ MonoBehaviour:
   owned: 0
   basicUnit: {fileID: 5987305005303747637}
   sim: {fileID: 0}
+--- !u!114 &6355398127440424377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987305005303747642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fb014bf7f926643b50cdc3e5013995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5987305005303747637
 MonoBehaviour:
   m_ObjectHideFlags: 0

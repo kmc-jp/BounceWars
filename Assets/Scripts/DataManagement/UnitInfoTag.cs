@@ -31,4 +31,12 @@ public class UnitInfoTag : MonoBehaviour
         // Tinaxd set owner
         GetComponent<BasicUnit>().Owned = b;
     }
+
+    public void InitializeBasicUnit(Unit u)
+    {
+        basicUnit.HP = u.HP;
+        basicUnit.MaxHP = u.HP;
+        basicUnit.MP = u.MP;
+        basicUnit.MaxMP = u.MP;
+    }
 }

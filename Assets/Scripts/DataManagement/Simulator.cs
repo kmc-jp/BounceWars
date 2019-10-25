@@ -66,10 +66,29 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    u1.vx1 = u1.vx + dx * sizeVertical;
-                    u1.vz1 = u1.vz + dz * sizeVertical;
-                    u2.vx1 = u2.vx - dx * sizeVertical;
-                    u2.vz1 = u2.vz - dz * sizeVertical;
+                    if (u1.type == 2) // tinaxd u1 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
+                        u1.HP = 0;
+                        u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
+                    }
+                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
+                        u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
+                        u2.vx1 = u2.vx + dx * 0.95f * sizeVertical;
+                        u2.vz1 = u2.vz + dz * 0.95f * sizeVertical;
+                        u2.HP = 0;
+                    }
+                    else // neither u1 nor u2 is arrow
+                    {
+                        u1.vx1 = u1.vx + dx * sizeVertical;
+                        u1.vz1 = u1.vz + dz * sizeVertical;
+                        u2.vx1 = u2.vx - dx * sizeVertical;
+                        u2.vz1 = u2.vz - dz * sizeVertical;
+                    }
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
                     clean[i] = false;
@@ -196,6 +215,9 @@ public class Simulator : MonoBehaviour
                 //Schin set unit type
                 u.type = Random.Range(0, 2);
                 u.uuid = Random.Range(int.MinValue, int.MaxValue);
+                // Tinaxd set HP/MP here
+                u.HP = 50;   // TODO
+                u.MP = 100;  // TODO
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -232,10 +254,11 @@ public class Simulator : MonoBehaviour
             }
             if (!found)
             {
-                GameObject g = Instantiate(prefabs[0]);
+                GameObject g = Instantiate(prefabs[units[i].type]); // Tinaxd
                 UnitInfoTag tag = g.GetComponent<UnitInfoTag>();
                 tag.sim = this;
                 tag.Apply(units[i]);
+                tag.InitializeBasicUnit(units[i]);
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }
@@ -362,6 +385,12 @@ public class Simulator : MonoBehaviour
                 if (isClient > 0)
                     c.processed = true;
             }
+            if (c1 is NewUnitCmd)
+            {
+                NewUnitCmd c = (NewUnitCmd)c1;
+                CreateArrow(GetUnit(c.fromUnitId), c.to);
+                c.processed = true;
+            }
         }
         List<Command> remains = new List<Command>();
         for (int i = 0; i < commands.Count; i++)
@@ -434,5 +463,32 @@ public class Simulator : MonoBehaviour
         if (tag != null)
             return tag.basicUnit;
         return null;
+    }
+
+    // Tinaxd Used by host only 
+    private void CreateArrow(Unit fromUnit, Vector3 to)
+    {
+        Debug.Log("Creating arrow");
+        Unit u = new Unit();
+        // Set velocity
+        var vel = new Vector3(to.x - fromUnit.x, 0, to.z - fromUnit.z).normalized;
+        u.vx = vel.x * 30;
+        u.vz = vel.z * 30;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
+        //Debug.Log("Velocity: " + vel);
+        // Set position
+        u.x = fromUnit.x + vel.x;
+        u.z = fromUnit.z + vel.z;
+        u.x1 = u.x;
+        u.z1 = u.z;
+        u.HP = 0.1f; // TODO
+        u.MP = 0;    //
+
+        u.type = 2; // Set unit type to "arrow"
+        u.uuid = Random.Range(int.MinValue, int.MaxValue);
+        u.owner = fromUnit.owner;
+        units.Add(u);
     }
 }
