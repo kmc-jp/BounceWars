@@ -5,12 +5,12 @@ using UnityEngine;
 // Represents arrows sent by archers
 public class ArcherArrow : BasicUnit
 {
-    private void Update()
+    override protected void Update()
     {
         
     }
 
-    private void Start()
+    override protected void Start()
     {
         HP = 1;
         MP = 0;

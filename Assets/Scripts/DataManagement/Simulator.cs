@@ -291,8 +291,8 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = Random.Range(0, 2);
-                u.uuid = Random.Range(int.MinValue, int.MaxValue);
+                u.type = UnityEngine.Random.Range(0, 2);
+                u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP here
                 u.HP = 50;   // TODO
                 u.MP = 100;  // TODO
@@ -575,7 +575,7 @@ public class Simulator : MonoBehaviour
         u.MP = 0;    //
 
         u.type = 2; // Set unit type to "arrow"
-        u.uuid = Random.Range(int.MinValue, int.MaxValue);
+        u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);
     }

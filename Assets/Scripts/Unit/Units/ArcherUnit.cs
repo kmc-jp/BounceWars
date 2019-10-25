@@ -12,7 +12,7 @@ public class ArcherUnit : BasicUnit
         // TODO: Change mouse cursor
     }
 
-    protected void Update()
+    override protected void Update()
     {
         base.Update();
         
