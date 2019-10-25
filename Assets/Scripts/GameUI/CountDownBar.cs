@@ -142,7 +142,6 @@ public class CountDownBar : MonoBehaviour
     private void SetYPosition(CountDownUnitIcon cdui, int posId)
     {
         int[] candidates = { 1, 2, 3, 4, 5, -1, -2, -3, -4, -5 };
-        //Debug.Log("posID" + posId);
         var y = candidates[posId] * IconYOffset;
 
         cdui.Icon.transform.localPosition = new Vector3(cdui.Icon.transform.localPosition.x, y, 0);
@@ -173,7 +172,6 @@ public class CountDownBar : MonoBehaviour
             {
                 for (int j = i+1; j < len; j++)
                 {
-                    //Debug.Log(array[i].Position);
                     if (array[j].Unit.Locked && array[i].Position == array[j].Position)
                     {
                         float diff = array[j].Unit.WaitTime - array[i].Unit.WaitTime;

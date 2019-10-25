@@ -6,17 +6,23 @@ public class Simulator : MonoBehaviour
 {
     public float time;
     public List<GameObject> prefabs;
+
     List<UnitInfoTag> instances = new List<UnitInfoTag>();
+    [HideInInspector]
     public List<Unit> units = new List<Unit>();
+    [HideInInspector]
     public int isClient = 0;
+    [HideInInspector]
     public List<Command> commands = new List<Command>();
 
+    [HideInInspector]
     public List<Command> unitTimerRequests = new List<Command>();
 
-    private void Awake()
-    {
+    public List<MapPhysicsMaterial> mapPhysicsMaterials;
 
-    }
+    public MapBehaviour mapBehaviour;
+    GameMap gameMap;
+
     void SimulateCollision(List<Unit> targets)
     {
         //Debug.Log(targets[0].vx);
@@ -90,6 +96,27 @@ public class Simulator : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Unit u = targets[i];
+            Vector2 pos = new Vector2(u.x1, u.z1);
+
+            Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
+            if (t==null||t.buildingType == 0)
+            {
+                continue;
+            }
+            Vector2 tPos = new Vector2(t.position.x, t.position.z);
+            Vector2 diff = pos - tPos;
+            if (diff.sqrMagnitude < 1)
+            {
+                clean[i] = false;
+                Vector2 normal = diff.normalized;
+                u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x*2;
+                u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y*2;
+            }
+        }
         for (int i = 0; i < infos.Count; i++)
         {
             CollisionInfo collision = infos[i];
@@ -130,13 +157,21 @@ public class Simulator : MonoBehaviour
         //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
         return Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1));
     }
+
     void SimulateIntegral(Unit u, float dt)
     {
         float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
         if (v > 0)
         {
-            float fx = -u.vx / v;
-            float fz = -u.vz / v;
+            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 0, u.z));
+            float friction = 1;
+            Debug.Log(tile);
+            if (tile != null)
+            {
+                friction = mapPhysicsMaterials[tile.type].friction;
+            }
+            float fx = -u.vx / v * friction;
+            float fz = -u.vz / v * friction;
             float fxdt = fx * dt;
             float fzdt = fz * dt;
             float vx1 = u.vx + fxdt;
@@ -163,6 +198,7 @@ public class Simulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameMap = mapBehaviour.map;
         if (isClient > 0)
         {
             return;
@@ -177,7 +213,7 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = Random.Range(0,2);
+                u.type = Random.Range(0, 2);
                 u.uuid = Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP here
                 u.HP = 50;   // TODO
@@ -411,7 +447,7 @@ public class Simulator : MonoBehaviour
 
     public UnitInfoTag GetUnitInfoTag(int uuid)
     {
-        for (int i=0; i<instances.Count; i++)
+        for (int i = 0; i < instances.Count; i++)
         {
             if (instances[i].uuid == uuid)
             {

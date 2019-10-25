@@ -536,6 +536,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapname: Map_Grassland
+  map:
+    id: 0
+    mapType: 0
 --- !u!114 &657742905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,6 +587,15 @@ MonoBehaviour:
   isClient: 0
   commands: []
   unitTimerRequests: []
+  mapPhysicsMaterials:
+  - {fileID: 11400000, guid: 54b812222b0bc430d9e8f65decc2ad4f, type: 2}
+  - {fileID: 11400000, guid: 4cec5680443ca49e9a5859373b1151c8, type: 2}
+  - {fileID: 11400000, guid: 4dad782dd6d294c5dbae2fb613e4eeb4, type: 2}
+  - {fileID: 11400000, guid: e3a2e7cedad16450d8762cf90afe80a4, type: 2}
+  - {fileID: 11400000, guid: 56a6542c4fa7640ed947108faab27ba2, type: 2}
+  - {fileID: 11400000, guid: 6ae3bcd8248564141b899c5ebea4b91c, type: 2}
+  - {fileID: 11400000, guid: 9f0074f8fd1ba4e3abed21bbe80734ad, type: 2}
+  mapBehaviour: {fileID: 657742904}
 --- !u!4 &657742908
 Transform:
   m_ObjectHideFlags: 0
