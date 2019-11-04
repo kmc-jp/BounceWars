@@ -20,8 +20,6 @@ public class CountDownBar : MonoBehaviour
 
     public float Threshold = 2.0f;
 
-    private int myUnlockedUnitsPos = 0;
-
     private GameObject modelIcon;
 
     private void Awake()
