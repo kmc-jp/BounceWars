@@ -10,7 +10,7 @@ public class HideUnit : MonoBehaviour
     {
         if (unit.owned)
         {
-            //enabled = false;
+            enabled = false;
         }
     }
     // Update is called once per frame
@@ -18,7 +18,7 @@ public class HideUnit : MonoBehaviour
     {
         Tile t = MapBehaviour.instance.GetTile(transform.position);
         if (t == null) return;
-        bool shown =t.buildingType != 1;
+        bool shown = t.buildingType != 1;
         if (shown!=shown1)
         {
             shown1 = shown;
