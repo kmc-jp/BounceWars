@@ -116,7 +116,7 @@ public class BasicUnit : MonoBehaviour
 
         var iconNames = new string[] { "sword", "archer" };
         var unitType = unit.type;
-        CountDownIconPath = "test/" + iconNames[unitType];
+        CountDownIconPath = "UnitIcon/" + iconNames[unitType];
 
         // bind CountDownUI OBJ Tinaxd
         countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();

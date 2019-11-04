@@ -959,6 +959,7 @@ MonoBehaviour:
   LockdownStartTime: 0
   LastMoveTime: 0
   Owned: 0
+  MovementLocked: 0
 --- !u!114 &6431284918042249863
 MonoBehaviour:
   m_ObjectHideFlags: 0
