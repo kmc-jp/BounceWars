@@ -291,4 +291,12 @@ public class BasicUnit : MonoBehaviour
     {
         unitUI.DragUI.ShowDragUI(false);
     }
+
+    public DragType DragMode = DragType.NORMAL;
+}
+
+public enum DragType
+{
+    NORMAL,
+    ARCHER,
 }

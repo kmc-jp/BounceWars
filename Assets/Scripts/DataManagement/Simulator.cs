@@ -472,7 +472,12 @@ public class Simulator : MonoBehaviour
             if (c1 is NewUnitCmd)
             {
                 NewUnitCmd c = (NewUnitCmd)c1;
-                CreateArrow(GetUnit(c.fromUnitId), c.to);
+                switch (c.unitType)
+                {
+                    case 2: // Arrow
+                        CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                        break;
+                }
                 c.processed = true;
             }
         }
@@ -555,21 +560,20 @@ public class Simulator : MonoBehaviour
     }
 
     // Tinaxd Used by host only 
-    private void CreateArrow(Unit fromUnit, Vector3 to)
+    private void CreateArrow(Unit fromUnit, Vector3 velocity)
     {
         Debug.Log("Creating arrow");
         Unit u = new Unit();
         // Set velocity
-        var vel = new Vector3(to.x - fromUnit.x, 0, to.z - fromUnit.z).normalized;
-        u.vx = vel.x * 30;
-        u.vz = vel.z * 30;
+        u.vx = velocity.x;
+        u.vz = velocity.z;
         u.vx1 = u.vx;
         u.vz1 = u.vz;
         //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
         //Debug.Log("Velocity: " + vel);
         // Set position
-        u.x = fromUnit.x + vel.x;
-        u.z = fromUnit.z + vel.z;
+        u.x = fromUnit.x + velocity.normalized.x;
+        u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
         u.HP = 0.1f; // TODO
