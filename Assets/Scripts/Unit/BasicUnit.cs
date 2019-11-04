@@ -157,6 +157,7 @@ public class BasicUnit : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
 

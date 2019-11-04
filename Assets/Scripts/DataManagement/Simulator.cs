@@ -10,7 +10,8 @@ public class Simulator : MonoBehaviour
     public float time;
     public List<GameObject> prefabs;
 
-    List<UnitInfoTag> instances = new List<UnitInfoTag>();
+    [HideInInspector]
+    public List<UnitInfoTag> instances = new List<UnitInfoTag>();
     [HideInInspector]
     public List<Unit> units = new List<Unit>();
     [HideInInspector]
@@ -108,7 +109,7 @@ public class Simulator : MonoBehaviour
             Vector2 pos = new Vector2(u.x1, u.z1);
 
             Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
-            if (t==null||t.buildingType == 0)
+            if (t==null||t.buildingType <= 1)
             {
                 continue;
             }
