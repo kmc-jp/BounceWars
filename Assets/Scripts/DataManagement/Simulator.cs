@@ -72,7 +72,7 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    if (u1.type == 2) // tinaxd u1 is arrow
+                    if (u1.type == UnitType.TYPE_ARROW) // tinaxd u1 is arrow
                     {
                         u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
@@ -80,7 +80,7 @@ public class Simulator : MonoBehaviour
                         u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
                     }
-                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    else if (u2.type == UnitType.TYPE_ARROW) // tinaxd u2 is arrow
                     {
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
@@ -292,7 +292,7 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = UnityEngine.Random.Range(0, 2);
+                u.type = UnitType.TYPE_CHESS;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP here
                 u.HP = 50;   // TODO
@@ -341,6 +341,13 @@ public class Simulator : MonoBehaviour
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }
+            //Schin update CD ready emotion
+            if (!units[i].isDead 
+                & units[i].owner==isClient 
+                & !GetBasicUnit(units[i].uuid).Locked)
+            {
+                GetBasicUnit(units[i].uuid).ShowEmotion(EmotionType.CD_READY, 5.0f);
+            }
         }
     }
 
@@ -376,6 +383,9 @@ public class Simulator : MonoBehaviour
                     Unit u = GetUnit(c.uuid);
                     u.vx = c.vx;
                     u.vz = c.vz;
+                    //schin Remove "ready to roll" emotion when ready.
+                    //      this doesn't check if it's really moved for client
+                    basicUnit.ExpireEmotion(EmotionType.CD_READY);
 
                     // Tinaxd update CountdownUI (Host only)
                     // Generate a UnitTimerCommand
@@ -579,7 +589,7 @@ public class Simulator : MonoBehaviour
         u.HP = 0.1f; // TODO
         u.MP = 0;    //
 
-        u.type = 2; // Set unit type to "arrow"
+        u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);

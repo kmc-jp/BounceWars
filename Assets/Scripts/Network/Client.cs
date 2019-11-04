@@ -150,7 +150,7 @@ public class Client : MonoBehaviour
                     }
                 }
             }
-            catch(TimeoutException we)
+            catch(TimeoutException)
             {
                 if(timedoutNum++ >= 5)
                 {
