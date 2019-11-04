@@ -18,7 +18,7 @@ public class HideUnit : MonoBehaviour
     {
         Tile t = MapBehaviour.instance.GetTile(transform.position);
         if (t == null) return;
-        bool shown = t.buildingType != 1;
+        bool shown = t.buildingType != 1||spotted;
         if (shown!=shown1)
         {
             shown1 = shown;
@@ -28,5 +28,6 @@ public class HideUnit : MonoBehaviour
             }
         }
     }
+    public bool spotted = false;
     bool shown1 = true;
 }

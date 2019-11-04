@@ -10,7 +10,8 @@ public class Simulator : MonoBehaviour
     public float time;
     public List<GameObject> prefabs;
 
-    List<UnitInfoTag> instances = new List<UnitInfoTag>();
+    [HideInInspector]
+    public List<UnitInfoTag> instances = new List<UnitInfoTag>();
     [HideInInspector]
     public List<Unit> units = new List<Unit>();
     [HideInInspector]

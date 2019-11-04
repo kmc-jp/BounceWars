@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641275, b: 0.5748174, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -504,6 +504,7 @@ GameObject:
   - component: {fileID: 657742904}
   - component: {fileID: 657742903}
   - component: {fileID: 657742909}
+  - component: {fileID: 657742910}
   m_Layer: 0
   m_Name: Obelisk
   m_TagString: Untagged
@@ -583,6 +584,7 @@ MonoBehaviour:
   - {fileID: 5987305005303747642, guid: a0d25c85d7a32c542b618c47aeaa25b7, type: 3}
   - {fileID: 5987305005303747642, guid: a0d25c85d7a32c542b618c47aeaa25b7, type: 3}
   - {fileID: 5987305005303747642, guid: fd243fe6492c80f40ac870316d65fff3, type: 3}
+  instances: []
   units: []
   isClient: 0
   commands: []
@@ -623,6 +625,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077d7b760a253884cb397573c5c06f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &657742910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657742902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d5d22235fd043f68a2cce88047a403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sim: {fileID: 657742907}
+  spotRange: 5
 --- !u!1 &832869361
 GameObject:
   m_ObjectHideFlags: 0
