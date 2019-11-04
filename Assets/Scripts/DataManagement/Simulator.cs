@@ -72,7 +72,7 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    if (u1.type == 2) // tinaxd u1 is arrow
+                    if (u1.type == 2 || u1.type == 3) // tinaxd u1 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
@@ -80,7 +80,7 @@ public class Simulator : MonoBehaviour
                         u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
                     }
-                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    else if (u2.type == 2 || u2.type == 3) // tinaxd u2 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
@@ -88,7 +88,7 @@ public class Simulator : MonoBehaviour
                         u2.vz1 = u2.vz + dz * 0.95f * sizeVertical;
                         u2.HP = 0;
                     }
-                    else // neither u1 nor u2 is arrow
+                    else // neither u1 nor u2 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * sizeVertical;
                         u1.vz1 = u1.vz + dz * sizeVertical;
