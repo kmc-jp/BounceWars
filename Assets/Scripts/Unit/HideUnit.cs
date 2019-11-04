@@ -16,7 +16,7 @@ public class HideUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool shown = MapBehaviour.instance.GetTile(transform.position).buildingType == 1;
+        bool shown = MapBehaviour.instance.GetTile(transform.position).buildingType != 1;
         if (shown!=shown1)
         {
             shown1 = shown;
