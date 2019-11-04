@@ -348,14 +348,26 @@ public class Simulator : MonoBehaviour
     void FixedUpdate()
     {
         time += Time.deltaTime;
+        bool doMPRegen = false;
+        if (time > NextMPRegenTime)
+        {
+            NextMPRegenTime = Mathf.Ceil(time);
+            doMPRegen = true;
+        }
         ProcessMyCommand();
         for (int i = 0; i < units.Count; i++)
         {
             SimulateIntegral(units[i], Time.deltaTime);
+            if (doMPRegen)
+            {
+                units[i].MP = Mathf.Min(units[i].MP + 1, 50);       
+            }
         }
         SimulateCollision(units);
         UpdateInstances();
     }
+
+    private float NextMPRegenTime = 0;
 
     void ProcessMyCommand()
     {
