@@ -9,11 +9,12 @@ public class MapBehaviour : MonoBehaviour
     //public string jsonData = "{\"id\": 1, \"mapType\": 3, \"mapData\":[[{\"type\": 1}, {\"type\": 1}, {\"type\": 1}], [{\"type\": 1}, {\"type\": 1}, {\"type\": 1}], [{\"type\": 1}, {\"type\": 1}, {\"type\": 1}]]}";
     //public string jsonData = "{\"id\": 1, \"mapType\": 3}";
     public GameMap map;
-    
+    public static MapBehaviour instance;
     // Start is called before the first frame update
     void Awake()
     {
         map=MapLoader.loadMap(mapname);
+        instance = this;
     }
 
     public Tile GetTile(Vector3 position)
