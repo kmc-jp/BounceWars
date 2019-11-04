@@ -66,6 +66,7 @@ public class DragAndFire : MonoBehaviour
 
                         simulator.commands.Add(c);
                         break;
+
                     case DragType.ARCHER:
                         target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
                         NewUnitCmd cmd = new NewUnitCmd
@@ -76,6 +77,18 @@ public class DragAndFire : MonoBehaviour
                         };
 
                         simulator.commands.Add(cmd);
+                        break;
+
+                    case DragType.FIREBALL:
+                        target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
+                        NewUnitCmd cmd2 = new NewUnitCmd
+                        {
+                            fromUnitId = target.GetComponent<BasicUnit>().unit.uuid,
+                            velocity = new Vector3(vel.x * 3, 0, vel.z * 3),
+                            unitType = 3, // Unit type Fireball
+                        };
+
+                        simulator.commands.Add(cmd2);
                         break;
                 }
                 //targetScript.rg.AddForce(vel, ForceMode.VelocityChange);

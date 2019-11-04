@@ -489,6 +489,11 @@ public class Simulator : MonoBehaviour
                     case 2: // Arrow
                         CreateArrow(GetUnit(c.fromUnitId), c.velocity);
                         break;
+                    case 3: // Fireball
+                        var u = GetUnit(c.fromUnitId);
+                        u.MP -= 25;
+                        CreateFireball(u, c.velocity);
+                        break;
                 }
                 c.processed = true;
             }
@@ -592,6 +597,31 @@ public class Simulator : MonoBehaviour
         u.MP = 0;    //
 
         u.type = 2; // Set unit type to "arrow"
+        u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        u.owner = fromUnit.owner;
+        units.Add(u);
+    }
+
+    private void CreateFireball(Unit fromUnit, Vector3 velocity)
+    {
+        Debug.Log("Creating fireball");
+        Unit u = new Unit();
+        // Set velocity
+        u.vx = velocity.x;
+        u.vz = velocity.z;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
+        //Debug.Log("Velocity: " + vel);
+        // Set position
+        u.x = fromUnit.x + velocity.normalized.x;
+        u.z = fromUnit.z + velocity.normalized.z;
+        u.x1 = u.x;
+        u.z1 = u.z;
+        u.HP = 0.1f; // TODO
+        u.MP = 0;    //
+
+        u.type = 3; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);

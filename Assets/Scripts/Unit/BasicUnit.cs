@@ -299,4 +299,5 @@ public enum DragType
 {
     NORMAL,
     ARCHER,
+    FIREBALL,
 }
