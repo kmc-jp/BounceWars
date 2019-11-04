@@ -12,6 +12,8 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     protected static string g_username;
     protected static List<Unit> units;
     protected static bool isHostWin;
+    protected static string selfURL;
+    protected static string targetURL;
 
     //For network
     static HttpListener _httpListener;
@@ -25,6 +27,8 @@ public abstract class IntersceneBehaviour : MonoBehaviour
         if (tosendCmds == null) tosendCmds = new List<Command>();
         if (receivedCmds == null) receivedCmds = new List<Command>();
     }
+    public string SelfURL { get => selfURL; set => selfURL = value; }
+    public string TargetURL { get => targetURL; set => targetURL = value; }
     public bool G_isHost { get => g_isHost; set => g_isHost = value; }
     public string G_username { get => g_username; set => g_username = value; }
     public List<Unit> Units { get => units; set => units = value; }
@@ -36,11 +40,30 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     }
     public HttpListener StartHttpListener(string ipAddr)
     {
+        if (ipAddr == null || ipAddr == "")
+        {
+            ipAddr = "localhost";
+            var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    // get current ipAddr in local network
+                    ipAddr = ip.ToString();
+                    break;
+                }
+            }
+            // Backup Plan
+            //ipAddr = UnityEngine.Networking.NetworkManager.singleton.networkAddress;
+        }
+        ipAddr = "http://" + ipAddr + ":5000/";
+
         if (_httpListener == null)
         {
+            selfURL = ipAddr;
             Debug.Log("Starting server...");
             _httpListener = new HttpListener();
-            _httpListener.Prefixes.Add("http://localhost:5000/");
+            _httpListener.Prefixes.Add(selfURL);
             _httpListener.Start();
         }
         return _httpListener;

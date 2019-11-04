@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +8,9 @@ using UnityEngine.UI;
 public class MainMenuScene : IntersceneBehaviour
 {
     private GameObject nameInputPanel;
-    private GameObject errorText;
+    private GameObject ipAddrInputPanel;
+    private GameObject nameErrText;
+    private GameObject ipErrText;
 
     private bool ishost;
     private bool firstTimeNameInput;
@@ -15,7 +18,10 @@ public class MainMenuScene : IntersceneBehaviour
     void OnEnable()
     {
         nameInputPanel = GameObject.Find("NameInputPanel");
-        errorText = GameObject.Find("IllegalNameWarning");
+        ipAddrInputPanel = GameObject.Find("ipAddrInputPanel");
+
+        nameErrText = GameObject.Find("IllegalNameWarning");
+        ipErrText = GameObject.Find("IllegalIpAddrWarning");
         //If Http port is on, close it
         CloseHttpListener();
     }
@@ -23,9 +29,19 @@ public class MainMenuScene : IntersceneBehaviour
     void Start()
     {
         nameInputPanel.SetActive(false);
-        errorText.SetActive(false);
+        nameErrText.SetActive(false);
+        ipAddrInputPanel.SetActive(false);
+        ipErrText.SetActive(false);
 
         nameInputPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        ipAddrInputPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+
+        nameInputPanel.GetComponentInChildren<InputField>().text = null;
+        // set IP if already defined
+        if (TargetURL != null)
+            ipAddrInputPanel.GetComponentInChildren<InputField>().text = TargetURL;
+        else
+            ipAddrInputPanel.GetComponentInChildren<InputField>().text = null;
     }
 
     public void onHostBtnClick()
@@ -65,6 +81,20 @@ public class MainMenuScene : IntersceneBehaviour
         else
         {
             nameInputPanel.SetActive(false);
+            ipAddrInputPanel.SetActive(true);
+        }
+    }
+    public void onIpConfirmClick()
+    {
+        string ipAddr = ipAddrInputPanel.GetComponentInChildren<InputField>().text;
+        if (!isIpAddrLegal(ipAddr))
+        {
+            return;
+        }
+        else
+        {
+            TargetURL = ipAddr;
+            ipAddrInputPanel.SetActive(false);
             // goto Client Lobby scene, which shall be 2 within project setting.
             SceneManager.LoadScene("ClientLobby");
         }
@@ -75,6 +105,11 @@ public class MainMenuScene : IntersceneBehaviour
         nameInputPanel.SetActive(false);
     }
 
+    public void onIpCancelClick()
+    {
+        ipAddrInputPanel.SetActive(false);
+        nameInputPanel.SetActive(true);
+    }
     private bool isNameLegal(string nameStr)
     {
         string errMsg = "";
@@ -83,14 +118,49 @@ public class MainMenuScene : IntersceneBehaviour
 
         if (!errMsg.Equals(""))
         {
-            errorText.GetComponent<Text>().text = errMsg;
-            errorText.SetActive(true);
+            nameErrText.GetComponent<Text>().text = errMsg;
+            nameErrText.SetActive(true);
 
             return false;
         }
         else
-            errorText.SetActive(false);
+            nameErrText.SetActive(false);
 
         return true;
+    }
+    private bool isIpAddrLegal(string ipStr)
+    {
+        string errMsg = "";
+        if (!ValidateIPv4(ipStr))
+        {
+            errMsg = "Invalid IP address.";
+        }
+        if (!errMsg.Equals(""))
+        {
+            ipErrText.GetComponent<Text>().text = errMsg;
+            ipErrText.SetActive(true);
+
+            return false;
+        }
+        else
+            ipErrText.SetActive(false);
+        return true;
+    }
+    private bool ValidateIPv4(string ipString)
+    {
+        if (System.String.IsNullOrWhiteSpace(ipString))
+        {
+            return false;
+        }
+
+        string[] splitValues = ipString.Split('.');
+        if (splitValues.Length != 4)
+        {
+            return false;
+        }
+
+        byte tempForParsing;
+
+        return splitValues.All(r => byte.TryParse(r, out tempForParsing));
     }
 }
