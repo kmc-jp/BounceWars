@@ -349,7 +349,7 @@ public class Simulator : MonoBehaviour
     {
         time += Time.deltaTime;
         bool doMPRegen = false;
-        if (time > NextMPRegenTime)
+        if (isClient == 0 && time > NextMPRegenTime)
         {
             NextMPRegenTime = Mathf.Ceil(time);
             doMPRegen = true;
