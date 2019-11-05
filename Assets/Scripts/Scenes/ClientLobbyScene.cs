@@ -54,13 +54,13 @@ public class ClientLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
-        audioMgr.PlaySFX("buttonHigh");
+        audioMgr.PlaySFX("buttonLow");
         //Dont set isReady until host reply
         isReadyRequest = isClientReady == 0 ? 1 : 0;
     }
     public void onReturnBtnClick()
     {
-        audioMgr.PlaySFX("buttonLow");
+        audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
     }
     public override List<Command> GetCmd()
