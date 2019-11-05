@@ -51,14 +51,14 @@ public class HostLobbyScene : IntersceneBehaviour
     {
         if(isClientReady > 0)
         {
-            audioMgr.PlaySFX("buttonHigh");
+            audioMgr.PlaySFX("buttonLow");
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }
     }
     public void onReturnBtnClick()
     {
-        audioMgr.PlaySFX("buttonLow");
+        audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
     }
 }
