@@ -257,7 +257,7 @@ public class BasicUnit : MonoBehaviour
     {
         unitUI.ShowEmotion(emotionName, length);
     }
-    public void CollisionEvent(CollisionInfo info)
+    public virtual void CollisionEvent(CollisionInfo info)
     {
         Debug.Log("CollisionEvent");
 
