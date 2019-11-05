@@ -262,7 +262,11 @@ public class BasicUnit : MonoBehaviour
         Debug.Log("CollisionEvent");
 
         Debug.Log("Attacked!");
-        float damage =Mathf.Abs(info.normalVelocity);
+        float damage = Mathf.Abs(info.normalVelocity);
+        if (info.me.vx* info.me.vx+ info.me.vz * info.me.vz == 0)
+        {
+            damage =Mathf.Floor( Mathf.Abs(info.normalVelocity)*10);
+        }
         HP = HP - damage;
 
         if (HP < 0) HP = 0;
