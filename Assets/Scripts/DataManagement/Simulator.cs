@@ -491,8 +491,11 @@ public class Simulator : MonoBehaviour
                         break;
                     case 3: // Fireball
                         var u = GetUnit(c.fromUnitId);
-                        u.MP -= 25;
-                        CreateFireball(u, c.velocity);
+                        if (u.MP > 25)
+                        {
+                            u.MP -= 25;
+                            CreateFireball(u, c.velocity);
+                        }
                         break;
                 }
                 c.processed = true;
