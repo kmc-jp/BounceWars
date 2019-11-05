@@ -62,7 +62,8 @@ public class Client : MonoBehaviour
             ////        Sending HTTP Request        ////
             //                                        //
             // Establish an http request
-            WebRequest request = WebRequest.Create("http://localhost:5000");
+            string targetURL = "http://" + interScene.TargetURL + ":5000/";
+            WebRequest request = WebRequest.Create(targetURL);
             request.Timeout = 1000;
             // If required by the server, set the credentials.  
             request.Credentials = CredentialCache.DefaultCredentials;
@@ -149,13 +150,17 @@ public class Client : MonoBehaviour
                     }
                 }
             }
-            catch(TimeoutException we)
+            catch(TimeoutException)
             {
                 if(timedoutNum++ >= 5)
                 {
                     hostTimedOut();
                     break;
                 }
+            }
+            catch(WebException we)
+            {
+                Debug.LogWarning(we.Message);
             }
                 
         }

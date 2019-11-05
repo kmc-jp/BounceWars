@@ -6,6 +6,6 @@ public class EmotionSubButton : ButtonsUISubButtonBase
 {
     public void Clicked()
     {
-        NotifyOperation("show-emotion", "thumbsUp");
+        NotifyOperation("show-emotion", EmotionType.THUMBS_UP);
     }
 }

@@ -35,7 +35,9 @@ public class Host : MonoBehaviour
         _httpListener = interScene.GetHttpListener();
         // Set network address here
         if(_httpListener == null)
-            _httpListener = interScene.StartHttpListener("http://localhost:5000/");
+        {
+            _httpListener = interScene.StartHttpListener(null);
+        }
         // A scene change detector
         SceneManager.sceneUnloaded += RefreshThread;
         // start a response thread 

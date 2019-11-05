@@ -10,7 +10,8 @@ public class Simulator : MonoBehaviour
     public float time;
     public List<GameObject> prefabs;
 
-    List<UnitInfoTag> instances = new List<UnitInfoTag>();
+    [HideInInspector]
+    public List<UnitInfoTag> instances = new List<UnitInfoTag>();
     [HideInInspector]
     public List<Unit> units = new List<Unit>();
     [HideInInspector]
@@ -71,7 +72,7 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    if (u1.type == 2) // tinaxd u1 is arrow
+                    if (u1.type == UnitType.TYPE_ARROW) // tinaxd u1 is arrow
                     {
                         u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
@@ -79,7 +80,7 @@ public class Simulator : MonoBehaviour
                         u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
                     }
-                    else if (u2.type == 2) // tinaxd u2 is arrow
+                    else if (u2.type == UnitType.TYPE_ARROW) // tinaxd u2 is arrow
                     {
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
@@ -108,7 +109,7 @@ public class Simulator : MonoBehaviour
             Vector2 pos = new Vector2(u.x1, u.z1);
 
             Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
-            if (t==null||t.buildingType == 0)
+            if (t==null||t.buildingType <= 1)
             {
                 continue;
             }
@@ -291,7 +292,7 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = UnityEngine.Random.Range(0, 2);
+                u.type = UnitType.TYPE_CHESS;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP here
                 u.HP = 50;   // TODO
@@ -340,6 +341,13 @@ public class Simulator : MonoBehaviour
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }
+            //Schin update CD ready emotion
+            if (!units[i].isDead 
+                & units[i].owner==isClient 
+                & !GetBasicUnit(units[i].uuid).Locked)
+            {
+                GetBasicUnit(units[i].uuid).ShowEmotion(EmotionType.CD_READY, 5.0f);
+            }
         }
     }
 
@@ -375,6 +383,9 @@ public class Simulator : MonoBehaviour
                     Unit u = GetUnit(c.uuid);
                     u.vx = c.vx;
                     u.vz = c.vz;
+                    //schin Remove "ready to roll" emotion when ready.
+                    //      this doesn't check if it's really moved for client
+                    basicUnit.ExpireEmotion(EmotionType.CD_READY);
 
                     // Tinaxd update CountdownUI (Host only)
                     // Generate a UnitTimerCommand
@@ -471,7 +482,12 @@ public class Simulator : MonoBehaviour
             if (c1 is NewUnitCmd)
             {
                 NewUnitCmd c = (NewUnitCmd)c1;
-                CreateArrow(GetUnit(c.fromUnitId), c.to);
+                switch (c.unitType)
+                {
+                    case 2: // Arrow
+                        CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                        break;
+                }
                 c.processed = true;
             }
         }
@@ -554,27 +570,26 @@ public class Simulator : MonoBehaviour
     }
 
     // Tinaxd Used by host only 
-    private void CreateArrow(Unit fromUnit, Vector3 to)
+    private void CreateArrow(Unit fromUnit, Vector3 velocity)
     {
         Debug.Log("Creating arrow");
         Unit u = new Unit();
         // Set velocity
-        var vel = new Vector3(to.x - fromUnit.x, 0, to.z - fromUnit.z).normalized;
-        u.vx = vel.x * 30;
-        u.vz = vel.z * 30;
+        u.vx = velocity.x;
+        u.vz = velocity.z;
         u.vx1 = u.vx;
         u.vz1 = u.vz;
         //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
         //Debug.Log("Velocity: " + vel);
         // Set position
-        u.x = fromUnit.x + vel.x;
-        u.z = fromUnit.z + vel.z;
+        u.x = fromUnit.x + velocity.normalized.x;
+        u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
         u.HP = 0.1f; // TODO
         u.MP = 0;    //
 
-        u.type = 2; // Set unit type to "arrow"
+        u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);
