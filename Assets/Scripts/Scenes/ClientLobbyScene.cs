@@ -23,7 +23,9 @@ public class ClientLobbyScene : IntersceneBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("menuTheme");
     }
     private void Update()
     {
@@ -52,11 +54,13 @@ public class ClientLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
+        audioMgr.PlaySFX("buttonHigh");
         //Dont set isReady until host reply
         isReadyRequest = isClientReady == 0 ? 1 : 0;
     }
     public void onReturnBtnClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         SceneManager.LoadScene("MainMenu");
     }
     public override List<Command> GetCmd()
