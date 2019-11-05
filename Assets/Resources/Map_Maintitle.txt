@@ -1,0 +1,80 @@
+{ 
+	"id": 10, 
+	"mapType": 3,
+ 	"mapData":
+		[
+
+		[ { "type":1 ,"buildingType": 1,"height": 0.3}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 },
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}],
+
+		[ { "type":1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, 
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, {"type":0,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}],
+
+		[ { "type":1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, 
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, {"type":0,"height":0.3}, {"type":0,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}],
+
+		[ { "type":1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, 
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0,"height":0.3}, {"type":0,"height":0.3}, {"type":0,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}, {"type":0,"buildingType":1,"height":0.3}],
+
+		[ { "type":1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, 
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, 
+		{ "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}, { "type": 0 }, { "type": 0 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 0}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 0}, { "type": 0 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }],
+
+		[ { "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type":1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1 }, { "type": 1}, { "type": 1 }, 
+		{ "type": 1}, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }, { "type": 1}, {"type": 1}, { "type": 1 }]
+
+		] 
+}

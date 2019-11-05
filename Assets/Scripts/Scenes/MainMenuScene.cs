@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AudioManager;
 
 public class MainMenuScene : IntersceneBehaviour
 {
@@ -33,6 +34,9 @@ public class MainMenuScene : IntersceneBehaviour
         ipAddrInputPanel.SetActive(false);
         ipErrText.SetActive(false);
 
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("menuTheme");
         nameInputPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ipAddrInputPanel.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
 
@@ -47,20 +51,24 @@ public class MainMenuScene : IntersceneBehaviour
     public void onHostBtnClick()
     {
         ishost = true;
+        audioMgr.PlaySFX("buttonLow");
         nameInputPanel.SetActive(true);
     }
     public void onClientBtnClick()
     {
         ishost = false;
+        audioMgr.PlaySFX("buttonLow");
         nameInputPanel.SetActive(true);
     }
     public void onQuitGameBtnClick()
     {
         // exit game
+        audioMgr.PlaySFX("buttonHigh");
         Application.Quit();
     }
     public void onNameConfirmClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         string inputName = nameInputPanel.GetComponentInChildren<InputField>().text;
         //Debug.Log("inputName " + inputName);
         if (!isNameLegal(inputName))
@@ -86,6 +94,7 @@ public class MainMenuScene : IntersceneBehaviour
     }
     public void onIpConfirmClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         string ipAddr = ipAddrInputPanel.GetComponentInChildren<InputField>().text;
         if (!isIpAddrLegal(ipAddr))
         {
@@ -102,14 +111,32 @@ public class MainMenuScene : IntersceneBehaviour
 
     public void onNameCancelClick()
     {
+        audioMgr.PlaySFX("buttonHigh");
         nameInputPanel.SetActive(false);
     }
 
     public void onIpCancelClick()
     {
+        audioMgr.PlaySFX("buttonHigh");
         ipAddrInputPanel.SetActive(false);
         nameInputPanel.SetActive(true);
     }
+
+    public void onMuteClick()
+    {
+        audioMgr.PlaySFX("buttonHigh");
+        if (AudioListener.volume == 1.0f)
+        {
+            AudioListener.volume = 0.0f;
+            GameObject.Find("MuteBtn/Text").GetComponent<Text>().text = "Unmute";
+        }
+        else
+        {
+            AudioListener.volume = 1.0f;
+            GameObject.Find("MuteBtn/Text").GetComponent<Text>().text = "Mute";
+        }
+    }
+
     private bool isNameLegal(string nameStr)
     {
         string errMsg = "";
