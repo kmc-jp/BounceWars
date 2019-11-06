@@ -83,23 +83,23 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    if (u1.type == UnitType.TYPE_ARROW) // tinaxd u1 is arrow
+                    if (u1.type == UnitType.TYPE_ARROW || u1.type == UnitType.TYPE_FIREBALL) // tinaxd u1 is arrow or fireball
                     {
-                        u1.vx1 = u1.vx + dx * 0.95f * sizeVertical;
-                        u1.vz1 = u1.vz + dz * 0.95f * sizeVertical;
+                        u1.vx1 = u1.vx;
+                        u1.vz1 = u1.vz;
                         u1.HP = 0;
-                        u2.vx1 = u2.vx + dx * 0.05f * sizeVertical;
-                        u2.vz1 = u2.vz + dz * 0.05f * sizeVertical;
+                        u2.vx1 = u2.vx - dx * 0.05f * sizeVertical;
+                        u2.vz1 = u2.vz - dz * 0.05f * sizeVertical;
                     }
-                    else if (u2.type == UnitType.TYPE_ARROW) // tinaxd u2 is arrow
+                    else if (u2.type == UnitType.TYPE_ARROW || u2.type == UnitType.TYPE_FIREBALL) // tinaxd u2 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
-                        u2.vx1 = u2.vx + dx * 0.95f * sizeVertical;
-                        u2.vz1 = u2.vz + dz * 0.95f * sizeVertical;
+                        u2.vx1 = u2.vx;
+                        u2.vz1 = u2.vz;
                         u2.HP = 0;
                     }
-                    else // neither u1 nor u2 is arrow
+                    else // neither u1 nor u2 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * sizeVertical;
                         u1.vz1 = u1.vz + dz * sizeVertical;
@@ -366,14 +366,26 @@ public class Simulator : MonoBehaviour
     void FixedUpdate()
     {
         time += Time.deltaTime;
+        bool doMPRegen = false;
+        if (isClient == 0 && time > NextMPRegenTime)
+        {
+            NextMPRegenTime = Mathf.Ceil(time);
+            doMPRegen = true;
+        }
         ProcessMyCommand();
         for (int i = 0; i < units.Count; i++)
         {
             SimulateIntegral(units[i], Time.deltaTime);
+            if (doMPRegen)
+            {
+                units[i].MP = Mathf.Min(units[i].MP + 1, 50);       
+            }
         }
         SimulateCollision(units);
         UpdateInstances();
     }
+
+    private float NextMPRegenTime = 0;
 
     void ProcessMyCommand()
     {
@@ -498,6 +510,14 @@ public class Simulator : MonoBehaviour
                     case 2: // Arrow
                         CreateArrow(GetUnit(c.fromUnitId), c.velocity);
                         break;
+                    case 3: // Fireball
+                        var u = GetUnit(c.fromUnitId);
+                        if (u.MP > 25)
+                        {
+                            u.MP -= 25;
+                            CreateFireball(u, c.velocity);
+                        }
+                        break;
                 }
                 c.processed = true;
             }
@@ -601,6 +621,31 @@ public class Simulator : MonoBehaviour
         u.MP = 0;    //
 
         u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
+        u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        u.owner = fromUnit.owner;
+        units.Add(u);
+    }
+
+    private void CreateFireball(Unit fromUnit, Vector3 velocity)
+    {
+        Debug.Log("Creating fireball");
+        Unit u = new Unit();
+        // Set velocity
+        u.vx = velocity.x;
+        u.vz = velocity.z;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        //Debug.Log("Arrow sent: (" + fromUnit.x + ", 0, " + fromUnit.z + ") -> (" + to.x + ", 0, " + to.z + ")");
+        //Debug.Log("Velocity: " + vel);
+        // Set position
+        u.x = fromUnit.x + velocity.normalized.x;
+        u.z = fromUnit.z + velocity.normalized.z;
+        u.x1 = u.x;
+        u.z1 = u.z;
+        u.HP = 0.1f; // TODO
+        u.MP = 0;    //
+
+        u.type = UnitType.TYPE_FIREBALL; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);

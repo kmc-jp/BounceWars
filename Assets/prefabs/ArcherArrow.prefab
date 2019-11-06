@@ -92,8 +92,8 @@ GameObject:
   - component: {fileID: 6491018936299758984}
   - component: {fileID: 3971167819769589303}
   - component: {fileID: 5223351277152420448}
-  - component: {fileID: 7760682452326880213}
   - component: {fileID: 6493691085379079662}
+  - component: {fileID: 8773365105763929420}
   m_Layer: 0
   m_Name: ArcherArrow
   m_TagString: Unit
@@ -191,22 +191,6 @@ MonoBehaviour:
   owned: 0
   basicUnit: {fileID: 6493691085379079662}
   sim: {fileID: 0}
---- !u!54 &7760682452326880213
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5987305005303747642}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &6493691085379079662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,12 +217,20 @@ MonoBehaviour:
     owner: 0
     HP: 0
     MP: 0
+    isDead: 0
+  isDead: 0
   damagePopup: {fileID: 0}
   canvas: {fileID: 0}
   buttonsUI: {fileID: 0}
   buttons: {fileID: 0}
   buttonsUICloseDelay: 0.3
   MouseOn: 0
+  currentTile:
+    type: 0
+    buildingType: 0
+    height: 0
+    position: {x: 0, y: 0, z: 0}
+    index: {x: 0, y: 0}
   CountDownIconPath: 
   BaseCountDownTime: 8
   Moved: 0
@@ -247,3 +239,20 @@ MonoBehaviour:
   LastMoveTime: 0
   Owned: 0
   MovementLocked: 0
+  DragMode: 0
+--- !u!114 &8773365105763929420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987305005303747642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478c99406dec74f0c86e1108a57517f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visibleObjects:
+  - {fileID: 2910010993661311815}
+  unit: {fileID: 5223351277152420448}
+  spotted: 0

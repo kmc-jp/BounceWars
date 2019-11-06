@@ -255,21 +255,31 @@ public class BasicUnit : MonoBehaviour
     // Emotion Icon Tinaxd
     public void ShowEmotion(string emotionName, float length)
     {
-        if (!unit.isDead)
-            unitUI.ShowEmotion(emotionName, length);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ShowEmotion(emotionName, length);
+        }
     }
     public void ExpireEmotion(string emotionName)//schin hide specific emotion
     {
-        if (!unit.isDead)
-            unitUI.ExpireEmotion(emotionName);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ExpireEmotion(emotionName);
+        }
     }
     public bool HasEmotion(string emotionName)// schin check is Unit is showing some emotion
     {
-        if(!unit.isDead)
-            return unitUI.HasEmotion(emotionName);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                return unitUI.HasEmotion(emotionName);
+            return false;
+        }
         return false;
     }
-    public void CollisionEvent(CollisionInfo info)
+    public virtual void CollisionEvent(CollisionInfo info)
     {
         Debug.Log("CollisionEvent");
 
@@ -311,4 +321,5 @@ public enum DragType
 {
     NORMAL,
     ARCHER,
+    FIREBALL,
 }

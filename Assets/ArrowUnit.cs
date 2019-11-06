@@ -67,4 +67,10 @@ public class ArrowUnit : BasicUnit
 
         }
     }
+
+    public override void CollisionEvent(CollisionInfo info)
+    {
+        HP = 0;
+        // Do not popup damage indicator
+    }
 }

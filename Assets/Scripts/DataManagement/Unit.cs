@@ -24,10 +24,13 @@ public class Unit
 //Type:(Legacy after Tinaxd use this for arrow)
 //0 for elf_sword, use sword cion
 //1 for dragon_archer, use archer icon
+//2 for fireball
 // Schin added UnitType uniform representation
 public sealed class UnitType
 {
     public static readonly int TYPE_CHESS = 0;
-    public static readonly int TYPE_ARROW = 1;
+    public static readonly int TYPE_ARCHER = 1;
+    public static readonly int TYPE_ARROW = 2;
+    public static readonly int TYPE_FIREBALL = 3;
     public static readonly int TYPE_UNDEFINED = -1;
 }
