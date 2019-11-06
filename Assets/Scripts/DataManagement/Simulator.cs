@@ -67,6 +67,17 @@ public class Simulator : MonoBehaviour
                     collision.vx2 = u2.vx;
                     collision.vz2 = u2.vz;
                     infos.Add(collision);
+
+
+                    CollisionInfo collision1 = new CollisionInfo();
+                    collision1.me = u2;
+                    collision1.other = u1;
+                    collision1.vx1 = u2.vx;
+                    collision1.vz1 = u2.vz;
+                    collision1.vx2 = u1.vx;
+                    collision1.vz2 = u1.vz;
+                    infos.Add(collision1);
+
                     float rvx = u2.vx - u1.vx;
                     float rvz = u2.vz - u1.vz;
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse

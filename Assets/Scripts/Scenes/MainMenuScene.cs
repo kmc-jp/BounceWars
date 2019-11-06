@@ -158,7 +158,7 @@ public class MainMenuScene : IntersceneBehaviour
     private bool isIpAddrLegal(string ipStr)
     {
         string errMsg = "";
-        if (!ValidateIPv4(ipStr))
+        if ((!ValidateIPv4(ipStr))&&ipStr!="localhost")
         {
             errMsg = "Invalid IP address.";
         }
@@ -170,7 +170,9 @@ public class MainMenuScene : IntersceneBehaviour
             return false;
         }
         else
+        {
             ipErrText.SetActive(false);
+        }
         return true;
     }
     private bool ValidateIPv4(string ipString)

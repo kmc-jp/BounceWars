@@ -45,15 +45,22 @@ public abstract class IntersceneBehaviour : MonoBehaviour
         if (ipAddr == null || ipAddr == "")
         {
             ipAddr = "localhost";
-            var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
-            foreach (var ip in host.AddressList)
+            try
             {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                string hostname = System.Net.Dns.GetHostName();
+                var host = System.Net.Dns.GetHostEntry(hostname);
+                foreach (var ip in host.AddressList)
                 {
-                    // get current ipAddr in local network
-                    ipAddr = ip.ToString();
-                    break;
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        // get current ipAddr in local network
+                        ipAddr = ip.ToString();
+                        break;
+                    }
                 }
+            }catch(Exception e)
+            {
+                Debug.Log(e.ToString());
             }
             // Backup Plan
             //ipAddr = UnityEngine.Networking.NetworkManager.singleton.networkAddress;
