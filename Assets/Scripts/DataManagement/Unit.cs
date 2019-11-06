@@ -18,6 +18,7 @@ public class Unit
     public float HP = 999;
     public float MP;
     public bool isDead = false;
+    public int buff;
 }
 
 
@@ -33,4 +34,10 @@ public sealed class UnitType
     public static readonly int TYPE_ARROW = 2;
     public static readonly int TYPE_FIREBALL = 3;
     public static readonly int TYPE_UNDEFINED = -1;
+}
+
+// Tinaxd added BuffFlag
+public sealed class BuffFlag
+{
+    public static readonly int BUFF_HEALING = 1;
 }
