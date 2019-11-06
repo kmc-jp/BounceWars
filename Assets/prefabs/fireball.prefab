@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5889235973824314488}
   - component: {fileID: 7696722970254353979}
   - component: {fileID: 2902798103021325494}
+  - component: {fileID: 4074971392508948758}
   m_Layer: 0
   m_Name: fireball
   m_TagString: Untagged
@@ -92,7 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uuid: 0
-  red: {fileID: 0}
+  red: {fileID: 2100000, guid: fcb56e0e56fe15f42b8f100e452f8a6a, type: 3}
   owned: 0
   basicUnit: {fileID: 2902798103021325494}
   sim: {fileID: 0}
@@ -145,3 +146,19 @@ MonoBehaviour:
   Owned: 0
   MovementLocked: 0
   DragMode: 0
+--- !u!114 &4074971392508948758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5889235973822046904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478c99406dec74f0c86e1108a57517f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visibleObjects:
+  - {fileID: 5889235973822046904}
+  unit: {fileID: 7696722970254353979}
+  spotted: 0
