@@ -16,6 +16,10 @@ public class TestOpArcherAndFireball : OperationHandlerBase
             Debug.Log("Start fireball mode");
             Invoke("_EnableFireballMode", 0.1f);
         }
+        else if (operation == "start-healingbuff-mode")
+        {
+            Debug.Log("Start healing buff mode");
+        }
     }
 
     private void _EnableFireballMode()
