@@ -67,12 +67,23 @@ public class Simulator : MonoBehaviour
                     collision.vx2 = u2.vx;
                     collision.vz2 = u2.vz;
                     infos.Add(collision);
+
+
+                    CollisionInfo collision1 = new CollisionInfo();
+                    collision1.me = u2;
+                    collision1.other = u1;
+                    collision1.vx1 = u2.vx;
+                    collision1.vz1 = u2.vz;
+                    collision1.vx2 = u1.vx;
+                    collision1.vz2 = u1.vz;
+                    infos.Add(collision1);
+
                     float rvx = u2.vx - u1.vx;
                     float rvz = u2.vz - u1.vz;
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
-                    if (u1.type == 2 || u1.type == 3) // tinaxd u1 is arrow or fireball
+                    if (u1.type == UnitType.TYPE_ARROW || u1.type == UnitType.TYPE_FIREBALL) // tinaxd u1 is arrow or fireball
                     {
                         u1.vx1 = u1.vx;
                         u1.vz1 = u1.vz;
@@ -80,7 +91,7 @@ public class Simulator : MonoBehaviour
                         u2.vx1 = u2.vx - dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz - dz * 0.05f * sizeVertical;
                     }
-                    else if (u2.type == 2 || u2.type == 3) // tinaxd u2 is arrow or fireball
+                    else if (u2.type == UnitType.TYPE_ARROW || u2.type == UnitType.TYPE_FIREBALL) // tinaxd u2 is arrow or fireball
                     {
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
@@ -292,7 +303,7 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 //Schin set unit type
-                u.type = UnityEngine.Random.Range(0, 2);
+                u.type = UnitType.TYPE_CHESS;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP here
                 u.HP = 50;   // TODO
@@ -341,6 +352,13 @@ public class Simulator : MonoBehaviour
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
             }
+            //Schin update CD ready emotion
+            if (!units[i].isDead 
+                & units[i].owner==isClient 
+                & !GetBasicUnit(units[i].uuid).Locked)
+            {
+                GetBasicUnit(units[i].uuid).ShowEmotion(EmotionType.CD_READY, 5.0f);
+            }
         }
     }
 
@@ -388,6 +406,9 @@ public class Simulator : MonoBehaviour
                     Unit u = GetUnit(c.uuid);
                     u.vx = c.vx;
                     u.vz = c.vz;
+                    //schin Remove "ready to roll" emotion when ready.
+                    //      this doesn't check if it's really moved for client
+                    basicUnit.ExpireEmotion(EmotionType.CD_READY);
 
                     // Tinaxd update CountdownUI (Host only)
                     // Generate a UnitTimerCommand
@@ -599,7 +620,7 @@ public class Simulator : MonoBehaviour
         u.HP = 0.1f; // TODO
         u.MP = 0;    //
 
-        u.type = 2; // Set unit type to "arrow"
+        u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);
@@ -624,7 +645,7 @@ public class Simulator : MonoBehaviour
         u.HP = 0.1f; // TODO
         u.MP = 0;    //
 
-        u.type = 3; // Set unit type to "arrow"
+        u.type = UnitType.TYPE_FIREBALL; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);

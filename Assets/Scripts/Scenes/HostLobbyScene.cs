@@ -20,6 +20,9 @@ public class HostLobbyScene : IntersceneBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("menuTheme");
 
     }
     void Update()
@@ -48,12 +51,14 @@ public class HostLobbyScene : IntersceneBehaviour
     {
         if(isClientReady > 0)
         {
+            audioMgr.PlaySFX("buttonLow");
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }
     }
     public void onReturnBtnClick()
     {
+        audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
     }
 }

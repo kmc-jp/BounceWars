@@ -255,7 +255,29 @@ public class BasicUnit : MonoBehaviour
     // Emotion Icon Tinaxd
     public void ShowEmotion(string emotionName, float length)
     {
-        unitUI.ShowEmotion(emotionName, length);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ShowEmotion(emotionName, length);
+        }
+    }
+    public void ExpireEmotion(string emotionName)//schin hide specific emotion
+    {
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ExpireEmotion(emotionName);
+        }
+    }
+    public bool HasEmotion(string emotionName)// schin check is Unit is showing some emotion
+    {
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                return unitUI.HasEmotion(emotionName);
+            return false;
+        }
+        return false;
     }
     public virtual void CollisionEvent(CollisionInfo info)
     {
