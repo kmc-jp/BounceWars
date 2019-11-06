@@ -5,9 +5,12 @@ using UnityEngine;
 public class ClientJoinedCmd : Command
 {
     public bool isClientJoined;
-    public ClientJoinedCmd()
+    // the new scene client is in.
+    public int sceneID;
+    public ClientJoinedCmd(int sceneID)
     {
         isClientJoined = true;
+        this.sceneID = sceneID;
         type = 106;
     }
 }

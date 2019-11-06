@@ -19,7 +19,7 @@ public class Simulator : MonoBehaviour
     [HideInInspector]
     public List<Command> commands = new List<Command>();
     public bool isCommandProcessingDone = false;
-    public GameSetCmd cmdGameSet = null;
+    //public GameSetCmd cmdGameSet = null;
 
     [HideInInspector]
     public List<Command> unitTimerRequests = new List<Command>();
@@ -218,12 +218,12 @@ public class Simulator : MonoBehaviour
         }
         if (!isHostAlive)
         {
-            sendGameSetCmd(false);
+            //sendGameSetCmd(false);
             openResultScene(false);
         }
         else if (!isClientAlive)
         {
-            sendGameSetCmd(true);
+            //sendGameSetCmd(true);
             openResultScene(true);
         }
     }
@@ -231,14 +231,17 @@ public class Simulator : MonoBehaviour
     //HostからClientにゲームが決着したことを知らせるコマンドを送る
     private void sendGameSetCmd(bool didHostWin)
     {
-        cmdGameSet = new GameSetCmd(didHostWin);
-        Thread.Sleep(500);      //送り終わるまで待つ
+        //cmdGameSet = new GameSetCmd(didHostWin);
+        //Thread.Sleep(500);      //送り終わるまで待つ
     }
 
     public void openResultScene(bool didHostWin)
     {
         IntersceneBehaviour.SetWinner(didHostWin);
-        SceneManager.LoadScene("Result");
+        if (isClient == 0)
+            SceneManager.LoadScene("ResultHost");
+        else
+            SceneManager.LoadScene("ResultClient");
     }
 
 
@@ -395,6 +398,11 @@ public class Simulator : MonoBehaviour
             if (c1.processed)
             {
                 continue;
+            }
+            if (c1 is GameSetCmd)
+            {
+                GameSetCmd c = (GameSetCmd)c1;
+                openResultScene(c.isHostWin);
             }
             if (c1 is UnitMovedCmd)
             {
@@ -568,11 +576,11 @@ public class Simulator : MonoBehaviour
     public List<Command> GetCommandsFromHost()
     {
         List<Command> cs = new List<Command>();
-        if(cmdGameSet != null)
-        {
-            cs.Add(cmdGameSet);     //add GameSetCmd
-            cmdGameSet = null;
-        }
+        //if(cmdGameSet != null)
+        //{
+        //    cs.Add(cmdGameSet);     //add GameSetCmd
+        //    cmdGameSet = null;
+        //}
         //unitupdatecmd
         UnitUpdateCmd unitUpdateCmd = new UnitUpdateCmd();
         unitUpdateCmd.units = units;

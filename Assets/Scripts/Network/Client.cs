@@ -78,23 +78,24 @@ public class Client : MonoBehaviour
                 fromClient.AddRange(simulator.commands);
                 simulator.SetCommandsSent();
             }
-            if (interScene != null) fromClient.AddRange(interScene.GetCmd());
+            if (interScene != null)
+                fromClient.AddRange(interScene.GetCmd());
             //System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             //timer.Start();
             //after collecting all the requests, convert them into binary stream
             byte[] binary = Encoding.UTF8.GetBytes(JsonUtility.ToJson(fromClient));
 
-            // Send the requests
-            using (Stream postStream = request.GetRequestStream())
+            try
             {
-                postStream.Write(binary, 0, binary.Length);
-                postStream.Close();
-            }
+                    // Send the requests
+                    using (Stream postStream = request.GetRequestStream())
+                {
+                    postStream.Write(binary, 0, binary.Length);
+                    postStream.Close();
+                }
 
             ////        receiving HTTP Request        ////
             //                                          //
-            try
-            {
                 // Get the stream containing content returned by the server. 
                 using (WebResponse response = request.GetResponse())
                 using (Stream dataStream = response.GetResponseStream())
@@ -119,10 +120,8 @@ public class Client : MonoBehaviour
                                 {
                                     case "UnitUpdateCmd":
                                     case "UnitTimerCmd":
-                                        simulator.commands.Add(c);
-                                        break;
                                     case "GameSetCmd":
-                                        simulator.openResultScene(((GameSetCmd)c).isHostWin);
+                                        simulator.commands.Add(c);
                                         break;
                                     case "LobbyReadyCmd":
                                     case "LobbyStartgameCmd":
@@ -161,6 +160,10 @@ public class Client : MonoBehaviour
             catch(WebException we)
             {
                 Debug.LogWarning(we.Message);
+                // Possibly Host has quit game
+                // Assume Host loses and client wins.
+                //if (simulator!= null)
+                //    simulator.commands.Add(new GameSetCmd(false)); 
             }
                 
         }

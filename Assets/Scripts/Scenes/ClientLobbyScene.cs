@@ -8,12 +8,14 @@ public class ClientLobbyScene : IntersceneBehaviour
 {
 
     private GameObject startGameButton;
+    private Text ClientSceneInfo;
     private int isClientReady;
     private int isReadyRequest;
 
     private void OnEnable()
     {
         startGameButton = GameObject.Find("StartGameBtn");
+        ClientSceneInfo = GameObject.Find("ClientSceneInfo").GetComponent<Text>();
         //startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
 
         isClientReady = 0;
@@ -26,6 +28,12 @@ public class ClientLobbyScene : IntersceneBehaviour
         //get audio manager instance
         audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
         audioMgr.PlayMusic("menuTheme");
+
+
+        //set UI username and ip address.
+        ClientSceneInfo.text =
+            "Client:  " + G_username
+            + " \n Host IP Address " + TargetURL;
     }
     private void Update()
     {
@@ -37,8 +45,14 @@ public class ClientLobbyScene : IntersceneBehaviour
             {
                 LobbyReadyCmd c = (LobbyReadyCmd)cTemp;
                 isClientReady = c.isReady;
+                G_opponentName = c.opponentName;
                 if (isClientReady > 0)
+                {
                     startGameButton.GetComponentInChildren<Text>().color = new Color(1, 0, 0);
+                    ClientSceneInfo.text =
+                        "Client:  " + G_username + " VS " + G_opponentName
+                        + " \n Host IP Address " + TargetURL;
+                }
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
             }
@@ -69,7 +83,7 @@ public class ClientLobbyScene : IntersceneBehaviour
         tosendCmds = new List<Command>();
         if (isClientReady != isReadyRequest)
         {
-            outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest)));
+            outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username)));
         }
         return outCmdTmp;
     }

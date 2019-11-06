@@ -31,10 +31,11 @@ public class CommandJsonList
     }
     public void AddRange(List<Command> cs)
     {
-        for (int i = 0; i < cs.Count; i++)
-        {
-            Add(cs[i]);
-        }
+        if (cs != null)
+            for (int i = 0; i < cs.Count; i++)
+            {
+                Add(cs[i]);
+            }
     }
     //Schin Merge another CommandJsonList
     public void MergeJsonList(CommandJsonList newCJL)
@@ -55,13 +56,16 @@ public class CommandJsonList
         {
             Type tp = Type.GetType(types[i]);
             Command c;
-            Type a = typeof(JsonUtility);
-            System.Reflection.MethodInfo b = a.GetMethod("FromJson", new[] { typeof(string) });
-
-            System.Reflection.MethodInfo cc = b.MakeGenericMethod(tp);
-            object d = cc.Invoke(this, new object[] { commandsJson[i]});
-            c = (Command)d;
+            //Type a = typeof(JsonUtility);
+            //System.Reflection.MethodInfo b = a.GetMethod("FromJson", new[] { typeof(string) });
+            //System.Reflection.MethodInfo cc = b.MakeGenericMethod(tp);
+            //object d = cc.Invoke(this, new object[] { commandsJson[i]});
+            //c = (Command)d;
             //JsonUtility.FromJson<SubclassOfCommand>(CommandsJsonString);
+            c = (Command)typeof(JsonUtility).
+                    GetMethod("FromJson", new[] { typeof(string) }).
+                    MakeGenericMethod(tp).
+                    Invoke(this, new object[] { commandsJson[i] });
             if (c == null) continue;
             commands.Add(c);
             /*if (!(c.sent))
