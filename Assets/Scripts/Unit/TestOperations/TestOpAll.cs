@@ -16,17 +16,17 @@ public class TestOpAll : OperationHandlerBase
     {
         if (operation == "start-archer-mode")
         {
-            Debug.Log("Start archer mode");
+            //Debug.Log("Start archer mode");
             Invoke("_EnableArcherMode", 0.1f);
         }
         else if (operation == "start-fireball-mode")
         {
-            Debug.Log("Start fireball mode");
+            //Debug.Log("Start fireball mode");
             Invoke("_EnableFireballMode", 0.1f);
         }
         else if (operation == "start-healingbuff-mode")
         {
-            Debug.Log("Start healing buff mode");
+            //Debug.Log("Start healing buff mode");
             Invoke("_EnableHealingBuffMode", 0.1f);
         }
     }

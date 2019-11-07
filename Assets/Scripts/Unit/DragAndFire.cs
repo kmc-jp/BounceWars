@@ -130,12 +130,12 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
     public void TurnOnDrag()
     {
         DragEnabled = true;
-        Debug.Log("Drag detection enabled");
+        //Debug.Log("Drag detection enabled");
     }
 
     public void TurnOffDrag()
     {
         DragEnabled = false;
-        Debug.Log("Drag detection disabled");
+        //Debug.Log("Drag detection disabled");
     }
 }
