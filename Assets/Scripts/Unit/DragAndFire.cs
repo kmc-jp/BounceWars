@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragAndFire : MonoBehaviour
+public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
 {
     GameObject target;
     UnitInfoTag targetScript;
@@ -12,9 +12,18 @@ public class DragAndFire : MonoBehaviour
     Vector3 localOrigin;
     public Simulator simulator;
 
+    private bool DragEnabled = true;
+
     // Update is called once per frame
     void Update()
     {
+        if (!DragEnabled)
+        {
+            grabbing = false;
+            target = null;
+            targetScript = null;
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -116,5 +125,17 @@ public class DragAndFire : MonoBehaviour
             var point = ray.GetPoint(enter);
             basicUnit.NotifyDragUpdate(point);
         }
+    }
+
+    public void TurnOnDrag()
+    {
+        DragEnabled = true;
+        Debug.Log("Drag detection enabled");
+    }
+
+    public void TurnOffDrag()
+    {
+        DragEnabled = false;
+        Debug.Log("Drag detection disabled");
     }
 }
