@@ -93,6 +93,7 @@ public class Host : MonoBehaviour
                         case "UnitUpdateCmd":
                         case "UnitMovedCmd":
                         case "NewUnitCmd":
+                        case "HealingBuffRequestCmd":
                             simulator.commands.Add(c);
                             break;
                         case "UnitTimerCmd":

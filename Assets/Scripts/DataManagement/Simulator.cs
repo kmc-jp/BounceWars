@@ -29,6 +29,9 @@ public class Simulator : MonoBehaviour
     public MapBehaviour mapBehaviour;
     GameMap gameMap;
 
+    // Used only in Host
+    public int HealingBuffMaxDistance;
+
     void SimulateCollision(List<Unit> targets)
     {
         //Debug.Log(targets[0].vx);
@@ -384,7 +387,7 @@ public class Simulator : MonoBehaviour
             if (doRegen)
             {
                 units[i].MP = Mathf.Min(units[i].MP + 1, 50);
-                ProcessHealingBuff(units[i]);
+                TryProcessingHealingBuff(units[i]);
             }
         }
         SimulateCollision(units);
@@ -527,6 +530,22 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
             }
+            if (c1 is HealingBuffRequestCmd)
+            {
+                var c = (HealingBuffRequestCmd)c1;
+                if (isClient == 0)
+                {
+                    var requestor = GetUnit(c.RequestorId);
+                    var target = GetUnit(c.TargetId);
+                    if (UnitDistance1(requestor, target) < HealingBuffMaxDistance)
+                    {
+                        target.buff |= BuffFlag.BUFF_HEALING;
+                    }
+                    c.processed = true;
+                }
+                GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
+                UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
+            }
         }
         List<Command> remains = new List<Command>();
         for (int i = 0; i < commands.Count; i++)
@@ -657,11 +676,17 @@ public class Simulator : MonoBehaviour
         units.Add(u);
     }
 
-    private void ProcessHealingBuff(Unit u)
+    private void TryProcessingHealingBuff(Unit u)
     {
         if ((u.buff & BuffFlag.BUFF_HEALING) != 0)
         {
             u.HP += 2;
+            var max = GetBasicUnit(u.uuid).MaxHP;
+            if (u.HP > max)
+            {
+                u.HP = max;
+                u.buff &= ~BuffFlag.BUFF_HEALING;
+            }
         }
     }
 }
