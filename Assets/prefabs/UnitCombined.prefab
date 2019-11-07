@@ -1022,7 +1022,7 @@ GameObject:
   - component: {fileID: 6491018936299758984}
   - component: {fileID: 3971167819769589303}
   - component: {fileID: 5223351277152420448}
-  - component: {fileID: 4744235672954800677}
+  - component: {fileID: 645715418289217597}
   - component: {fileID: 5987305005303747637}
   - component: {fileID: 7760682452326880213}
   - component: {fileID: 1700390600749733718}
@@ -1125,7 +1125,7 @@ MonoBehaviour:
   owned: 0
   basicUnit: {fileID: 5987305005303747637}
   sim: {fileID: 0}
---- !u!114 &4744235672954800677
+--- !u!114 &645715418289217597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1134,7 +1134,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5987305005303747642}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4553a0aaaca00b646ba63d3decffb8f8, type: 3}
+  m_Script: {fileID: 11500000, guid: eae3d407e5c55254bb377a96e9b50c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5987305005303747637
@@ -1164,6 +1164,7 @@ MonoBehaviour:
     HP: 0
     MP: 0
     isDead: 0
+    buff: 0
   isDead: 0
   damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
     type: 3}

@@ -343,4 +343,5 @@ public enum DragType
     NORMAL,
     ARCHER,
     FIREBALL,
+    HEALING_BUFF,
 }
