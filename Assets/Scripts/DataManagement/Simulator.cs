@@ -86,6 +86,7 @@ public class Simulator : MonoBehaviour
                     float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
 
                     collision.normalVelocity = sizeVertical;
+                    collision1.normalVelocity = sizeVertical;
                     if (u1.type == UnitType.TYPE_ARROW || u1.type == UnitType.TYPE_FIREBALL) // tinaxd u1 is arrow or fireball
                     {
                         u1.vx1 = u1.vx;
