@@ -600,6 +600,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6ae3bcd8248564141b899c5ebea4b91c, type: 2}
   - {fileID: 11400000, guid: 9f0074f8fd1ba4e3abed21bbe80734ad, type: 2}
   mapBehaviour: {fileID: 657742904}
+  HealingBuffMaxDistance: 15
 --- !u!4 &657742908
 Transform:
   m_ObjectHideFlags: 0

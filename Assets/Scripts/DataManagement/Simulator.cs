@@ -29,6 +29,9 @@ public class Simulator : MonoBehaviour
     public MapBehaviour mapBehaviour;
     GameMap gameMap;
 
+    // Used only in Host
+    public int HealingBuffMaxDistance;
+
     void SimulateCollision(List<Unit> targets)
     {
         //Debug.Log(targets[0].vx);
@@ -108,6 +111,11 @@ public class Simulator : MonoBehaviour
                     }
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
+
+                    // Stop healing buff
+                    u1.buff &= ~BuffFlag.BUFF_HEALING;
+                    u2.buff &= ~BuffFlag.BUFF_HEALING;
+
                     clean[i] = false;
                     clean[j] = false;
                 }
@@ -369,26 +377,27 @@ public class Simulator : MonoBehaviour
     void FixedUpdate()
     {
         time += Time.deltaTime;
-        bool doMPRegen = false;
-        if (isClient == 0 && time > NextMPRegenTime)
+        bool doRegen = false;
+        if (isClient == 0 && time > RegenTimer)
         {
-            NextMPRegenTime = Mathf.Ceil(time);
-            doMPRegen = true;
+            RegenTimer = Mathf.Ceil(time);
+            doRegen = true;
         }
         ProcessMyCommand();
         for (int i = 0; i < units.Count; i++)
         {
             SimulateIntegral(units[i], Time.deltaTime);
-            if (doMPRegen)
+            if (doRegen)
             {
-                units[i].MP = Mathf.Min(units[i].MP + 1, 50);       
+                units[i].MP = Mathf.Min(units[i].MP + 1, 50);
+                TryProcessingHealingBuff(units[i]);
             }
         }
         SimulateCollision(units);
         UpdateInstances();
     }
 
-    private float NextMPRegenTime = 0;
+    private float RegenTimer = 0;
 
     void ProcessMyCommand()
     {
@@ -529,6 +538,22 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
             }
+            if (c1 is HealingBuffRequestCmd)
+            {
+                var c = (HealingBuffRequestCmd)c1;
+                if (isClient == 0)
+                {
+                    var requestor = GetUnit(c.RequestorId);
+                    var target = GetUnit(c.TargetId);
+                    if (UnitDistance1(requestor, target) < HealingBuffMaxDistance)
+                    {
+                        target.buff |= BuffFlag.BUFF_HEALING;
+                    }
+                    c.processed = true;
+                }
+                GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
+                UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
+            }
         }
         List<Command> remains = new List<Command>();
         for (int i = 0; i < commands.Count; i++)
@@ -657,5 +682,19 @@ public class Simulator : MonoBehaviour
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         u.owner = fromUnit.owner;
         units.Add(u);
+    }
+
+    private void TryProcessingHealingBuff(Unit u)
+    {
+        if ((u.buff & BuffFlag.BUFF_HEALING) != 0)
+        {
+            u.HP += 2;
+            var max = GetBasicUnit(u.uuid).MaxHP;
+            if (u.HP > max)
+            {
+                u.HP = max;
+                u.buff &= ~BuffFlag.BUFF_HEALING;
+            }
+        }
     }
 }

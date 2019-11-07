@@ -315,6 +315,27 @@ public class BasicUnit : MonoBehaviour
     }
 
     public DragType DragMode = DragType.NORMAL;
+
+    // Tinaxd added buff related operations
+    public int GetBuffs()
+    {
+        return unit.buff;
+    }
+
+    public void AddBuff(int buffType)
+    {
+        unit.buff |= buffType;
+    }
+
+    public void RemoveBuff(int buffType)
+    {
+        unit.buff &= ~buffType;
+    }
+
+    public void UpdateBuff(int buffs)
+    {
+        unit.buff = buffs;
+    }
 }
 
 public enum DragType
@@ -322,4 +343,5 @@ public enum DragType
     NORMAL,
     ARCHER,
     FIREBALL,
+    HEALING_BUFF,
 }
