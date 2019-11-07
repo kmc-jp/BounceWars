@@ -5,6 +5,7 @@ using UnityEngine;
 public class LobbyReadyCmd : Command
 {
     public int isReady = 0;
+    public string opponentName;
     public LobbyReadyCmd()
     {
         isReady = 0;
@@ -13,6 +14,12 @@ public class LobbyReadyCmd : Command
     public LobbyReadyCmd(int r)
     {
         isReady = r;
+        type = 101;
+    }
+    public LobbyReadyCmd(int r, string name)
+    {
+        isReady = r;
+        opponentName = name;
         type = 101;
     }
 }

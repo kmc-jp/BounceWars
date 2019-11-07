@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 490391661}
   - component: {fileID: 490391660}
   m_Layer: 5
-  m_Name: HostSceneInfo
+  m_Name: ClientSceneInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -374,7 +374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -100}
+  m_AnchoredPosition: {x: 520, y: -120}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &490391660
@@ -399,7 +399,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 10
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -1199,7 +1199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d978185deff1a4e8fc89f426478901, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commands: []
 --- !u!114 &1979631128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1213,7 +1212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 0}
-  clientLobbyScene: {fileID: 1979631127}
+  interScene: {fileID: 0}
 --- !u!1 &1996204817
 GameObject:
   m_ObjectHideFlags: 0

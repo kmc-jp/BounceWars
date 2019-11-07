@@ -543,7 +543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04667368a2a2f54a97280be5f4e1a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commands: []
 --- !u!114 &300462503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,8 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 0}
-  hostLobbyScene: {fileID: 300462502}
-  hostBattleScene: {fileID: 0}
+  interScene: {fileID: 0}
 --- !u!1 &472371812
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +752,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -100}
+  m_AnchoredPosition: {x: 520, y: -120}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &551059304
@@ -779,7 +777,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 10
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1

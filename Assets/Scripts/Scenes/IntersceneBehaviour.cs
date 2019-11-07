@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+//Schin
 public abstract class IntersceneBehaviour : MonoBehaviour
 {
     // Inter-Scene data
     protected static bool g_isHost;
     protected static string g_username;
+    protected static string g_opponentName;
     protected static List<Unit> units;
     protected static bool isHostWin;
     protected static string selfURL;
@@ -33,7 +34,9 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     public string TargetURL { get => targetURL; set => targetURL = value; }
     public bool G_isHost { get => g_isHost; set => g_isHost = value; }
     public string G_username { get => g_username; set => g_username = value; }
+    protected static string G_opponentName { get => g_opponentName; set => g_opponentName = value; }
     public List<Unit> Units { get => units; set => units = value; }
+    protected static bool IsHostWin { get => isHostWin; set => isHostWin = value; }
 
     //For network System
     public HttpListener GetHttpListener()
@@ -65,14 +68,14 @@ public abstract class IntersceneBehaviour : MonoBehaviour
             // Backup Plan
             //ipAddr = UnityEngine.Networking.NetworkManager.singleton.networkAddress;
         }
-        ipAddr = "http://" + ipAddr + ":5000/";
 
         if (_httpListener == null)
         {
             selfURL = ipAddr;
+            ipAddr = "http://" + ipAddr + ":5000/";
             Debug.Log("Starting server...");
             _httpListener = new HttpListener();
-            _httpListener.Prefixes.Add(selfURL);
+            _httpListener.Prefixes.Add(ipAddr);
             _httpListener.Start();
         }
         return _httpListener;
@@ -91,8 +94,17 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     //Give the commands ready to send
     public virtual List<Command> GetCmd()
     {
-        List<Command> outCmdTmp = new List<Command>(tosendCmds);
-        tosendCmds = new List<Command>();
+        List<Command> outCmdTmp = new List<Command>();
+        try
+        {
+            outCmdTmp = new List<Command>(tosendCmds);
+            tosendCmds = new List<Command>();
+        }
+        catch (Exception)
+        {
+            // Currently, tosendCmds is not thread-save
+            // If fail, the commands will be collected next round.
+        }
         return outCmdTmp;
     }
     //Get current scene, can only be used in MainThread

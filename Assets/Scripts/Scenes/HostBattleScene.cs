@@ -17,10 +17,17 @@ public class HostBattleScene : IntersceneBehaviour
         for (int i = receivedCmds.Count - 1; i >= 0; i--)
         {
             Command cTemp = receivedCmds[i];
-            if (cTemp is ClientJoinedCmd)
+            if (cTemp is ClientJoinedCmd & ((ClientJoinedCmd)cTemp).sceneID == 4)
             {
                 Debug.Log("ClientJoined");
                 isClientInGame = true;
+            }
+            if (cTemp is ClientJoinedCmd & ((ClientJoinedCmd)cTemp).sceneID == 6)
+            {
+                // 6 for client having quit the game, because it sends this code in result scene only.
+                Debug.Log("ClientQuitted game");
+                SetWinner(true);// in this case host wins
+                SceneManager.LoadScene("ResultHost");
             }
             // The unprocessed commands are saved for other child of IntersceneBehaviour
             else
@@ -41,9 +48,11 @@ public class HostBattleScene : IntersceneBehaviour
     }
     public void onQuitBattleBtnClick()
     {
-        CloseHttpListener();
-        SceneManager.LoadScene("MainMenu");
+        //CloseHttpListener();
+        SetWinner(false);
+        SceneManager.LoadScene("ResultHost");
 
         //TODO clear user info
     }
+
 }
