@@ -11,6 +11,10 @@ public class ClientLobbyScene : IntersceneBehaviour
     private Text ClientSceneInfo;
     private int isClientReady;
     private int isReadyRequest;
+    private List<int> HostUnitTypes;
+
+    [SerializeField]
+    private UnitChooserManager UCManager;
 
     private void OnEnable()
     {
@@ -55,6 +59,8 @@ public class ClientLobbyScene : IntersceneBehaviour
                 }
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
+
+                HostUnitTypes = c.unitTypes;
             }
             else if (cTemp is LobbyStartgameCmd)
             {
@@ -76,6 +82,19 @@ public class ClientLobbyScene : IntersceneBehaviour
     {
         audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
+        // For debug
+        var units = GetClientUnits();
+        if (units == null)
+        {
+            Debug.Log("Units null");
+        }
+        else
+        {
+            foreach (var unit in units)
+            {
+                Debug.Log(unit);
+            }
+        }
     }
     public override List<Command> GetCmd()
     {
@@ -83,8 +102,17 @@ public class ClientLobbyScene : IntersceneBehaviour
         tosendCmds = new List<Command>();
         if (isClientReady != isReadyRequest)
         {
-            outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username)));
+            var cunits = GetClientUnits();
+            if (cunits != null)
+            {
+                outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username, cunits)));
+            }
         }
         return outCmdTmp;
+    }
+
+    private List<int> GetClientUnits()
+    {
+        return UCManager.GetSelectedUnitTypes();
     }
 }

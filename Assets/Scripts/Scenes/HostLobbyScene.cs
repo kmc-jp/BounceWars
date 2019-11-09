@@ -10,6 +10,10 @@ public class HostLobbyScene : IntersceneBehaviour
     private GameObject startGameButton;
     private Text HostSceneInfo;
     private int isClientReady;
+    private List<int> ClientUnitTypes;
+
+    [SerializeField]
+    private UnitChooserManager UCManager;
 
     void OnEnable()
     {
@@ -44,6 +48,7 @@ public class HostLobbyScene : IntersceneBehaviour
                 LobbyReadyCmd c = (LobbyReadyCmd)cTemp;
                 isClientReady = c.isReady;
                 G_opponentName = c.opponentName;
+                ClientUnitTypes = c.unitTypes;    // Client's units
                 if (isClientReady > 0)
                 {
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
@@ -54,7 +59,8 @@ public class HostLobbyScene : IntersceneBehaviour
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
                 // return this cmd back to Client for checking
-                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username)));
+                // Tinaxd added unit type field
+                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username, GetHostUnits())));
             }
             else
                 continue;
@@ -66,6 +72,21 @@ public class HostLobbyScene : IntersceneBehaviour
         if(isClientReady > 0)
         {
             audioMgr.PlaySFX("buttonLow");
+            
+            List<int> HostUnitTypes = GetHostUnits();
+            if (HostUnitTypes == null)
+            {
+                return;
+            }
+            Debug.Assert(HostUnitTypes.Count == 5);
+            Debug.Assert(ClientUnitTypes.Count == 5);
+
+            // Set InitialUnitTypes before Simulator's Start method is called.
+            var combined = new List<int>();
+            combined.AddRange(HostUnitTypes);
+            combined.AddRange(ClientUnitTypes);
+            Simulator.InitialUnitTypes = combined;
+
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }
@@ -74,5 +95,23 @@ public class HostLobbyScene : IntersceneBehaviour
     {
         audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
+        // For debug
+        var units = GetHostUnits();
+        if (units == null)
+        {
+            Debug.Log("Units null");
+        }
+        else
+        {
+            foreach (var unit in units)
+            {
+                Debug.Log(unit);
+            }
+        }
+    }
+
+    private List<int> GetHostUnits()
+    {
+        return UCManager.GetSelectedUnitTypes();
     }
 }

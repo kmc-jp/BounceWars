@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -601,6 +601,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f0074f8fd1ba4e3abed21bbe80734ad, type: 2}
   mapBehaviour: {fileID: 657742904}
   HealingBuffMaxDistance: 15
+  UnitSpecs:
+  - {fileID: 11400000, guid: ea491f8ad0f0db244ba908191578726c, type: 2}
+  - {fileID: 11400000, guid: c00eaa1ced3d752469ad2b6c43705d53, type: 2}
+  - {fileID: 11400000, guid: 7e7a2d391f2a9b04e91c358f8ca74acd, type: 2}
+  - {fileID: 11400000, guid: bc880bcf5e8f8e9469e29116167e6549, type: 2}
+  InitialUnitTypes: 
 --- !u!4 &657742908
 Transform:
   m_ObjectHideFlags: 0
