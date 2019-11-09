@@ -1171,7 +1171,7 @@ MonoBehaviour:
   canvas: {fileID: 4307218764190310259}
   buttonsUI: {fileID: 8144059138035865704, guid: 2c005143ca31ba7468a0016e61d2a4c8,
     type: 3}
-  buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
+  buttons: {fileID: 8054815423015936249, guid: cb70a8d1052db854fa960caffec56814, type: 3}
   buttonsUICloseDelay: 0.3
   MouseOn: 0
   currentTile:
