@@ -300,7 +300,7 @@ public class Simulator : MonoBehaviour
 
     // Used by Host
     public List<UnitSpec> UnitSpecs;
-    public List<int> InitialUnitTypes; // 0-4: Host's units 5-9: Client's units
+    static public List<int> InitialUnitTypes; // 0-4: Host's units 5-9: Client's units
 
     // Start is called before the first frame update
     void Start()
@@ -310,6 +310,12 @@ public class Simulator : MonoBehaviour
         {
             return;
         }
+        Debug.Log("Initial Unit Types");
+        for (int i = 0; i < InitialUnitTypes.Count; i++)
+        {
+            Debug.Log(InitialUnitTypes[i]);
+        }
+        Debug.Log("Initiating units...");
         for (int n = -1; n < 2; n += 2)
         {
             for (int i = 0; i < 5; i++) // Tinaxd reduced the number of units
@@ -320,11 +326,11 @@ public class Simulator : MonoBehaviour
                 u.x1 = u.x;
                 u.z1 = u.z;
                 // Tinaxd set unit type
-                u.type = InitialUnitTypes[i + n == 1 ? 5 : 0] ;
+                u.type = InitialUnitTypes[i + (n == 1 ? 5 : 0)] ;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 // Tinaxd set HP/MP
-                u.HP = UnitSpecs[i].HP;
-                u.MP = UnitSpecs[i].MP;
+                u.HP = UnitSpecs[u.type].HP;
+                u.MP = UnitSpecs[u.type].MP;
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -334,12 +340,6 @@ public class Simulator : MonoBehaviour
                     u.owner = 1;
                 }
                 units.Add(u);
-
-                /*
-                GameObject g = Instantiate(prefabs[0]);
-                UnitInfoTag tag = g.GetComponent<UnitInfoTag>();
-                tag.Apply(u);
-                instances.Add(tag);*/
             }
         }
         UpdateInstances();

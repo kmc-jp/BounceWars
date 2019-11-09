@@ -12,6 +12,9 @@ public class HostLobbyScene : IntersceneBehaviour
     private int isClientReady;
     private List<int> ClientUnitTypes;
 
+    [SerializeField]
+    private UnitChooserManager UCManager;
+
     void OnEnable()
     {
         startGameButton = GameObject.Find("StartGameBtn");
@@ -69,6 +72,21 @@ public class HostLobbyScene : IntersceneBehaviour
         if(isClientReady > 0)
         {
             audioMgr.PlaySFX("buttonLow");
+            
+            List<int> HostUnitTypes = GetHostUnits();
+            if (HostUnitTypes == null)
+            {
+                return;
+            }
+            Debug.Assert(HostUnitTypes.Count == 5);
+            Debug.Assert(ClientUnitTypes.Count == 5);
+
+            // Set InitialUnitTypes before Simulator's Start method is called.
+            var combined = new List<int>();
+            combined.AddRange(HostUnitTypes);
+            combined.AddRange(ClientUnitTypes);
+            Simulator.InitialUnitTypes = combined;
+
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }
@@ -94,6 +112,6 @@ public class HostLobbyScene : IntersceneBehaviour
 
     private List<int> GetHostUnits()
     {
-        return GameObject.Find("UnitSelectPanel").GetComponent<UnitChooserManager>().GetSelectedUnitTypes();
+        return UCManager.GetSelectedUnitTypes();
     }
 }

@@ -13,6 +13,9 @@ public class ClientLobbyScene : IntersceneBehaviour
     private int isReadyRequest;
     private List<int> HostUnitTypes;
 
+    [SerializeField]
+    private UnitChooserManager UCManager;
+
     private void OnEnable()
     {
         startGameButton = GameObject.Find("StartGameBtn");
@@ -110,6 +113,6 @@ public class ClientLobbyScene : IntersceneBehaviour
 
     private List<int> GetClientUnits()
     {
-        return GameObject.Find("UnitSelectPanel").GetComponent<UnitChooserManager>().GetSelectedUnitTypes();
+        return UCManager.GetSelectedUnitTypes();
     }
 }
