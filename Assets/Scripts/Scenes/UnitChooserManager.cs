@@ -16,6 +16,7 @@ public class UnitChooserManager : MonoBehaviour
 
     public List<int> GetSelectedUnitTypes()
     {
+        Debug.Log("Unit selected");
         for (int i = 0; i < groups.Count; i++)
         {
             if (groups[i].GetSelected())
