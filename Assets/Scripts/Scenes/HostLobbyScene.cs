@@ -10,6 +10,7 @@ public class HostLobbyScene : IntersceneBehaviour
     private GameObject startGameButton;
     private Text HostSceneInfo;
     private int isClientReady;
+    private List<int> ClientUnitTypes;
 
     void OnEnable()
     {
@@ -44,6 +45,7 @@ public class HostLobbyScene : IntersceneBehaviour
                 LobbyReadyCmd c = (LobbyReadyCmd)cTemp;
                 isClientReady = c.isReady;
                 G_opponentName = c.opponentName;
+                ClientUnitTypes = c.unitTypes;    // Client's units
                 if (isClientReady > 0)
                 {
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
@@ -54,7 +56,8 @@ public class HostLobbyScene : IntersceneBehaviour
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
                 // return this cmd back to Client for checking
-                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username)));
+                // Tinaxd added unit type field
+                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username, GetHostUnits())));
             }
             else
                 continue;
@@ -72,7 +75,24 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     public void onReturnBtnClick()
     {
-        audioMgr.PlaySFX("buttonHigh");
+        //audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
+        var units = GetHostUnits();
+        if (units == null)
+        {
+            Debug.Log("Units null");
+        }
+        else
+        {
+            foreach (var unit in units)
+            {
+                Debug.Log(unit);
+            }
+        }
+    }
+
+    private List<int> GetHostUnits()
+    {
+        return GameObject.Find("UnitSelectPanel").GetComponent<UnitChooserManager>().GetSelectedUnitTypes();
     }
 }

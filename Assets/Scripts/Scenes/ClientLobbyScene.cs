@@ -11,6 +11,7 @@ public class ClientLobbyScene : IntersceneBehaviour
     private Text ClientSceneInfo;
     private int isClientReady;
     private int isReadyRequest;
+    private List<int> HostUnitTypes;
 
     private void OnEnable()
     {
@@ -55,6 +56,8 @@ public class ClientLobbyScene : IntersceneBehaviour
                 }
                 else
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
+
+                HostUnitTypes = c.unitTypes;
             }
             else if (cTemp is LobbyStartgameCmd)
             {
@@ -83,8 +86,17 @@ public class ClientLobbyScene : IntersceneBehaviour
         tosendCmds = new List<Command>();
         if (isClientReady != isReadyRequest)
         {
-            outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username)));
+            var cunits = GetClientUnits();
+            if (cunits != null)
+            {
+                outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username, cunits)));
+            }
         }
         return outCmdTmp;
+    }
+
+    private List<int> GetClientUnits()
+    {
+        return null; // TODO
     }
 }

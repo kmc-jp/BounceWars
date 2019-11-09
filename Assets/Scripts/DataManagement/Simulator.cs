@@ -297,6 +297,11 @@ public class Simulator : MonoBehaviour
         u.x = u.x1;
         u.z = u.z1;
     }
+
+    // Used by Host
+    public List<UnitSpec> UnitSpecs;
+    public List<int> InitialUnitTypes; // 0-4: Host's units 5-9: Client's units
+
     // Start is called before the first frame update
     void Start()
     {
@@ -314,12 +319,12 @@ public class Simulator : MonoBehaviour
                 u.z = i * 1.5f;
                 u.x1 = u.x;
                 u.z1 = u.z;
-                //Schin set unit type
-                u.type = UnitType.TYPE_CHESS;
+                // Tinaxd set unit type
+                u.type = InitialUnitTypes[i + n == 1 ? 5 : 0] ;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-                // Tinaxd set HP/MP here
-                u.HP = 50;   // TODO
-                u.MP = 100;  // TODO
+                // Tinaxd set HP/MP
+                u.HP = UnitSpecs[i].HP;
+                u.MP = UnitSpecs[i].MP;
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -651,8 +656,8 @@ public class Simulator : MonoBehaviour
         u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
-        u.HP = 0.1f; // TODO
-        u.MP = 0;    //
+        u.HP = UnitSpecs[UnitType.TYPE_ARROW].HP;
+        u.MP = UnitSpecs[UnitType.TYPE_ARROW].MP;
 
         u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
@@ -676,8 +681,8 @@ public class Simulator : MonoBehaviour
         u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
-        u.HP = 0.1f; // TODO
-        u.MP = 0;    //
+        u.HP = UnitSpecs[UnitType.TYPE_FIREBALL].HP;
+        u.MP = UnitSpecs[UnitType.TYPE_FIREBALL].MP;
 
         u.type = UnitType.TYPE_FIREBALL; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);

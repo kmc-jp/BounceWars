@@ -6,6 +6,8 @@ public class LobbyReadyCmd : Command
 {
     public int isReady = 0;
     public string opponentName;
+    public List<int> unitTypes;
+
     public LobbyReadyCmd()
     {
         isReady = 0;
@@ -21,5 +23,12 @@ public class LobbyReadyCmd : Command
         isReady = r;
         opponentName = name;
         type = 101;
+    }
+
+    public LobbyReadyCmd(int r, string name, List<int> unittypes)
+    {
+        isReady = r;
+        opponentName = name;
+        unitTypes = unittypes;
     }
 }
