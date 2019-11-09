@@ -557,8 +557,8 @@ public class Simulator : MonoBehaviour
                     }
                     c.processed = true;
                 }
-                GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
-                UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
+                //GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
+                //UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
             }
         }
         List<Command> remains = new List<Command>();

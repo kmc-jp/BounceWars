@@ -15,7 +15,7 @@ public class TestOpArcher : OperationHandlerBase
 
     private void _EnableArcherMode()
     {
-        Unit.DragMode = DragType.ARCHER;
+        //Unit.DragMode = DragType.ARCHER;
     }
 
     private void Update()

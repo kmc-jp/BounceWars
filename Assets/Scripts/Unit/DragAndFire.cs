@@ -85,7 +85,7 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
                         break;
 
                     case DragType.ARCHER:
-                        target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
+                        //target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
                         NewUnitCmd cmd = new NewUnitCmd
                         {
                             fromUnitId = target.GetComponent<BasicUnit>().unit.uuid,
@@ -97,7 +97,7 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
                         break;
 
                     case DragType.FIREBALL:
-                        target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
+                        //target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
                         NewUnitCmd cmd2 = new NewUnitCmd
                         {
                             fromUnitId = target.GetComponent<BasicUnit>().unit.uuid,

@@ -24,12 +24,12 @@ public class TestOpArcherAndFireball : OperationHandlerBase
 
     private void _EnableFireballMode()
     {
-        Unit.DragMode = DragType.FIREBALL;
+        //Unit.DragMode = DragType.FIREBALL;
     }
 
     private void _EnableArcherMode()
     {
-        Unit.DragMode = DragType.ARCHER;
+        //Unit.DragMode = DragType.ARCHER;
     }
 
     private void Update()

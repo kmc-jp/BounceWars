@@ -147,8 +147,7 @@ public class BasicUnit : MonoBehaviour
 
         myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
         myButtons.transform.SetParent(buttonsUI.transform);
-        myButtons.GetComponent<ButtonsUI>().Target = this;
-        myButtons.GetComponent<ButtonsUI>().UpdateActive();
+        myButtons.GetComponent<ButtonsUIManager>().basicunit = this;
 
         // Tinaxd register units to CountDownBar
         countDownBar.RegisterUnit(this, CountDownIconPath);
@@ -199,13 +198,13 @@ public class BasicUnit : MonoBehaviour
     {
         MouseOn = true;
         if (!Locked)
-            myButtons.GetComponent<ButtonsUI>().UpdateActive();
+            myButtons.GetComponent<ButtonsUIManager>().OpenAll();
     }
 
     private void OnMouseExit()
     {
         MouseOn = false;
-        myButtons.GetComponent<ButtonsUI>().UpdateActive();
+        myButtons.GetComponent<ButtonsUIManager>().CloseRequest();
     }
 
     public void NotifyOperation(string operation, object args)
@@ -299,7 +298,7 @@ public class BasicUnit : MonoBehaviour
         unitUI.DragUI.ShowDragUI(true);
         // close ButtonsUI
         MouseOn = false;
-        myButtons.GetComponent<ButtonsUI>().UpdateActive();
+        myButtons.GetComponent<ButtonsUIManager>().CloseAll();
     }
 
     public void NotifyDragUpdate(Vector3 worldPos)
@@ -314,7 +313,13 @@ public class BasicUnit : MonoBehaviour
         unitUI.DragUI.ShowDragUI(false);
     }
 
-    public DragType DragMode = DragType.NORMAL;
+    public DragType DragMode
+    {
+        get
+        {
+            return myButtons.GetComponent<ButtonsUIManager>().CurrentDragType;
+        }
+    }
 
     // Tinaxd added buff related operations
     public int GetBuffs()
