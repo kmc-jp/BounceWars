@@ -75,8 +75,9 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     public void onReturnBtnClick()
     {
-        //audioMgr.PlaySFX("buttonHigh");
+        audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
+        // For debug
         var units = GetHostUnits();
         if (units == null)
         {

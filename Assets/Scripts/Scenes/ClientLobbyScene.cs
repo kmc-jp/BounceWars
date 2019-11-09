@@ -79,6 +79,19 @@ public class ClientLobbyScene : IntersceneBehaviour
     {
         audioMgr.PlaySFX("buttonHigh");
         SceneManager.LoadScene("MainMenu");
+        // For debug
+        var units = GetClientUnits();
+        if (units == null)
+        {
+            Debug.Log("Units null");
+        }
+        else
+        {
+            foreach (var unit in units)
+            {
+                Debug.Log(unit);
+            }
+        }
     }
     public override List<Command> GetCmd()
     {
@@ -97,6 +110,6 @@ public class ClientLobbyScene : IntersceneBehaviour
 
     private List<int> GetClientUnits()
     {
-        return null; // TODO
+        return GameObject.Find("UnitSelectPanel").GetComponent<UnitChooserManager>().GetSelectedUnitTypes();
     }
 }
