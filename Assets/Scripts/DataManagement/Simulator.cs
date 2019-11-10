@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class Simulator : MonoBehaviour
 {
     public float time;
-    public List<GameObject> prefabs;
+    //public List<GameObject> prefabs;
 
     [HideInInspector]
     public List<UnitInfoTag> instances = new List<UnitInfoTag>();
@@ -147,7 +147,8 @@ public class Simulator : MonoBehaviour
         {
             CollisionInfo collision = infos[i];
             UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
-            unitInfoTag.basicUnit.CollisionEvent(collision);
+            if (unitInfoTag != null)
+                unitInfoTag.basicUnit.CollisionEvent(collision);
         }
         float E = 0;
         float px = 0;
@@ -328,9 +329,7 @@ public class Simulator : MonoBehaviour
                 // Tinaxd set unit type
                 u.type = InitialUnitTypes[i + (n == 1 ? 5 : 0)] ;
                 u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-                // Tinaxd set HP/MP
-                u.HP = UnitSpecs[u.type].HP;
-                u.MP = UnitSpecs[u.type].MP;
+                // Tinaxd Initial HP/MP are set in UpdateInstances() method
                 if (n == -1)
                 {
                     u.owner = 0;
@@ -361,7 +360,10 @@ public class Simulator : MonoBehaviour
             }
             if (!found)
             {
-                GameObject g = Instantiate(prefabs[units[i].type]); // Tinaxd
+                var prefab = (GameObject)Resources.Load(UnitTypeIndexMapper.map[units[i].type]);
+                GameObject g = Instantiate(prefab);
+                units[i].HP = g.GetComponent<UnitSpec>().MaxHP;
+                units[i].MP = g.GetComponent<UnitSpec>().MaxMP;
                 UnitInfoTag tag = g.GetComponent<UnitInfoTag>();
                 tag.sim = this;
                 tag.Apply(units[i]);
@@ -557,8 +559,8 @@ public class Simulator : MonoBehaviour
                     }
                     c.processed = true;
                 }
-                GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
-                UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
+                //GetBasicUnit(c.RequestorId).DragMode = DragType.NORMAL;
+                //UnityEngine.EventSystems.ExecuteEvents.Execute<IDragAndFireEventHandler>(this.gameObject, null, (x, y) => x.TurnOnDrag());
             }
         }
         List<Command> remains = new List<Command>();
@@ -656,8 +658,6 @@ public class Simulator : MonoBehaviour
         u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
-        u.HP = UnitSpecs[UnitType.TYPE_ARROW].HP;
-        u.MP = UnitSpecs[UnitType.TYPE_ARROW].MP;
 
         u.type = UnitType.TYPE_ARROW; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
@@ -681,8 +681,6 @@ public class Simulator : MonoBehaviour
         u.z = fromUnit.z + velocity.normalized.z;
         u.x1 = u.x;
         u.z1 = u.z;
-        u.HP = UnitSpecs[UnitType.TYPE_FIREBALL].HP;
-        u.MP = UnitSpecs[UnitType.TYPE_FIREBALL].MP;
 
         u.type = UnitType.TYPE_FIREBALL; // Set unit type to "arrow"
         u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
@@ -703,4 +701,15 @@ public class Simulator : MonoBehaviour
             }
         }
     }
+}
+
+public sealed class UnitTypeIndexMapper
+{
+    public static readonly Dictionary<int, string> map = new Dictionary<int, string>
+    {
+        [UnitType.TYPE_CHESS] = "Units/Swordsman",
+        [UnitType.TYPE_ARCHER] = "Units/Archer",
+        [UnitType.TYPE_ARROW] = "Units/NonPlayer/ArcherArrow",
+        [UnitType.TYPE_FIREBALL] = "Units/NonPlayer/fireball",
+    };
 }
