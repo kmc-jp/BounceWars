@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 // Original author: Tinaxd
 // Attach this script to all units
@@ -9,7 +9,7 @@ public class BasicUnit : MonoBehaviour
 {
     public Unit unit;
 
-    public bool isDead = false;
+    private bool _isDead = false;
     protected float hp;
     protected float mp;
 
@@ -27,6 +27,8 @@ public class BasicUnit : MonoBehaviour
     public bool MouseOn;
 
     public Tile currentTile;
+
+    private Simulator simulator;
 
     // Tinaxd countdown timer
     private float waitTime = 0;
@@ -135,6 +137,7 @@ public class BasicUnit : MonoBehaviour
         // bind CountDownUI OBJ Tinaxd
         countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();
 
+        simulator = GameObject.Find("Obelisk").GetComponent<Simulator>();
     }
 
     // Start is called before the first frame update
@@ -151,6 +154,12 @@ public class BasicUnit : MonoBehaviour
 
         // Tinaxd register units to CountDownBar
         countDownBar.RegisterUnit(this, CountDownIconPath);
+
+        if (unit.owner != simulator.isClient)
+        {
+            myButtons.GetComponent<ButtonsUIManager>().disabled = true;
+            myButtons.GetComponent<ButtonsUIManager>().CloseAll();
+        }
     }
 
     // Update is called once per frame
@@ -197,14 +206,11 @@ public class BasicUnit : MonoBehaviour
     private void OnMouseEnter()
     {
         MouseOn = true;
-        if (!Locked)
-            myButtons.GetComponent<ButtonsUIManager>().OpenAll();
     }
 
     private void OnMouseExit()
     {
         MouseOn = false;
-        myButtons.GetComponent<ButtonsUIManager>().CloseRequest();
     }
 
     public void NotifyOperation(string operation, object args)
@@ -298,7 +304,10 @@ public class BasicUnit : MonoBehaviour
         unitUI.DragUI.ShowDragUI(true);
         // close ButtonsUI
         MouseOn = false;
-        myButtons.GetComponent<ButtonsUIManager>().CloseAll();
+        for (int i = 0; i < buttonsUI.transform.childCount; i++)
+        {
+            ExecuteEvents.Execute<IButtonSignalHandler>(buttonsUI.transform.GetChild(i).gameObject, null, (x, y) => x.CloseButton());
+        }
     }
 
     public void NotifyDragUpdate(Vector3 worldPos)
@@ -311,6 +320,11 @@ public class BasicUnit : MonoBehaviour
     public void NotifyDragEnd()
     {
         unitUI.DragUI.ShowDragUI(false);
+        // open ButtonsUI
+        for (int i = 0; i < buttonsUI.transform.childCount; i++)
+        {
+            ExecuteEvents.Execute<IButtonSignalHandler>(buttonsUI.transform.GetChild(i).gameObject, null, (x, y) => x.OpenButton());
+        }
     }
 
     public DragType DragMode
@@ -340,6 +354,20 @@ public class BasicUnit : MonoBehaviour
     public void UpdateBuff(int buffs)
     {
         unit.buff = buffs;
+    }
+
+    public bool isDead
+    {
+        get => _isDead;
+        set
+        {
+            _isDead = value;
+            if (value) // If Dead
+            {
+                if (myButtons != null) // If unit has buttons
+                    Destroy(myButtons);
+            }
+        }
     }
 }
 

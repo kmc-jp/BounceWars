@@ -3,46 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonsUIManager : MonoBehaviour
+public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
 {
     public BasicUnit basicunit;
 
     [SerializeField]
     private DragType DefaultDragType = DragType.NORMAL;
 
-    private bool CursorOn = false;
-    private bool CloseRequestFromBasicUnit = false;
-
     [SerializeField]
     private Vector2 Offset = new Vector2(10, 8);
 
+    private List<GameObject> children;
+
+    public bool disabled = false;
+
+    private void Awake()
+    {
+        children = new List<GameObject>();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            children.Add(transform.GetChild(i).gameObject);
+        }
+    }
+
     public void CloseAll()
     {
-        ExecuteEvents.ExecuteHierarchy<IButtonSignalHandler>(this.gameObject, null, (x, y) => x.CloseButton());
-        CloseRequestFromBasicUnit = false;
-        CursorOn = false;
+        children.ForEach(c => 
+            ExecuteEvents.Execute<IButtonSignalHandler>(c, null, (x, y) => x.CloseButton())
+        );
     }
 
     public void OpenAll()
     {
-        ExecuteEvents.ExecuteHierarchy<IButtonSignalHandler>(this.gameObject, null, (x, y) => x.OpenButton());
-        CloseRequestFromBasicUnit = false;
-        CursorOn = true;
-    }
-
-    public void CloseRequest()
-    {
-        if (!CursorOn)
-            CloseAll();
-        else
-            CloseRequestFromBasicUnit = true;
-    }
-
-    public void InternalCloseRequest()
-    {
-        CursorOn = false;
-        if (CloseRequestFromBasicUnit)
-            CloseAll();
+        if (disabled)
+            return;
+        children.ForEach(c =>
+            c.GetComponent<IButtonSignalHandler>().OpenButton()
+        );
     }
 
     public DragType CurrentDragType
@@ -59,5 +56,15 @@ public class ButtonsUIManager : MonoBehaviour
     private void LateUpdate()
     {
         transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, basicunit.transform.position) + Offset;
+    }
+
+    public void CloseButton()
+    {
+        CloseAll();
+    }
+
+    public void OpenButton()
+    {
+        OpenAll();
     }
 }

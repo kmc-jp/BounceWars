@@ -41,12 +41,12 @@ public class ButtonsUIToggleButton : MonoBehaviour, IButtonSignalHandler
 
     public void CloseButton()
     {
-        this.enabled = false;
+        gameObject.SetActive(false);
     }
 
     public void OpenButton()
     {
-        this.enabled = true;
+        gameObject.SetActive(true);
     }
 
     public DragType CurrentDragType

@@ -15,12 +15,12 @@ public class ButtonsUIItem : MonoBehaviour, IButtonSignalHandler
 
     public void CloseButton()
     {
-        this.enabled = false;
+        gameObject.SetActive(false);
     }
 
     public void OpenButton()
     {
-        this.enabled = true;
+        gameObject.SetActive(true);
     }
 
     public void SetItemByIndex(int i)
