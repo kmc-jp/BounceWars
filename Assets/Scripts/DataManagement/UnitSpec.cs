@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UnitSpecDefault", menuName = "Unit/UnitSpec")]
-public class UnitSpec : ScriptableObject
+public class UnitSpec : MonoBehaviour
 {
-    public float HP;
-    public float MP;
+    public float MaxHP;
+    public float MaxMP;
 }
