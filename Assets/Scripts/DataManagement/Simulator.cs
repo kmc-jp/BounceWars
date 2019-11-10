@@ -147,7 +147,8 @@ public class Simulator : MonoBehaviour
         {
             CollisionInfo collision = infos[i];
             UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
-            unitInfoTag.basicUnit.CollisionEvent(collision);
+            if (unitInfoTag != null)
+                unitInfoTag.basicUnit.CollisionEvent(collision);
         }
         float E = 0;
         float px = 0;
