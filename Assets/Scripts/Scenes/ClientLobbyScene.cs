@@ -14,7 +14,7 @@ public class ClientLobbyScene : IntersceneBehaviour
     private List<int> HostUnitTypes;
 
     [SerializeField]
-    private UnitChooserManager UCManager;
+    private UnitChooserManager UCManager = default;
 
     private void OnEnable()
     {

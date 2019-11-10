@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Diagnostics.CodeAnalysis;
 
 public class HostLobbyScene : IntersceneBehaviour
 {
@@ -13,7 +14,7 @@ public class HostLobbyScene : IntersceneBehaviour
     private List<int> ClientUnitTypes;
 
     [SerializeField]
-    private UnitChooserManager UCManager;
+    private UnitChooserManager UCManager = default;
 
     void OnEnable()
     {
