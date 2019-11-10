@@ -1022,7 +1022,6 @@ GameObject:
   - component: {fileID: 6491018936299758984}
   - component: {fileID: 3971167819769589303}
   - component: {fileID: 5223351277152420448}
-  - component: {fileID: 645715418289217597}
   - component: {fileID: 5987305005303747637}
   - component: {fileID: 7760682452326880213}
   - component: {fileID: 1700390600749733718}
@@ -1126,18 +1125,6 @@ MonoBehaviour:
   owned: 0
   basicUnit: {fileID: 5987305005303747637}
   sim: {fileID: 0}
---- !u!114 &645715418289217597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5987305005303747642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae3d407e5c55254bb377a96e9b50c9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5987305005303747637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,13 +1153,12 @@ MonoBehaviour:
     MP: 0
     isDead: 0
     buff: 0
-  isDead: 0
   damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
     type: 3}
   canvas: {fileID: 4307218764190310259}
   buttonsUI: {fileID: 8144059138035865704, guid: 2c005143ca31ba7468a0016e61d2a4c8,
     type: 3}
-  buttons: {fileID: 8054815423015936249, guid: 2525dd94cc560784dbc7d050490fe4fc, type: 3}
+  buttons: {fileID: 8054815423015936249, guid: f3a32f7a25cfc7f42a09c87357571aa1, type: 3}
   buttonsUICloseDelay: 0.3
   MouseOn: 0
   currentTile:

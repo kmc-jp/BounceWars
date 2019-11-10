@@ -1153,7 +1153,6 @@ MonoBehaviour:
     MP: 0
     isDead: 0
     buff: 0
-  isDead: 0
   damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
     type: 3}
   canvas: {fileID: 4307218764190310259}

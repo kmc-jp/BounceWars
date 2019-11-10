@@ -59,9 +59,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba35962300ff94392d33f1092cb6e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DragTypes: 00000000
+  DragTypes: 0000000001000000
   Sprites:
   - {fileID: 21300000, guid: b5e1341ab54ecb74494a59f6b15867ef, type: 3}
+  - {fileID: 21300000, guid: d0e6d9559ad2da14aa89417518abdb78, type: 3}
 --- !u!114 &5338667123978229328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +193,7 @@ GameObject:
   - component: {fileID: 813263005736146059}
   - component: {fileID: 6757290978210403819}
   m_Layer: 5
-  m_Name: ButtonSwordsman
+  m_Name: ButtonArcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

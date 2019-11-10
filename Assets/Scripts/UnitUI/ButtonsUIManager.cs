@@ -11,7 +11,7 @@ public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
     private DragType DefaultDragType = DragType.NORMAL;
 
     [SerializeField]
-    private Vector2 Offset = new Vector2(10, 8);
+    private Vector2 Offset = new Vector2(-50, 25);
 
     private List<GameObject> children;
 
