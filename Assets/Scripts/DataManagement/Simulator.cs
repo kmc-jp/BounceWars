@@ -306,6 +306,13 @@ public class Simulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (InitialUnitTypes == null) // For debug
+        {
+            InitialUnitTypes = new List<int>
+            {
+                0, 0, 0, 1, 1, 0, 0, 0, 1, 1
+            };
+        }
         gameMap = mapBehaviour.map;
         if (isClient > 0)
         {
