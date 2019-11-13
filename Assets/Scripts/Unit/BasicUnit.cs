@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 // Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
+    public UnitInfoTag infoTag;
     public Unit unit;
 
     private bool _isDead = false;
@@ -168,6 +169,12 @@ public class BasicUnit : MonoBehaviour
         currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
+        if(unit.isDead
+          && unit.owner == simulator.isClient
+          && !Locked)
+        {
+            ShowEmotion(EmotionType.CD_READY, 5.0f);
+        }
 
         float delta = Time.deltaTime;
         if (Locked)
@@ -289,7 +296,13 @@ public class BasicUnit : MonoBehaviour
         Debug.Log("CollisionEvent");
 
         Debug.Log("Attacked!");
-        float damage =Mathf.Abs(info.normalVelocity);
+        float damage = 10;
+
+        if (UnitType.isItem(info.other.type))
+        {
+            AddBuff(0);
+            return;
+        }
         HP = HP - damage;
 
         if (HP < 0) HP = 0;

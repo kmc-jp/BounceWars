@@ -20,19 +20,19 @@ public class MapLoader
     {
         // CubeプレハブをGameObject型で取得
         GameObject[] tiles = {
-                (GameObject)Resources.Load ("Tile_Grass"),  //0
-                (GameObject)Resources.Load ("Tile_Sea"),    //1
-                (GameObject)Resources.Load ("Tile_Sand"),   //2
-                (GameObject)Resources.Load ("Tile_Brick"),  //3
-                (GameObject)Resources.Load ("Tile_Clay"),   //4
-                (GameObject)Resources.Load ("Tile_Lava"),   //5
-                (GameObject)Resources.Load ("Tile_Rock") }; //6
+                (GameObject)Resources.Load ("Tiles/Tile_Grass"),  //0
+                (GameObject)Resources.Load ("Tiles/Tile_Sea"),    //1
+                (GameObject)Resources.Load ("Tiles/Tile_Sand"),   //2
+                (GameObject)Resources.Load ("Tiles/Tile_Brick"),  //3
+                (GameObject)Resources.Load ("Tiles/Tile_Clay"),   //4
+                (GameObject)Resources.Load ("Tiles/Tile_Lava"),   //5
+                (GameObject)Resources.Load ("Tiles/Tile_Rock") }; //6
         GameObject[] buildings = {
                 null,
-                (GameObject)Resources.Load ("Building_Forest"),
-                (GameObject)Resources.Load ("Building_Stones_1"),
-                (GameObject)Resources.Load ("Building_Stones_2"),
-                (GameObject)Resources.Load ("Building_Stones_3"),};
+                (GameObject)Resources.Load ("Buildings/Building_Forest"),
+                (GameObject)Resources.Load ("Buildings/Building_Stones_1"),
+                (GameObject)Resources.Load ("Buildings/Building_Stones_2"),
+                (GameObject)Resources.Load ("Buildings/Building_Stones_3"),};
         // Cubeプレハブを元に、インスタンスを生成、
         //Object.Instantiate(obj, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
         Dictionary<GameObject, Tile> gameObjectTable = new Dictionary<GameObject, Tile>();

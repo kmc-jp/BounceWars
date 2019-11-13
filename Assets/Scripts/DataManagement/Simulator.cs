@@ -34,153 +34,10 @@ public class Simulator : MonoBehaviour
 
     void SimulateCollision(List<Unit> targets)
     {
-        //Debug.Log(targets[0].vx);
         List<bool> clean = new List<bool>();
-
-        for (int i = 0; i < targets.Count; i++)
-        {
-            clean.Add(true);
-        }
-        for (int i = 0; i < targets.Count; i++)
-        {
-            targets[i].vx1 = targets[i].vx;
-            targets[i].vz1 = targets[i].vz;
-        }
         List<CollisionInfo> infos = new List<CollisionInfo>();
-        for (int i = 0; i < targets.Count; i++)
-        {
-            for (int j = i; j < targets.Count; j++)
-            {
-                if (i == j) continue;
-                Unit u1 = targets[i];
-                Unit u2 = targets[j];
-                float d = UnitDistance1(u1, u2);
-                float dx = u2.x1 - u1.x1;
-                dx /= d;
-                float dz = u2.z1 - u1.z1;
-                dz /= d;
-
-                if (0 < d && d < 1)
-                {
-                    CollisionInfo collision = new CollisionInfo();
-                    collision.me = u1;
-                    collision.other = u2;
-                    collision.vx1 = u1.vx;
-                    collision.vz1 = u1.vz;
-                    collision.vx2 = u2.vx;
-                    collision.vz2 = u2.vz;
-                    infos.Add(collision);
-
-
-                    CollisionInfo collision1 = new CollisionInfo();
-                    collision1.me = u2;
-                    collision1.other = u1;
-                    collision1.vx1 = u2.vx;
-                    collision1.vz1 = u2.vz;
-                    collision1.vx2 = u1.vx;
-                    collision1.vz2 = u1.vz;
-                    infos.Add(collision1);
-
-                    float rvx = u2.vx - u1.vx;
-                    float rvz = u2.vz - u1.vz;
-                    float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
-
-                    collision.normalVelocity = sizeVertical;
-                    collision1.normalVelocity = sizeVertical;
-                    if (u1.type == UnitType.TYPE_ARROW || u1.type == UnitType.TYPE_FIREBALL) // tinaxd u1 is arrow or fireball
-                    {
-                        u1.vx1 = u1.vx;
-                        u1.vz1 = u1.vz;
-                        u1.HP = 0;
-                        u2.vx1 = u2.vx - dx * 0.05f * sizeVertical;
-                        u2.vz1 = u2.vz - dz * 0.05f * sizeVertical;
-                    }
-                    else if (u2.type == UnitType.TYPE_ARROW || u2.type == UnitType.TYPE_FIREBALL) // tinaxd u2 is arrow or fireball
-                    {
-                        u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
-                        u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
-                        u2.vx1 = u2.vx;
-                        u2.vz1 = u2.vz;
-                        u2.HP = 0;
-                    }
-                    else // neither u1 nor u2 is arrow or fireball
-                    {
-                        u1.vx1 = u1.vx + dx * sizeVertical;
-                        u1.vz1 = u1.vz + dz * sizeVertical;
-                        u2.vx1 = u2.vx - dx * sizeVertical;
-                        u2.vz1 = u2.vz - dz * sizeVertical;
-                    }
-                    //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
-                    //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
-
-                    // Stop healing buff
-                    u1.buff &= ~BuffFlag.BUFF_HEALING;
-                    u2.buff &= ~BuffFlag.BUFF_HEALING;
-
-                    clean[i] = false;
-                    clean[j] = false;
-                }
-            }
-        }
-
-        for (int i = 0; i < targets.Count; i++)
-        {
-            Unit u = targets[i];
-            Vector2 pos = new Vector2(u.x1, u.z1);
-
-            Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
-            if (t==null||t.buildingType <= 1)
-            {
-                continue;
-            }
-            Vector2 tPos = new Vector2(t.position.x, t.position.z);
-            Vector2 diff = pos - tPos;
-            if (diff.sqrMagnitude < 1)
-            {
-                clean[i] = false;
-                Vector2 normal = diff.normalized;
-                u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x*2;
-                u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y*2;
-            }
-        }
-        for (int i = 0; i < infos.Count; i++)
-        {
-            CollisionInfo collision = infos[i];
-            UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
-            if (unitInfoTag != null)
-                unitInfoTag.basicUnit.CollisionEvent(collision);
-        }
-        float E = 0;
-        float px = 0;
-        float pz = 0;
-        for (int i = 0; i < targets.Count; i++)
-        {
-            Unit curUnit = targets[i];
-            curUnit.vx = curUnit.vx1;
-            curUnit.vz = curUnit.vz1;
-            E += curUnit.vx * curUnit.vx + curUnit.vz * curUnit.vz;
-            px += curUnit.vx;
-            pz += curUnit.vz;
-
-            //死亡判定
-            if (isClient == 0 && !curUnit.isDead)
-            {
-                // if HP is zero, and Unit is stopped
-                if (curUnit.HP == 0 && curUnit.vx < 0.05 && curUnit.vz < 0.05)
-                {
-                    curUnit.isDead = true;
-                    checkGameSet();
-                }
-                else if (isOutOfBounds(curUnit))     //ユニットが範囲外に出たときの死亡判定
-                {
-                    curUnit.isDead = true;
-                    checkGameSet();
-                }
-            }
-        }
-
-        //        Debug.Log(targets[0].vx);
-        //Debug.Log(string.Format("E={0},p=({1},{2})", E, px, pz));
+        //Simulate Collision:manipulate only veloity and position
+        PhysicsSimulator.SimulateCollision(targets, mapBehaviour, this, clean, infos);
 
         for (int i = 0; i < targets.Count; i++)
         {
@@ -194,15 +51,41 @@ public class Simulator : MonoBehaviour
                 ApplyIntegral(targets[i]);
             }
         }
+        for (int i = 0; i < infos.Count; i++)
+        {
+            CollisionInfo collision = infos[i];
+            // Stop healing buff
+            infos[i].me.buff &= ~BuffFlag.BUFF_HEALING;
+            infos[i].other.buff &= ~BuffFlag.BUFF_HEALING;
+            UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
 
-        //        Debug.Log(targets[0].vx);
+            unitInfoTag.CollisionEvent(collision);
+        }
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Unit curUnit = targets[i];
+            //死亡判定
+            if (isClient == 0 && !curUnit.isDead)
+            {
+                // if HP is zero, and Unit is stopped
+                if (curUnit.HP == 0 && curUnit.vx < 0.05 && curUnit.vz < 0.05)
+                {
+                    curUnit.isDead = true;
+                }
+                else if (isOutOfBounds(curUnit))     //ユニットが範囲外に出たときの死亡判定
+                {
+                    curUnit.isDead = true;
+                }
+            }
+        }
+        checkGameSet();
     }
 
-    private bool isOutOfBounds(Unit curUnit)
+    public bool isOutOfBounds(Unit curUnit)
     {
         int xnum = 20;
         int ynum = 12;
-        if(curUnit.x < -0.5 - 10 || curUnit.x > 2*xnum + 0.5 - 10 || curUnit.z < -1.3 || curUnit.z > 1.3 * 1.1547*ynum + 1.3)
+        if (curUnit.x < -0.5 - 10 || curUnit.x > 2 * xnum + 0.5 - 10 || curUnit.z < -1.3 || curUnit.z > 1.3 * 1.1547 * ynum + 1.3)
         {
             return true;
         }
@@ -213,11 +96,11 @@ public class Simulator : MonoBehaviour
     }
 
     //ゲームが決着したかどうかの判定
-    void checkGameSet()
+    public void checkGameSet()
     {
         bool isHostAlive = false, isClientAlive = false;
         //それぞれのチームで生存しているユニットがいるかどうかを調べる
-        for(int i = 0; i < units.Count; i++)
+        for (int i = 0; i < units.Count; i++)
         {
             if (!units[i].isDead)
             {
@@ -255,11 +138,6 @@ public class Simulator : MonoBehaviour
     }
 
 
-    float UnitDistance1(Unit u1, Unit u2)
-    {
-        //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
-        return Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1));
-    }
 
     void SimulateIntegral(Unit u, float dt)
     {
@@ -328,25 +206,13 @@ public class Simulator : MonoBehaviour
         {
             for (int i = 0; i < 5; i++) // Tinaxd reduced the number of units
             {
-                Unit u = new Unit();
-                u.x = n * 10;
-                u.z = i * 1.5f;
-                u.x1 = u.x;
-                u.z1 = u.z;
-                // Tinaxd set unit type
-                u.type = InitialUnitTypes[i + (n == 1 ? 5 : 0)] ;
-                u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-                // Tinaxd Initial HP/MP are set in UpdateInstances() method
-                if (n == -1)
-                {
-                    u.owner = 0;
-                }
-                else
-                {
-                    u.owner = 1;
-                }
-                units.Add(u);
+                CreateUnitFromHost(n == -1 ? 0 : 1, InitialUnitTypes[i + (n == 1 ? 5 : 0)], Vector2.zero, new Vector2(n * 10, i * 1.5f));
             }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            CreateUnitFromHost(-1, UnitType.TYPE_ITEM_HEAL, Vector2.zero, new Vector2(0, i * 1.5f));
         }
         UpdateInstances();
     }
@@ -362,6 +228,8 @@ public class Simulator : MonoBehaviour
                 {
                     instances[j].Apply(units[i]);
                     found = true;
+                    //Schin update CD ready emotion
+                    //this process has moved to inside Update() of BasicUnit
                     break;
                 }
             }
@@ -377,13 +245,6 @@ public class Simulator : MonoBehaviour
                 tag.InitializeBasicUnit(units[i]);
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
-            }
-            //Schin update CD ready emotion
-            if (!units[i].isDead 
-                & units[i].owner==isClient 
-                & !GetBasicUnit(units[i].uuid).Locked)
-            {
-                GetBasicUnit(units[i].uuid).ShowEmotion(EmotionType.CD_READY, 5.0f);
             }
         }
     }
@@ -476,11 +337,12 @@ public class Simulator : MonoBehaviour
                 {
                     case 0: // MOVED
                         var basicUnit = GetBasicUnit(c.uuid);
-                        basicUnit.MarkMoved();
+                        if (basicUnit != null) basicUnit.MarkMoved();
                         // Lockdown ends
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (bu.Owned != basicUnit.Owned)
                             {
                                 bu.MovementLocked = false;
@@ -491,6 +353,7 @@ public class Simulator : MonoBehaviour
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (isClient > 0)
                             {
                                 if (bu.Owned)
@@ -511,6 +374,7 @@ public class Simulator : MonoBehaviour
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (isClient > 0)
                             {
                                 if (bu.Owned)
@@ -560,7 +424,7 @@ public class Simulator : MonoBehaviour
                 {
                     var requestor = GetUnit(c.RequestorId);
                     var target = GetUnit(c.TargetId);
-                    if (UnitDistance1(requestor, target) < HealingBuffMaxDistance)
+                    if (PhysicsSimulator.UnitDistance1(requestor, target) < HealingBuffMaxDistance)
                     {
                         target.buff |= BuffFlag.BUFF_HEALING;
                     }
@@ -578,7 +442,7 @@ public class Simulator : MonoBehaviour
         }
         commands = remains;
     }
-    UnitInfoTag FindInstance(int uuid)
+    public UnitInfoTag FindInstance(int uuid)
     {
         for (int i = 0; i < instances.Count; i++)
         {
@@ -647,7 +511,30 @@ public class Simulator : MonoBehaviour
             return tag.basicUnit;
         return null;
     }
+    void CreateUnitFromHost(int owner, int type, Vector2 velocity, Vector2 position)//should be called only for initialization from host
+    {
+        Debug.Log("Creating arrow");
+        Unit u = new Unit();
+        // Set velocity
+        u.vx = velocity.x;
+        u.vz = velocity.y;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        // Set position
+        u.x = position.x;
+        u.z = position.y;
+        u.x1 = u.x;
+        u.z1 = u.z;
 
+        u.type = type; // Set unit type
+        u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        u.owner = owner;
+        units.Add(u);
+        if (isClient != 0)
+        {
+            //add command
+        }
+    }
     // Tinaxd Used by host only 
     private void CreateArrow(Unit fromUnit, Vector3 velocity)
     {
@@ -718,5 +605,6 @@ public sealed class UnitTypeIndexMapper
         [UnitType.TYPE_ARCHER] = "Units/Archer",
         [UnitType.TYPE_ARROW] = "Units/NonPlayer/ArcherArrow",
         [UnitType.TYPE_FIREBALL] = "Units/NonPlayer/fireball",
+        [UnitType.TYPE_ITEM_HEAL] = "Units/NonPlayer/Heal",
     };
 }
