@@ -83,6 +83,8 @@ public class Simulator : MonoBehaviour
 
     public bool isOutOfBounds(Unit curUnit)
     {
+        return mapBehaviour.GetTile(new Vector3(curUnit.x, 0, curUnit.z))==null;
+        /*
         int xnum = 20;
         int ynum = 12;
         if (curUnit.x < -0.5 - 10 || curUnit.x > 2 * xnum + 0.5 - 10 || curUnit.z < -1.3 || curUnit.z > 1.3 * 1.1547 * ynum + 1.3)
@@ -92,7 +94,7 @@ public class Simulator : MonoBehaviour
         else
         {
             return false;
-        }
+        }*/
     }
 
     //ゲームが決着したかどうかの判定
