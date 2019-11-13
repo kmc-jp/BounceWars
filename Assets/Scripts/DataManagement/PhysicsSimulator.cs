@@ -70,6 +70,8 @@ public static class PhysicsSimulator
                         u1.HP = 0;
                         u2.vx1 = u2.vx - dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz - dz * 0.05f * sizeVertical;
+                        clean[i] = false;
+                        clean[j] = false;
                     }
                     else if (u2.type == UnitType.TYPE_ARROW || u2.type == UnitType.TYPE_FIREBALL) // tinaxd u2 is arrow or fireball
                     {
@@ -78,6 +80,24 @@ public static class PhysicsSimulator
                         u2.vx1 = u2.vx;
                         u2.vz1 = u2.vz;
                         u2.HP = 0;
+                        clean[i] = false;
+                        clean[j] = false;
+                    }
+                    else if (UnitType.isItem(u2.type))
+                    {
+                        u1.vx1 = u1.vx;
+                        u1.vz1 = u1.vz;
+                        u2.vx1 = u2.vx;
+                        u2.vz1 = u2.vz;
+                        u2.HP = 0;
+                    }
+                    else if (UnitType.isItem(u1.type))
+                    {
+                        u1.vx1 = u1.vx;
+                        u1.vz1 = u1.vz;
+                        u2.vx1 = u2.vx;
+                        u2.vz1 = u2.vz;
+                        u1.HP = 0;
                     }
                     else // neither u1 nor u2 is arrow or fireball
                     {
@@ -85,13 +105,13 @@ public static class PhysicsSimulator
                         u1.vz1 = u1.vz + dz * sizeVertical;
                         u2.vx1 = u2.vx - dx * sizeVertical;
                         u2.vz1 = u2.vz - dz * sizeVertical;
+                        clean[i] = false;
+                        clean[j] = false;
                     }
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
 
 
-                    clean[i] = false;
-                    clean[j] = false;
                 }
             }
         }

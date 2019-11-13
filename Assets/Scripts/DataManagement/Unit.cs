@@ -33,10 +33,19 @@ public sealed class UnitType
     public static readonly int TYPE_ARROW = 2;
     public static readonly int TYPE_FIREBALL = 3;
     public static readonly int TYPE_UNDEFINED = -1;
+    public static readonly int TYPE_ITEM_HEAL = 5;
+    public static bool isItem(int type) {
+        return type == TYPE_ITEM_HEAL;
+    }
 }
 
 // Tinaxd added BuffFlag
 public sealed class BuffFlag
 {
     public static readonly int BUFF_HEALING = 1;
+    //2
+    //4
+    //8
+    //16
+    //2^n
 }

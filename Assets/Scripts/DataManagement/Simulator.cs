@@ -36,6 +36,7 @@ public class Simulator : MonoBehaviour
     {
         List<bool> clean = new List<bool>();
         List<CollisionInfo> infos = new List<CollisionInfo>();
+        //Simulate Collision:manipulate only veloity and position
         PhysicsSimulator.SimulateCollision(targets, mapBehaviour, this, clean, infos);
 
         for (int i = 0; i < targets.Count; i++)
@@ -57,8 +58,8 @@ public class Simulator : MonoBehaviour
             infos[i].me.buff &= ~BuffFlag.BUFF_HEALING;
             infos[i].other.buff &= ~BuffFlag.BUFF_HEALING;
             UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
-            if (unitInfoTag != null)
-                unitInfoTag.basicUnit.CollisionEvent(collision);
+
+            unitInfoTag.CollisionEvent(collision);
         }
         for (int i = 0; i < targets.Count; i++)
         {
@@ -205,25 +206,13 @@ public class Simulator : MonoBehaviour
         {
             for (int i = 0; i < 5; i++) // Tinaxd reduced the number of units
             {
-                Unit u = new Unit();
-                u.x = n * 10;
-                u.z = i * 1.5f;
-                u.x1 = u.x;
-                u.z1 = u.z;
-                // Tinaxd set unit type
-                u.type = InitialUnitTypes[i + (n == 1 ? 5 : 0)];
-                u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-                // Tinaxd Initial HP/MP are set in UpdateInstances() method
-                if (n == -1)
-                {
-                    u.owner = 0;
-                }
-                else
-                {
-                    u.owner = 1;
-                }
-                units.Add(u);
+                CreateUnitFromHost(n == -1 ? 0 : 1, InitialUnitTypes[i + (n == 1 ? 5 : 0)], Vector2.zero, new Vector2(n * 10, i * 1.5f));
             }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            CreateUnitFromHost(-1, UnitType.TYPE_ITEM_HEAL, Vector2.zero, new Vector2(0, i * 1.5f));
         }
         UpdateInstances();
     }
@@ -239,6 +228,8 @@ public class Simulator : MonoBehaviour
                 {
                     instances[j].Apply(units[i]);
                     found = true;
+                    //Schin update CD ready emotion
+                    //this process has moved to inside Update() of BasicUnit
                     break;
                 }
             }
@@ -254,13 +245,6 @@ public class Simulator : MonoBehaviour
                 tag.InitializeBasicUnit(units[i]);
                 tag.SetOwned(units[i].owner == isClient);
                 instances.Add(tag);
-            }
-            //Schin update CD ready emotion
-            if (!units[i].isDead
-                & units[i].owner == isClient
-                & !GetBasicUnit(units[i].uuid).Locked)
-            {
-                GetBasicUnit(units[i].uuid).ShowEmotion(EmotionType.CD_READY, 5.0f);
             }
         }
     }
@@ -353,11 +337,12 @@ public class Simulator : MonoBehaviour
                 {
                     case 0: // MOVED
                         var basicUnit = GetBasicUnit(c.uuid);
-                        basicUnit.MarkMoved();
+                        if (basicUnit != null) basicUnit.MarkMoved();
                         // Lockdown ends
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (bu.Owned != basicUnit.Owned)
                             {
                                 bu.MovementLocked = false;
@@ -368,6 +353,7 @@ public class Simulator : MonoBehaviour
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (isClient > 0)
                             {
                                 if (bu.Owned)
@@ -388,6 +374,7 @@ public class Simulator : MonoBehaviour
                         foreach (var instance in instances)
                         {
                             var bu = instance.basicUnit;
+                            if (bu == null) continue;
                             if (isClient > 0)
                             {
                                 if (bu.Owned)
@@ -524,7 +511,30 @@ public class Simulator : MonoBehaviour
             return tag.basicUnit;
         return null;
     }
+    void CreateUnitFromHost(int owner, int type, Vector2 velocity, Vector2 position)//should be called only for initialization from host
+    {
+        Debug.Log("Creating arrow");
+        Unit u = new Unit();
+        // Set velocity
+        u.vx = velocity.x;
+        u.vz = velocity.y;
+        u.vx1 = u.vx;
+        u.vz1 = u.vz;
+        // Set position
+        u.x = position.x;
+        u.z = position.y;
+        u.x1 = u.x;
+        u.z1 = u.z;
 
+        u.type = type; // Set unit type
+        u.uuid = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        u.owner = owner;
+        units.Add(u);
+        if (isClient != 0)
+        {
+            //add command
+        }
+    }
     // Tinaxd Used by host only 
     private void CreateArrow(Unit fromUnit, Vector3 velocity)
     {
@@ -595,5 +605,6 @@ public sealed class UnitTypeIndexMapper
         [UnitType.TYPE_ARCHER] = "Units/Archer",
         [UnitType.TYPE_ARROW] = "Units/NonPlayer/ArcherArrow",
         [UnitType.TYPE_FIREBALL] = "Units/NonPlayer/fireball",
+        [UnitType.TYPE_ITEM_HEAL] = "Units/NonPlayer/Heal",
     };
 }
