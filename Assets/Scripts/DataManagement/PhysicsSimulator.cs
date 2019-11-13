@@ -89,9 +89,6 @@ public static class PhysicsSimulator
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
 
-                    // Stop healing buff
-                    u1.buff &= ~BuffFlag.BUFF_HEALING;
-                    u2.buff &= ~BuffFlag.BUFF_HEALING;
 
                     clean[i] = false;
                     clean[j] = false;

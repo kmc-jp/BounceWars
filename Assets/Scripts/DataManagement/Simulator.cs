@@ -53,6 +53,9 @@ public class Simulator : MonoBehaviour
         for (int i = 0; i < infos.Count; i++)
         {
             CollisionInfo collision = infos[i];
+            // Stop healing buff
+            infos[i].me.buff &= ~BuffFlag.BUFF_HEALING;
+            infos[i].other.buff &= ~BuffFlag.BUFF_HEALING;
             UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
             if (unitInfoTag != null)
                 unitInfoTag.basicUnit.CollisionEvent(collision);
