@@ -58,8 +58,8 @@ public class Simulator : MonoBehaviour
             infos[i].me.buff &= ~BuffFlag.BUFF_HEALING;
             infos[i].other.buff &= ~BuffFlag.BUFF_HEALING;
             UnitInfoTag unitInfoTag = FindInstance(collision.me.uuid);
-
-            unitInfoTag.CollisionEvent(collision);
+            if (unitInfoTag != null)
+                unitInfoTag.CollisionEvent(collision);
         }
         for (int i = 0; i < targets.Count; i++)
         {
@@ -83,7 +83,7 @@ public class Simulator : MonoBehaviour
 
     public bool isOutOfBounds(Unit curUnit)
     {
-        return mapBehaviour.GetTile(new Vector3(curUnit.x, 0, curUnit.z))==null;
+        return mapBehaviour.GetTile(new Vector3(curUnit.x, 0, curUnit.z)) == null;
         /*
         int xnum = 20;
         int ynum = 12;
@@ -133,6 +133,7 @@ public class Simulator : MonoBehaviour
     public void openResultScene(bool didHostWin)
     {
         IntersceneBehaviour.SetWinner(didHostWin);
+        Debug.Log("game set");
         if (isClient == 0)
             SceneManager.LoadScene("ResultHost");
         else
@@ -146,7 +147,7 @@ public class Simulator : MonoBehaviour
         float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
         if (v > 0)
         {
-            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 0, u.z));
+            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 10, u.z));
             float friction = 1;
             Debug.Log(tile);
             if (tile != null)

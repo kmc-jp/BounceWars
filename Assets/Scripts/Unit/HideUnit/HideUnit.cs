@@ -24,7 +24,7 @@ public class HideUnit : MonoBehaviour
             shown1 = shown;
             for (int i = 0; i < visibleObjects.Count; i++)
             {
-                visibleObjects[i].SetActive(shown);
+                //visibleObjects[i].SetActive(shown);
             }
         }
     }

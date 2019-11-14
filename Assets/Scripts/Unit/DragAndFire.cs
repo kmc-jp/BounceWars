@@ -68,7 +68,7 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 float enter = 0;
                 targetPlane.Raycast(ray, out enter);
-                Debug.Log(localOrigin - ray.GetPoint(enter));
+//                Debug.Log(localOrigin - ray.GetPoint(enter));
                 Vector3 vel = localOrigin - ray.GetPoint(enter);
                 DragType dt = target.GetComponent<BasicUnit>().DragMode;
                 switch (dt) 
