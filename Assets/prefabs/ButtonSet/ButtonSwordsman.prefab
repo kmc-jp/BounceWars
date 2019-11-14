@@ -234,6 +234,9 @@ MonoBehaviour:
   basicunit: {fileID: 0}
   DefaultDragType: 0
   Offset: {x: -50, y: 50}
+  children:
+  - {fileID: 6660972043366793623}
+  - {fileID: 5480564534052090790}
   disabled: 0
 --- !u!114 &6757290978210403819
 MonoBehaviour:

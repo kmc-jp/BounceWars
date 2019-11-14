@@ -13,17 +13,17 @@ public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
     [SerializeField]
     private Vector2 Offset = new Vector2(-50, 25);
 
+    [SerializeField]
     private List<GameObject> children;
+    public List<GameObject> Children
+    {
+        get => children;
+    }
 
     public bool disabled = false;
 
     private void Awake()
     {
-        children = new List<GameObject>();
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            children.Add(transform.GetChild(i).gameObject);
-        }
     }
 
     public void CloseAll()
@@ -38,7 +38,7 @@ public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
         if (disabled)
             return;
         children.ForEach(c =>
-            c.GetComponent<IButtonSignalHandler>().OpenButton()
+            c.SetActive(true)
         );
     }
 
@@ -51,11 +51,6 @@ public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
                 return DefaultDragType;
             return attackButton.GetComponent<ButtonsUIToggleButton>().CurrentDragType;
         }
-    }
-
-    private void LateUpdate()
-    {
-        transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, basicunit.transform.position) + Offset;
     }
 
     public void CloseButton()
