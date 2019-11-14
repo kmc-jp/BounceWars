@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 // Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
+    BuffParticleManager buffParticleManager;
+
     public UnitInfoTag infoTag;
     public Unit unit;
 
@@ -144,6 +146,7 @@ public class BasicUnit : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        buffParticleManager = GetComponent<BuffParticleManager>();
         //HP = 50;
         //MP = 100;
         // bind ButtonsUI OBJ Schin
@@ -169,7 +172,7 @@ public class BasicUnit : MonoBehaviour
         currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
-        if(unit.isDead
+        if (unit.isDead
           && unit.owner == simulator.isClient
           && !Locked)
         {
@@ -293,14 +296,15 @@ public class BasicUnit : MonoBehaviour
     }
     public virtual void CollisionEvent(CollisionInfo info)
     {
-        Debug.Log("CollisionEvent");
+        //        Debug.Log("CollisionEvent");
 
-        Debug.Log("Attacked!");
+        //        Debug.Log("Attacked!");
         float damage = 10;
 
         if (UnitType.isItem(info.other.type))
         {
             AddBuff(0);
+            UpdateBuff(GetBuffs());
             return;
         }
         HP = HP - damage;
@@ -356,17 +360,23 @@ public class BasicUnit : MonoBehaviour
 
     public void AddBuff(int buffType)
     {
-        unit.buff |= buffType;
+        unit.buff |= (1 << buffType);
     }
 
     public void RemoveBuff(int buffType)
     {
-        unit.buff &= ~buffType;
+        unit.buff &= ~(1 << buffType);
+    }
+    public void RemoveBuffAll()
+    {
+        unit.buff = 0;
     }
 
     public void UpdateBuff(int buffs)
     {
+        Debug.Log("UpdateBuff");
         unit.buff = buffs;
+        buffParticleManager.UpdateParticles(buffs);
     }
 
     public bool isDead

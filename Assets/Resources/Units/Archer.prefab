@@ -1026,6 +1026,7 @@ GameObject:
   - component: {fileID: 7760682452326880213}
   - component: {fileID: 1700390600749733718}
   - component: {fileID: 2901764321967285051}
+  - component: {fileID: 5106088720885290580}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Unit
@@ -1137,6 +1138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722ed425a9729444688e55f0d91bfdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoTag: {fileID: 0}
   unit:
     x: 0
     z: 0
@@ -1222,6 +1224,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 50
   MaxMP: 50
+--- !u!114 &5106088720885290580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987305005303747642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad1a2b4ebc0a4e1e9993e91d47ace80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 5879218071436412174, guid: 41a3557f640254587ae62a4444820a2e, type: 3}
 --- !u!1 &6602238550485698232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1745,6 +1761,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2699944022651292614, guid: d3912862a6c25784eb09f01e25261618,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3912862a6c25784eb09f01e25261618, type: 3}
