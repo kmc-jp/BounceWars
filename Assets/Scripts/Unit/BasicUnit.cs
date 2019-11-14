@@ -20,11 +20,10 @@ public class BasicUnit : MonoBehaviour
 
     public GameObject damagePopup;
     public GameObject canvas;
-    public GameObject buttonsUI;
-    public GameObject buttons;
 
     public float buttonsUICloseDelay = 0.3f;
 
+    [SerializeField]
     private GameObject myButtons;
 
     public bool MouseOn;
@@ -141,6 +140,8 @@ public class BasicUnit : MonoBehaviour
         countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();
 
         simulator = GameObject.Find("Obelisk").GetComponent<Simulator>();
+
+        myButtons.GetComponent<ButtonsUIManager>().basicunit = this;
     }
 
     // Start is called before the first frame update
@@ -149,12 +150,6 @@ public class BasicUnit : MonoBehaviour
         buffParticleManager = GetComponent<BuffParticleManager>();
         //HP = 50;
         //MP = 100;
-        // bind ButtonsUI OBJ Schin
-        buttonsUI = GameObject.Find("ButtonsUIObj");
-
-        myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
-        myButtons.transform.SetParent(buttonsUI.transform);
-        myButtons.GetComponent<ButtonsUIManager>().basicunit = this;
 
         // Tinaxd register units to CountDownBar
         countDownBar.RegisterUnit(this, CountDownIconPath);
@@ -321,10 +316,7 @@ public class BasicUnit : MonoBehaviour
         unitUI.DragUI.ShowDragUI(true);
         // close ButtonsUI
         MouseOn = false;
-        for (int i = 0; i < buttonsUI.transform.childCount; i++)
-        {
-            ExecuteEvents.Execute<IButtonSignalHandler>(buttonsUI.transform.GetChild(i).gameObject, null, (x, y) => x.CloseButton());
-        }
+        myButtons.GetComponent<ButtonsUIManager>().CloseAll();
     }
 
     public void NotifyDragUpdate(Vector3 worldPos)
@@ -338,10 +330,7 @@ public class BasicUnit : MonoBehaviour
     {
         unitUI.DragUI.ShowDragUI(false);
         // open ButtonsUI
-        for (int i = 0; i < buttonsUI.transform.childCount; i++)
-        {
-            ExecuteEvents.Execute<IButtonSignalHandler>(buttonsUI.transform.GetChild(i).gameObject, null, (x, y) => x.OpenButton());
-        }
+        myButtons.GetComponent<ButtonsUIManager>().OpenAll();
     }
 
     public DragType DragMode

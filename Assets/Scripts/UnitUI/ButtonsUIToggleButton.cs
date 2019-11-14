@@ -13,9 +13,9 @@ public class ButtonsUIToggleButton : MonoBehaviour, IButtonSignalHandler
     private List<(DragType, Sprite)> ButtonSprites;
 
     [SerializeField]
-    private List<DragType> DragTypes;
+    private List<DragType> DragTypes = default;
     [SerializeField]
-    private List<Sprite> Sprites;
+    private List<Sprite> Sprites = default;
 
     public ButtonsUIToggleButton()
     {
