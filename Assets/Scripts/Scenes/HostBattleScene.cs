@@ -22,7 +22,7 @@ public class HostBattleScene : IntersceneBehaviour
                 Debug.Log("ClientJoined");
                 isClientInGame = true;
             }
-            if (cTemp is ClientJoinedCmd & ((ClientJoinedCmd)cTemp).sceneID == 6)
+            else if (cTemp is ClientJoinedCmd & ((ClientJoinedCmd)cTemp).sceneID == 6)
             {
                 // 6 for client having quit the game, because it sends this code in result scene only.
                 Debug.Log("ClientQuitted game");
