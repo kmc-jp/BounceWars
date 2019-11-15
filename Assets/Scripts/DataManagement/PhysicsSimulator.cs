@@ -2,12 +2,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PhysicsSimulator
+public class PhysicsSimulator
 {
+    public static List<MapPhysicsMaterial> mapPhysicsMaterials;
+
+    public static void SimulateIntegral( Unit u, float dt,MapBehaviour mapBehaviour)
+    {
+        float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
+        if (v > 0)
+        {
+            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 10, u.z));
+            float friction = 1;
+//            Debug.Log(tile);
+            if (tile != null)
+            {
+                friction = mapPhysicsMaterials[tile.type].friction;
+            }
+            float fx = -u.vx / v * friction;
+            float fz = -u.vz / v * friction;
+            float fxdt = fx * dt;
+            float fzdt = fz * dt;
+            float vx1 = u.vx + fxdt;
+            float vz1 = u.vz + fzdt;
+            if (vx1 * u.vx > 0)
+            {
+                u.vx = vx1;
+                u.vz = vz1;
+            }
+            else
+            {
+                u.vx = 0;
+                u.vz = 0;
+            }
+        }
+        u.x1 += u.vx * dt;
+        u.z1 += u.vz * dt;
+    }
+    public static void ApplyIntegral(Unit u)
+    {
+        u.x = u.x1;
+        u.z = u.z1;
+    }
     public static float UnitDistance1(Unit u1, Unit u2)
     {
         //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
         return Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1));
+    }
+    public static bool CollideMap(Unit u,MapBehaviour mapBehaviour)
+    {
+        Vector2 pos = new Vector2(u.x1, u.z1);
+
+        Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
+        if (t == null || t.buildingType <= 1)
+        {
+            return false;
+        }
+        Vector2 tPos = new Vector2(t.position.x, t.position.z);
+        Vector2 diff = pos - tPos;
+        if (diff.sqrMagnitude < 1)
+        {
+            Vector2 normal = diff.normalized;
+            u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x * 2;
+            u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y * 2;
+            return false;
+        }
+        return true;
     }
     public static void SimulateCollision(List<Unit> targets,MapBehaviour mapBehaviour,Simulator simulator,List<bool> clean,
         List<CollisionInfo> infos)
@@ -118,23 +177,7 @@ public static class PhysicsSimulator
 
         for (int i = 0; i < targets.Count; i++)
         {
-            Unit u = targets[i];
-            Vector2 pos = new Vector2(u.x1, u.z1);
-
-            Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
-            if (t == null || t.buildingType <= 1)
-            {
-                continue;
-            }
-            Vector2 tPos = new Vector2(t.position.x, t.position.z);
-            Vector2 diff = pos - tPos;
-            if (diff.sqrMagnitude < 1)
-            {
-                clean[i] = false;
-                Vector2 normal = diff.normalized;
-                u.vx1 = u.vx1 - u.vx1 * normal.x * normal.x * 2;
-                u.vz1 = u.vz1 - u.vz1 * normal.y * normal.y * 2;
-            }
+            clean[i] = CollideMap(targets[i], mapBehaviour);
         }
         float E = 0;
         float px = 0;

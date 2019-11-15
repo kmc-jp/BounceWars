@@ -168,7 +168,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 105
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -924,7 +924,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 93af104ee50d13241abef55a70dc90eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1165,6 +1165,7 @@ MonoBehaviour:
   currentTile:
     type: 0
     buildingType: 0
+    itemType: 0
     height: 0
     position: {x: 0, y: 0, z: 0}
     index: {x: 0, y: 0}
@@ -1908,15 +1909,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3a32f7a25cfc7f42a09c87357571aa1, type: 3}
---- !u!224 &797683665549929931 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4339051767771374801, guid: f3a32f7a25cfc7f42a09c87357571aa1,
-    type: 3}
-  m_PrefabInstance: {fileID: 3974032525096323354}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6408317111449741795 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8054815423015936249, guid: f3a32f7a25cfc7f42a09c87357571aa1,
+    type: 3}
+  m_PrefabInstance: {fileID: 3974032525096323354}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &797683665549929931 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4339051767771374801, guid: f3a32f7a25cfc7f42a09c87357571aa1,
     type: 3}
   m_PrefabInstance: {fileID: 3974032525096323354}
   m_PrefabAsset: {fileID: 0}

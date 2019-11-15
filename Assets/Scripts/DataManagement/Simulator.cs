@@ -43,12 +43,12 @@ public class Simulator : MonoBehaviour
         {
             if (clean[i])
             {
-                ApplyIntegral(targets[i]);
+                PhysicsSimulator.ApplyIntegral(targets[i]);
             }
             else
             {
-                SimulateIntegral(targets[i], Time.deltaTime);
-                ApplyIntegral(targets[i]);
+                PhysicsSimulator.SimulateIntegral(targets[i], Time.deltaTime,mapBehaviour);
+                PhysicsSimulator.ApplyIntegral(targets[i]);
             }
         }
         for (int i = 0; i < infos.Count; i++)
@@ -142,43 +142,6 @@ public class Simulator : MonoBehaviour
 
 
 
-    void SimulateIntegral(Unit u, float dt)
-    {
-        float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
-        if (v > 0)
-        {
-            Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 10, u.z));
-            float friction = 1;
-            Debug.Log(tile);
-            if (tile != null)
-            {
-                friction = mapPhysicsMaterials[tile.type].friction;
-            }
-            float fx = -u.vx / v * friction;
-            float fz = -u.vz / v * friction;
-            float fxdt = fx * dt;
-            float fzdt = fz * dt;
-            float vx1 = u.vx + fxdt;
-            float vz1 = u.vz + fzdt;
-            if (vx1 * u.vx > 0)
-            {
-                u.vx = vx1;
-                u.vz = vz1;
-            }
-            else
-            {
-                u.vx = 0;
-                u.vz = 0;
-            }
-        }
-        u.x1 += u.vx * dt;
-        u.z1 += u.vz * dt;
-    }
-    void ApplyIntegral(Unit u)
-    {
-        u.x = u.x1;
-        u.z = u.z1;
-    }
 
     // Used by Host
     public List<UnitSpec> UnitSpecs;
@@ -268,7 +231,7 @@ public class Simulator : MonoBehaviour
         ProcessMyCommand();
         for (int i = 0; i < units.Count; i++)
         {
-            SimulateIntegral(units[i], Time.deltaTime);
+            PhysicsSimulator.SimulateIntegral(units[i], Time.deltaTime,mapBehaviour);
             if (doRegen)
             {
                 units[i].MP = Mathf.Min(units[i].MP + 1, 50);
@@ -600,6 +563,10 @@ public class Simulator : MonoBehaviour
                 u.buff &= ~BuffFlag.BUFF_HEALING;
             }
         }
+    }
+    private void Awake()
+    {
+        PhysicsSimulator.mapPhysicsMaterials = mapPhysicsMaterials;
     }
 }
 
