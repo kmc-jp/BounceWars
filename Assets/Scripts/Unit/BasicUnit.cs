@@ -167,7 +167,7 @@ public class BasicUnit : MonoBehaviour
         currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
-        if (unit.isDead
+        if (!unit.isDead
           && unit.owner == simulator.isClient
           && !Locked)
         {
