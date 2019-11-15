@@ -30,6 +30,12 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
             targetScript = null;
             return;
         }
+        if (target == null)
+        {
+            grabbing = false;
+            target = null;
+            targetScript = null;
+        }
         if (target != null && Input.GetKeyDown(KeyCode.Escape)) // Tinaxd Press Esc to cancel dragging
         {
             target.GetComponent<BasicUnit>().NotifyDragEnd();

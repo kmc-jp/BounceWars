@@ -290,8 +290,15 @@ public class BasicUnit : MonoBehaviour
         //        Debug.Log("CollisionEvent");
 
         //        Debug.Log("Attacked!");
-        float damage =Mathf.Abs( Mathf.Floor(info.normalVelocity));
-
+        float damage =info.normalVelocity;
+        if (info.me.owner != info.other.owner)
+        {
+            if (info.other.type == UnitType.TYPE_CHESS)
+            {
+                damage *= 5;
+            }
+        }
+        damage=Mathf.Abs(Mathf.Floor(damage));
         if (UnitType.isItem(info.other.type))
         {
             AddBuff(0);

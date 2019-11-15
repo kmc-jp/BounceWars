@@ -89,6 +89,8 @@ public class AutoBow : MonoBehaviour
 
             Vector3 p = new Vector3(from.x, 0, from.z);
             Vector3 q = new Vector3(u.x, 0, u.z);
+            float d = Vector3.Distance(p, q);
+
             List<Vector3> trails = ballisticsSimulator.GetTrails(p, calculateVelocity(q - p));
             bool inRange = false;
             float mina = float.PositiveInfinity;
@@ -110,7 +112,6 @@ public class AutoBow : MonoBehaviour
                 }
             }
             if (!inRange) continue;
-            float d = Vector3.Distance(p, q);
             if (d < distance)
             {
                 approachData = mina;

@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646015b928ca6dd48a99c7d19c71db40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapname: Map_Grassland
+  mapname: Map_Small
   map:
     id: 0
     mapType: 0
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sim: {fileID: 657742907}
-  spotRange: 5
+  spotRange: 4
 --- !u!114 &657742911
 MonoBehaviour:
   m_ObjectHideFlags: 0

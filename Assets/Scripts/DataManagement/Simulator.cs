@@ -398,7 +398,7 @@ public class Simulator : MonoBehaviour
                     case 2: // Arrow
                         if (GetUnit(c.fromUnitId).projectileReload < 0)
                         {
-                            GetUnit(c.fromUnitId).projectileReload = 1;
+                            GetUnit(c.fromUnitId).projectileReload = 2;
                             CreateArrow(GetUnit(c.fromUnitId), c.velocity);
                         }
                         break;
