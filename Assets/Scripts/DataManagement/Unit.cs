@@ -19,6 +19,7 @@ public class Unit
     public float MP;
     public bool isDead = false;
     public int buff;
+    public float projectileReload;
 }
 
 //Type:(Legacy after Tinaxd use this for arrow)

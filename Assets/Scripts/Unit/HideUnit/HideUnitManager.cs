@@ -22,6 +22,7 @@ public class HideUnitManager : MonoBehaviour
             if (!sim.instances[i].owned)
             {
                 HideUnit hideUnit = sim.instances[i].GetComponent<HideUnit>();
+                if (hideUnit == null) continue;
                 bool spotted=false;
                 for(int j = 0; j < allies.Count; j++)
                 {
@@ -34,7 +35,12 @@ public class HideUnitManager : MonoBehaviour
                         spotted = true;
                     }
                 }
+                Tile t = MapBehaviour.instance.GetTile(hideUnit.transform.position);
                 hideUnit.spotted = spotted;
+                if (t==null||t.buildingType!=1)
+                {
+                    hideUnit.spotted = true;
+                }
             }
         }
     }

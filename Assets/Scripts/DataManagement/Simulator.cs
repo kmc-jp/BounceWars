@@ -32,6 +32,8 @@ public class Simulator : MonoBehaviour
     // Used only in Host
     public int HealingBuffMaxDistance;
 
+    public AutoBow autoBow;
+
     void SimulateCollision(List<Unit> targets)
     {
         List<bool> clean = new List<bool>();
@@ -156,6 +158,7 @@ public class Simulator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        autoBow = GetComponent<AutoBow>();
         if (InitialUnitTypes == null) // For debug
         {
             InitialUnitTypes = new List<int>
@@ -257,6 +260,7 @@ public class Simulator : MonoBehaviour
                 TryProcessingHealingBuff(units[i]);
             }
         }
+        autoBow.ProcessArrow(Time.deltaTime);
         SimulateCollision(units);
         UpdateInstances();
     }
@@ -392,7 +396,11 @@ public class Simulator : MonoBehaviour
                 switch (c.unitType)
                 {
                     case 2: // Arrow
-                        CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                        if (GetUnit(c.fromUnitId).projectileReload < 0)
+                        {
+                            GetUnit(c.fromUnitId).projectileReload = 1;
+                            CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                        }
                         break;
                     case 3: // Fireball
                         var u = GetUnit(c.fromUnitId);

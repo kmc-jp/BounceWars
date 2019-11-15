@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 657742903}
   - component: {fileID: 657742909}
   - component: {fileID: 657742910}
+  - component: {fileID: 657742911}
   m_Layer: 0
   m_Name: Obelisk
   m_TagString: Untagged
@@ -510,6 +511,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f0074f8fd1ba4e3abed21bbe80734ad, type: 2}
   mapBehaviour: {fileID: 657742904}
   HealingBuffMaxDistance: 15
+  autoBow: {fileID: 0}
   UnitSpecs:
   - {fileID: 0}
   - {fileID: 0}
@@ -555,6 +557,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sim: {fileID: 657742907}
   spotRange: 5
+--- !u!114 &657742911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657742902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7714a79cef3cd46d28c88ce8a337d372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832869361
 GameObject:
   m_ObjectHideFlags: 0
