@@ -55,7 +55,7 @@ public class MapLoader
                 Tile curTile = map.mapData[q][p];
                 int type = curTile.type;
 
-                Vector3 position = new Vector3(p * 2 + offset - 10, -0.5f + (float)curTile.height, q * 1.5f * 1.1547f);
+                Vector3 position = new Vector3(p * 2 - map.mapData[q].Length + offset, -0.5f + (float)curTile.height, q * 1.5f * 1.1547f);
                 GameObject mapGenObj = GameObject.Find("Obelisk");
                 GameObject g = UnityEngine.Object.Instantiate(tiles[type], position, Quaternion.Euler(-90, 0, 0), mapGenObj.transform);
                 GameObject curBuilding = buildings[curTile.buildingType];
@@ -64,7 +64,7 @@ public class MapLoader
                 curTile.index = new Vector2Int(q, p);
                 if (curBuilding != null)
                 {
-                    Vector3 position1 = new Vector3(p * 2 + offset - 10, -0.5f + (float)curTile.height, q * 1.5f * 1.1547f);
+                    Vector3 position1 = new Vector3(p * 2 - map.mapData[q].Length + offset, -0.5f + (float)curTile.height, q * 1.5f * 1.1547f);
                     UnityEngine.Object.Instantiate(curBuilding, position1, new Quaternion(0, 0, 0, 0), mapGenObj.transform);
 
                 }
