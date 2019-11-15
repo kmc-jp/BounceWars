@@ -52,13 +52,13 @@ public class MainMenuScene : IntersceneBehaviour
     {
         ishost = true;
         audioMgr.PlaySFX("buttonLow");
-        nameInputPanel.SetActive(true);
+        SceneManager.LoadScene("HostLobby");
     }
     public void onClientBtnClick()
     {
         ishost = false;
         audioMgr.PlaySFX("buttonLow");
-        nameInputPanel.SetActive(true);
+        ipAddrInputPanel.SetActive(true);
     }
     public void onQuitGameBtnClick()
     {
@@ -119,7 +119,7 @@ public class MainMenuScene : IntersceneBehaviour
     {
         audioMgr.PlaySFX("buttonHigh");
         ipAddrInputPanel.SetActive(false);
-        nameInputPanel.SetActive(true);
+        nameInputPanel.SetActive(false);
     }
 
     public void onMuteClick()

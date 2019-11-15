@@ -68,8 +68,7 @@ public class Simulator : MonoBehaviour
             //死亡判定
             if (isClient == 0 && !curUnit.isDead)
             {
-                // if HP is zero, and Unit is stopped
-                if (curUnit.HP == 0 && curUnit.vx < 0.05 && curUnit.vz < 0.05)
+                if (curUnit.HP<= 0)
                 {
                     curUnit.isDead = true;
                 }
