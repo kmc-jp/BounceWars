@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sim: {fileID: 657742907}
-  spotRange: 4
+  spotRange: 2
 --- !u!114 &657742911
 MonoBehaviour:
   m_ObjectHideFlags: 0

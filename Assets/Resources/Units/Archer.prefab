@@ -27,14 +27,14 @@ RectTransform:
   m_GameObject: {fileID: 833984967533857549}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 1448705003395259377}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000000007450581, y: 0.31}
+  m_AnchoredPosition: {x: 0, y: 0.412}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2255125111298144208
@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 1353620956126683569}
   - component: {fileID: 6922512808279398212}
   - component: {fileID: 17603968743557672}
+  - component: {fileID: 994115397044816223}
   m_Layer: 5
   m_Name: HPText
   m_TagString: Untagged
@@ -288,8 +289,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -0.000073433}
+  m_SizeDelta: {x: 160, y: 40.658}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6922512808279398212
 CanvasRenderer:
@@ -321,7 +322,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 18
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -333,6 +334,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 46
+--- !u!114 &994115397044816223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3014725790055213487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3153477983552924109
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7588234891491015166
 RectTransform:
   m_ObjectHideFlags: 0
@@ -800,8 +816,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.14}
-  m_SizeDelta: {x: 80, y: 20}
+  m_AnchoredPosition: {x: 0, y: 0.0367}
+  m_SizeDelta: {x: 150, y: 40.6585}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3071481006677140520
 MonoBehaviour:
@@ -1156,6 +1172,7 @@ MonoBehaviour:
     MP: 0
     isDead: 0
     buff: 0
+    projectileReload: 0
   damagePopup: {fileID: 4125458201144339016, guid: 39bd0790ad4bfb94fad164812a0494f8,
     type: 3}
   canvas: {fileID: 4307218764190310259}
@@ -1207,7 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visibleObjects:
   - {fileID: 4307218764190310259}
-  - {fileID: 0}
+  - {fileID: 1179329615943813910}
   unit: {fileID: 5223351277152420448}
   spotted: 0
 --- !u!114 &2901764321967285051
@@ -1381,7 +1398,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1769,6 +1786,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3912862a6c25784eb09f01e25261618, type: 3}
+--- !u!1 &1179329615943813910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1331615950830665903, guid: d3912862a6c25784eb09f01e25261618,
+    type: 3}
+  m_PrefabInstance: {fileID: 155105560057629625}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8129553912402225159 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8284074205821232062, guid: d3912862a6c25784eb09f01e25261618,
@@ -1786,6 +1809,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ButtonArcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054815423015936249, guid: f3a32f7a25cfc7f42a09c87357571aa1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4339051767771374801, guid: f3a32f7a25cfc7f42a09c87357571aa1,
         type: 3}

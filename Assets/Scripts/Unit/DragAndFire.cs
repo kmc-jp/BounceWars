@@ -83,7 +83,7 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
 //                Debug.Log(localOrigin - ray.GetPoint(enter));
                 Vector3 vel = localOrigin - ray.GetPoint(enter);
                 vel *= 2;
-                DragType dt = target.GetComponent<BasicUnit>().DragMode;
+                DragType dt = DragType.NORMAL;
                 vel = GetVelocity(vel);
                 switch (dt) 
                 {
