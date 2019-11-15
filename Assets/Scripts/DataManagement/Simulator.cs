@@ -286,7 +286,7 @@ public class Simulator : MonoBehaviour
                 UnitMovedCmd c = (UnitMovedCmd)c1;
                 var basicUnit = GetBasicUnit(c.uuid);
                 //Debug.Log(c.vx);
-                if (!basicUnit.MovementLocked && !basicUnit.Locked) // lockdown and waittime check
+                if (basicUnit!=null&&!basicUnit.MovementLocked && !basicUnit.Locked) // lockdown and waittime check
                 {
                     Unit u = GetUnit(c.uuid);
                     u.vx = c.vx;
@@ -306,6 +306,10 @@ public class Simulator : MonoBehaviour
                         unitTimerRequests.Add(utc);
                         commands.Add(utc);
                     }
+                }
+                else
+                {
+
                 }
                 c.processed = true;
             }
@@ -511,9 +515,9 @@ public class Simulator : MonoBehaviour
 
     public BasicUnit GetBasicUnit(int uuid)
     {
-        UnitInfoTag tag = GetUnitInfoTag(uuid);
-        if (tag != null)
-            return tag.basicUnit;
+        UnitInfoTag info = GetUnitInfoTag(uuid);
+        if (info != null)
+            return info.basicUnit;
         return null;
     }
     void CreateUnitFromHost(int owner, int type, Vector2 velocity, Vector2 position)//should be called only for initialization from host

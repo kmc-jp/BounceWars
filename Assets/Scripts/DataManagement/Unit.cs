@@ -20,6 +20,14 @@ public class Unit
     public bool isDead = false;
     public int buff;
     public float projectileReload;
+    public Vector3 GetPosition()
+    {
+        return new Vector3(x, 0, z);
+    }
+    public Vector3 GetVelocity()
+    {
+        return new Vector3(vx, 0, vz);
+    }
 }
 
 //Type:(Legacy after Tinaxd use this for arrow)

@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 657742909}
   - component: {fileID: 657742910}
   - component: {fileID: 657742911}
+  - component: {fileID: 657742912}
   m_Layer: 0
   m_Name: Obelisk
   m_TagString: Untagged
@@ -567,6 +568,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7714a79cef3cd46d28c88ce8a337d372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &657742912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657742902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf97469f0eb85448e9e33f3ad7bde9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &832869361
