@@ -5,6 +5,7 @@ using UnityEngine;
 public class BallisticsSimulator : MonoBehaviour
 {
     public LineRenderer lr;
+    public Transform targetCircle;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,13 +15,14 @@ public class BallisticsSimulator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        targetCircle.gameObject.SetActive(lr.enabled);
     }
     public void UpdateTrails(Vector3 position, Vector3 velocity)
     {
         List<Vector3> trails = GetTrails(position, velocity);
         lr.positionCount=(trails.Count);
         lr.SetPositions(trails.ToArray());
+        targetCircle.position = trails[trails.Count - 1];
     }
     public List<Vector3> GetTrails(Vector3 position,Vector3 velocity)
     {
