@@ -39,6 +39,10 @@ public sealed class UnitType
     public static bool isItem(int type) {
         return type == TYPE_ITEM_HEAL || type == TYPE_ITEM_MPOT || type == TYPE_ITEM_LPOT;
     }
+    public static bool isProjectile(int type)
+    {
+        return type == UnitType.TYPE_ARROW || type == UnitType.TYPE_FIREBALL;
+    }
 }
 
 // Tinaxd added BuffFlag

@@ -97,6 +97,36 @@ public class PhysicsSimulator
 
                 if (0 < d && d < 1)
                 {
+
+                    float rvx = u2.vx - u1.vx;
+                    float rvz = u2.vz - u1.vz;
+                    float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
+
+                    if (UnitType.isItem(u2.type))
+                    {
+                        u1.vx1 = u1.vx;
+                        u1.vz1 = u1.vz;
+                        if (!UnitType.isProjectile(u1.type))
+                        {
+                            u2.HP = 0;
+                        }
+                        u2.vx1 = u2.vx;
+                        u2.vz1 = u2.vz;
+
+                        continue;
+                    }
+                    if (UnitType.isItem(u1.type))
+                    {
+                        u1.vx1 = u1.vx;
+                        u1.vz1 = u1.vz;
+                        u2.vx1 = u2.vx;
+                        u2.vz1 = u2.vz;
+                        if (!UnitType.isProjectile(u2.type))
+                        {
+                            u1.HP = 0;
+                        }
+                        continue;
+                    }
                     CollisionInfo collision = new CollisionInfo();
                     collision.me = u1;
                     collision.other = u2;
@@ -104,7 +134,7 @@ public class PhysicsSimulator
                     collision.vz1 = u1.vz;
                     collision.vx2 = u2.vx;
                     collision.vz2 = u2.vz;
-                    infos.Add(collision);
+                    collision.normalVelocity = sizeVertical;
 
 
                     CollisionInfo collision1 = new CollisionInfo();
@@ -114,26 +144,20 @@ public class PhysicsSimulator
                     collision1.vz1 = u2.vz;
                     collision1.vx2 = u1.vx;
                     collision1.vz2 = u1.vz;
-                    infos.Add(collision1);
-
-                    float rvx = u2.vx - u1.vx;
-                    float rvz = u2.vz - u1.vz;
-                    float sizeVertical = dx * rvx + dz * rvz;//hiroaki strength of impulse
-
-                    collision.normalVelocity = sizeVertical;
                     collision1.normalVelocity = sizeVertical;
-                    if (u1.type == UnitType.TYPE_ARROW || u1.type == UnitType.TYPE_FIREBALL) // tinaxd u1 is arrow or fireball
+
+                    if (UnitType.isProjectile(u1.type)) // tinaxd u1 is arrow or fireball
                     {
+                        if (u1.owner == u2.owner) continue;
                         u1.vx1 = u1.vx;
                         u1.vz1 = u1.vz;
                         u1.HP = 0;
                         u2.vx1 = u2.vx - dx * 0.05f * sizeVertical;
                         u2.vz1 = u2.vz - dz * 0.05f * sizeVertical;
-                        clean[i] = false;
-                        clean[j] = false;
                     }
-                    else if (u2.type == UnitType.TYPE_ARROW || u2.type == UnitType.TYPE_FIREBALL) // tinaxd u2 is arrow or fireball
+                    else if (UnitType.isProjectile(u2.type)) // tinaxd u2 is arrow or fireball
                     {
+                        if (u1.owner == u2.owner) continue;
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
                         u2.vx1 = u2.vx;
@@ -141,22 +165,6 @@ public class PhysicsSimulator
                         u2.HP = 0;
                         clean[i] = false;
                         clean[j] = false;
-                    }
-                    else if (UnitType.isItem(u2.type))
-                    {
-                        u1.vx1 = u1.vx;
-                        u1.vz1 = u1.vz;
-                        u2.vx1 = u2.vx;
-                        u2.vz1 = u2.vz;
-                        u2.HP = 0;
-                    }
-                    else if (UnitType.isItem(u1.type))
-                    {
-                        u1.vx1 = u1.vx;
-                        u1.vz1 = u1.vz;
-                        u2.vx1 = u2.vx;
-                        u2.vz1 = u2.vz;
-                        u1.HP = 0;
                     }
                     else // neither u1 nor u2 is arrow or fireball
                     {
@@ -167,6 +175,8 @@ public class PhysicsSimulator
                         clean[i] = false;
                         clean[j] = false;
                     }
+                    infos.Add(collision1);
+                    infos.Add(collision);
                     //Debug.Log(string.Format("{0}:({1},{2}),({3},{4})({5})",Time.time,i,j,rvx,rvz,sizeVertical));
                     //Debug.Log(string.Format("{0} i={1}:({2},{3})",Time.time,i, u1.vx1, u1.vz1));
 
