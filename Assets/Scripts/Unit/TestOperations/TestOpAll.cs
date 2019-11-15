@@ -49,6 +49,8 @@ public class TestOpAll : OperationHandlerBase
 
     private void Update()
     {
+        //not used
+        //heal is processed in Simulator.cs
         if (Unit.DragMode == DragType.HEALING_BUFF)
         {
             if (Input.GetMouseButtonDown(0))

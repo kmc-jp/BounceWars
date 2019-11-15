@@ -413,6 +413,7 @@ public class Simulator : MonoBehaviour
                 }
                 c.processed = true;
             }
+
             if (c1 is HealingBuffRequestCmd)
             {
                 var c = (HealingBuffRequestCmd)c1;

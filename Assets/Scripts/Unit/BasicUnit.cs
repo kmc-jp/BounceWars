@@ -361,7 +361,6 @@ public class BasicUnit : MonoBehaviour
     {
         Debug.Log("UpdateBuff");
         unit.buff = buffs;
-        buffParticleManager.UpdateParticles(buffs);
     }
 
     public bool isDead
