@@ -55,7 +55,7 @@ public class PhysicsSimulator
         Tile t = mapBehaviour.GetTile(new Vector3(u.x1, 0, u.z1));
         if (t == null || t.buildingType <= 1)
         {
-            return false;
+            return true;
         }
         Vector2 tPos = new Vector2(t.position.x, t.position.z);
         Vector2 diff = pos - tPos;
