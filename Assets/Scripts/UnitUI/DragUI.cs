@@ -23,12 +23,13 @@ public class DragUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
     }
 
     public void ShowDragUI(bool b)
     {
+        b = false;//tmporary
         circleImg.enabled = b;
         arrowImgWrapper.SetActive(b);
     }
