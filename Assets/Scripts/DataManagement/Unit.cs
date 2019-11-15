@@ -34,8 +34,10 @@ public sealed class UnitType
     public static readonly int TYPE_FIREBALL = 3;
     public static readonly int TYPE_UNDEFINED = -1;
     public static readonly int TYPE_ITEM_HEAL = 5;
+    public static readonly int TYPE_ITEM_MPOT = 6;
+    public static readonly int TYPE_ITEM_LPOT = 7;
     public static bool isItem(int type) {
-        return type == TYPE_ITEM_HEAL;
+        return type == TYPE_ITEM_HEAL || type == TYPE_ITEM_MPOT || type == TYPE_ITEM_LPOT;
     }
 }
 

@@ -183,6 +183,7 @@ public class Simulator : MonoBehaviour
     // Used by Host
     public List<UnitSpec> UnitSpecs;
     static public List<int> InitialUnitTypes; // 0-4: Host's units 5-9: Client's units
+    static public List<Unit> InitialItems = new List<Unit>();   //MapLoaderによって配置されたアイテム
 
     // Start is called before the first frame update
     void Start()
@@ -213,10 +214,12 @@ public class Simulator : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < InitialItems.Count; i++)    //marot
         {
-            CreateUnitFromHost(-1, UnitType.TYPE_ITEM_HEAL, Vector2.zero, new Vector2(0, i * 1.5f));
+            Debug.Log("TestTest");
+            CreateUnitFromHost(-1, InitialItems[i].type, Vector2.zero, new Vector2(InitialItems[i].x, InitialItems[i].z));
         }
+
         UpdateInstances();
     }
 
@@ -516,7 +519,7 @@ public class Simulator : MonoBehaviour
     }
     void CreateUnitFromHost(int owner, int type, Vector2 velocity, Vector2 position)//should be called only for initialization from host
     {
-        Debug.Log("Creating arrow");
+        Debug.Log("Creating an item");
         Unit u = new Unit();
         // Set velocity
         u.vx = velocity.x;
@@ -609,5 +612,7 @@ public sealed class UnitTypeIndexMapper
         [UnitType.TYPE_ARROW] = "Units/NonPlayer/ArcherArrow",
         [UnitType.TYPE_FIREBALL] = "Units/NonPlayer/fireball",
         [UnitType.TYPE_ITEM_HEAL] = "Units/NonPlayer/Heal",
+        [UnitType.TYPE_ITEM_MPOT] = "Units/NonPlayer/MPot",
+        [UnitType.TYPE_ITEM_LPOT] = "Units/NonPlayer/LPot",
     };
 }
