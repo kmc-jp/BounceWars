@@ -21,8 +21,14 @@ public class AutoPlay : MonoBehaviour
             return;
         }
     }
+    float queue = 0;
     private void Update()
     {
+        queue += Time.deltaTime;
+        if (queue > 5)
+        {
+            queue = 0;
+        }
         List<Unit> myUnit = new List<Unit>();
         List<Unit> units = sim.units;
         List<Unit> enemies = new List<Unit>();
@@ -49,6 +55,7 @@ public class AutoPlay : MonoBehaviour
             Unit u = myUnit[i];
             if (u.type != UnitType.TYPE_CHESS) continue;
             Unit target = FindNearest(u.GetPosition(), enemies);
+            if (i % 5 != Mathf.Floor(queue)) continue;
             if (target == null)
             {
                 break;
@@ -69,6 +76,7 @@ public class AutoPlay : MonoBehaviour
         for (int i = 0; i < myUnit.Count; i++)
         {
 
+            if (i % 5 != Mathf.Floor(queue)) continue;
             Unit u = myUnit[i];
             if (u.type == UnitType.TYPE_CHESS) continue;
             Unit target = FindNearest(u.GetPosition(), enemies);
@@ -78,7 +86,7 @@ public class AutoPlay : MonoBehaviour
             }
             enemies.Remove(target);
             Vector3 vel = target.GetPosition() - u.GetPosition();
-            vel = vel.normalized * 2;
+            vel = vel.normalized * 1;
             UnitMovedCmd c = new UnitMovedCmd();
             c.sent = false;
             c.vx = vel.x;

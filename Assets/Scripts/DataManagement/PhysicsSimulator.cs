@@ -6,14 +6,14 @@ public class PhysicsSimulator
 {
     public static List<MapPhysicsMaterial> mapPhysicsMaterials;
 
-    public static void SimulateIntegral( Unit u, float dt,MapBehaviour mapBehaviour)
+    public static void SimulateIntegral(Unit u, float dt, MapBehaviour mapBehaviour)
     {
         float v = Mathf.Sqrt(u.vx * u.vx + u.vz * u.vz);
         if (v > 0)
         {
             Tile tile = mapBehaviour.GetTile(new Vector3(u.x, 10, u.z));
             float friction = 1;
-//            Debug.Log(tile);
+            //            Debug.Log(tile);
             if (tile != null)
             {
                 friction = mapPhysicsMaterials[tile.type].friction;
@@ -48,7 +48,7 @@ public class PhysicsSimulator
         //Debug.Log(Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1)));
         return Mathf.Sqrt((u1.x1 - u2.x1) * (u1.x1 - u2.x1) + (u1.z1 - u2.z1) * (u1.z1 - u2.z1));
     }
-    public static bool CollideMap(Unit u,MapBehaviour mapBehaviour)
+    public static bool CollideMap(Unit u, MapBehaviour mapBehaviour)
     {
         Vector2 pos = new Vector2(u.x1, u.z1);
 
@@ -68,7 +68,7 @@ public class PhysicsSimulator
         }
         return true;
     }
-    public static void SimulateCollision(List<Unit> targets,MapBehaviour mapBehaviour,Simulator simulator,List<bool> clean,
+    public static void SimulateCollision(List<Unit> targets, MapBehaviour mapBehaviour, Simulator simulator, List<bool> clean,
         List<CollisionInfo> infos)
     {
         //Debug.Log(targets[0].vx);
@@ -145,7 +145,10 @@ public class PhysicsSimulator
                     collision1.vx2 = u1.vx;
                     collision1.vz2 = u1.vz;
                     collision1.normalVelocity = sizeVertical;
-
+                    if (UnitType.isProjectile(u1.type)&& UnitType.isProjectile(u2.type)) // tinaxd u1 is arrow or fireball
+                    {
+                        continue;
+                    }
                     if (UnitType.isProjectile(u1.type)) // tinaxd u1 is arrow or fireball
                     {
                         if (u1.owner == u2.owner) continue;
