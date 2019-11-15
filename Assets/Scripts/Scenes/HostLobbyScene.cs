@@ -20,9 +20,13 @@ public class HostLobbyScene : IntersceneBehaviour
     {
         startGameButton = GameObject.Find("StartGameBtn");
         HostSceneInfo = GameObject.Find("HostSceneInfo").GetComponent<Text>();
-        startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
+        if (!AutoPlay.isOffline)
+            startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
 
         isClientReady = 0;
+
+        if (AutoPlay.isOffline)
+            isClientReady = 1;
     }
     // Start is called before the first frame update
     void Start()
@@ -32,6 +36,7 @@ public class HostLobbyScene : IntersceneBehaviour
         audioMgr.PlayMusic("menuTheme");
 
 
+        if (AutoPlay.isOffline) return;
         //set UI username and ip address.
         HostSceneInfo.text =
             "Host:  " + G_username
@@ -40,6 +45,10 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     void Update()
     {
+        if (AutoPlay.isOffline) {
+
+            isClientReady = 1;
+            return; }
         //Check cmmands
         for (int i = receivedCmds.Count - 1; i >= 0; i--)
         {
@@ -70,24 +79,30 @@ public class HostLobbyScene : IntersceneBehaviour
     }
     public void onStartGameBtnClick()
     {
-        if(isClientReady > 0)
+        if (isClientReady > 0||AutoPlay.isOffline)
         {
             audioMgr.PlaySFX("buttonLow");
-            
+
             List<int> HostUnitTypes = GetHostUnits();
+            Debug.Log(GetHostUnits());
             if (HostUnitTypes == null)
             {
+                Debug.Log("null");
                 return;
             }
             Debug.Assert(HostUnitTypes.Count == 5);
-            Debug.Assert(ClientUnitTypes.Count == 5);
+            //Debug.Assert(ClientUnitTypes.Count == 5);
 
             // Set InitialUnitTypes before Simulator's Start method is called.
             var combined = new List<int>();
             combined.AddRange(HostUnitTypes);
-            combined.AddRange(ClientUnitTypes);
+            if (AutoPlay.isOffline)
+                combined.AddRange(HostUnitTypes);
+            else
+                combined.AddRange(ClientUnitTypes);
             Simulator.InitialUnitTypes = combined;
 
+            Debug.Log("nonnull");
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }

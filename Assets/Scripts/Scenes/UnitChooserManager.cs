@@ -5,7 +5,11 @@ using UnityEngine;
 public class UnitChooserManager : MonoBehaviour
 {
     public List<UnitChooser> groups;
-
+    private void Start()
+    {
+        Debug.Log(gameObject.name);
+        groups[0].SetSelected(true);
+    }
     public void UnselectAll()
     {
         foreach (var group in groups)

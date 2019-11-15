@@ -28,19 +28,19 @@ public class ResultScene : IntersceneBehaviour
         Text ButtonText = GameObject.Find("ReturnBtn").GetComponentInChildren<Text>();
 
         // set players' names
-        GameObject.Find("selfName").GetComponent<Text>().text = G_username;
-        GameObject.Find("opponentName").GetComponent<Text>().text = G_opponentName;
+        //GameObject.Find("selfName").GetComponent<Text>().text = G_username;
+        //GameObject.Find("opponentName").GetComponent<Text>().text = G_opponentName;
 
         if (G_isHost == IsHostWin)// Current Player wins.
         {
-            resultTitleSelf.text = "You Win!";
-            ResultTitleOpponent.text = "Loser";
+            resultTitleSelf.text = "You Won!";
+            ResultTitleOpponent.text = "";
             ButtonText.text = "Yeah!";
         }
         else// Current Player loses.
         {
-            resultTitleSelf.text = "You Loses!";
-            ResultTitleOpponent.text = "Winner";
+            resultTitleSelf.text = "You Lost!";
+            ResultTitleOpponent.text = "";
             ButtonText.text = "Alright..";
         }
     }

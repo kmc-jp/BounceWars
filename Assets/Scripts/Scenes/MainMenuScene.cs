@@ -29,6 +29,7 @@ public class MainMenuScene : IntersceneBehaviour
 
     void Start()
     {
+        AutoPlay.isOffline = false;
         nameInputPanel.SetActive(false);
         nameErrText.SetActive(false);
         ipAddrInputPanel.SetActive(false);
@@ -47,7 +48,13 @@ public class MainMenuScene : IntersceneBehaviour
         else
             ipAddrInputPanel.GetComponentInChildren<InputField>().text = null;
     }
-
+    public void onOfflineBtnClick()
+    {
+        ishost = true;
+        AutoPlay.isOffline = true;
+        audioMgr.PlaySFX("buttonLow");
+        SceneManager.LoadScene("HostLobby");
+    }
     public void onHostBtnClick()
     {
         ishost = true;

@@ -8,14 +8,14 @@ public class UnitChooser : MonoBehaviour
     [SerializeField]
     public List<int> UnitTypes;
 
-    private bool IsSelected;
+    public bool IsSelected;
 
     public Color ColorSelected = Color.green;
     public Color ColorUnselected = Color.gray;
 
     private void Awake()
     {
-        SetSelected(false);
+        SetSelected(IsSelected);
     }
 
     public void SetSelected(bool b)
