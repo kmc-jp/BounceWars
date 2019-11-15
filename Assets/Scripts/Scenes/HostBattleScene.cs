@@ -49,7 +49,7 @@ public class HostBattleScene : IntersceneBehaviour
     public void onQuitBattleBtnClick()
     {
         //CloseHttpListener();
-        SetWinner(false);
+        SetWinner(true);
         SceneManager.LoadScene("ResultHost");
 
         //TODO clear user info
