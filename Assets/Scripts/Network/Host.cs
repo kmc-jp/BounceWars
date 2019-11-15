@@ -28,6 +28,7 @@ public class Host : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (AutoPlay.isOffline) return;
         // Bind a childclass of IntersceneBehaviour in current scene
         interScene = GetComponent<IntersceneBehaviour>();
         // Start http server and establish a response thread

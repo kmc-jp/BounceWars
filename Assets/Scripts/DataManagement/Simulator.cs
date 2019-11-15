@@ -121,12 +121,12 @@ public class Simulator : MonoBehaviour
         if (!isHostAlive)
         {
             //sendGameSetCmd(false);
-            openResultScene(false);
+            openResultScene(true);
         }
         else if (!isClientAlive)
         {
             //sendGameSetCmd(true);
-            openResultScene(true);
+            openResultScene(false);
         }
     }
 
@@ -407,7 +407,7 @@ public class Simulator : MonoBehaviour
                             Unit u = GetUnit(c.fromUnitId);
                             if (u.projectileReload <= 0)
                             {
-                                u.projectileReload = 2;
+                                u.projectileReload = 3;
                                 CreateArrow(GetUnit(c.fromUnitId), c.velocity);
                             }
                         }
