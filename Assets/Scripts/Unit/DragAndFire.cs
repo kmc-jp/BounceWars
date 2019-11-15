@@ -14,6 +14,12 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
 
     private bool DragEnabled = true;
 
+    BallisticsSimulator ballisticsSimulator;
+    void Start()
+    {
+        ballisticsSimulator = GameObject.Find("BallisticsViewer").GetComponent<BallisticsSimulator>();
+
+    }
     // Update is called once per frame
     void Update()
     {
@@ -123,6 +129,7 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
                 target.GetComponent<BasicUnit>().NotifyDragEnd(); // Tinaxd disable DragUI
             }
         }
+        ballisticsSimulator.lr.enabled = grabbing;
         // Tinaxd update DragUI
         if (grabbing)
         {
@@ -131,6 +138,9 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
             float enter = 0;
             targetPlane.Raycast(ray, out enter);
             var point = ray.GetPoint(enter);
+            Vector3 diff = -point + localOrigin;
+
+            ballisticsSimulator.UpdateTrails(target.transform.position, diff);
             basicUnit.NotifyDragUpdate(point);
         }
     }
