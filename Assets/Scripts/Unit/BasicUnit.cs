@@ -132,10 +132,6 @@ public class BasicUnit : MonoBehaviour
 
         WaitTime = 0;
 
-        var iconNames = new string[] { "sword", "archer" };
-        var unitType = unit.type;
-        CountDownIconPath = "test/" + iconNames[unitType];
-
         // bind CountDownUI OBJ Tinaxd
         countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();
 
@@ -152,7 +148,7 @@ public class BasicUnit : MonoBehaviour
         //MP = 100;
 
         // Tinaxd register units to CountDownBar
-        countDownBar.RegisterUnit(this, CountDownIconPath);
+        countDownBar.RegisterUnit(this);
 
         if (unit.owner != simulator.isClient)
         {
@@ -378,6 +374,7 @@ public class BasicUnit : MonoBehaviour
             {
                 if (myButtons != null) // If unit has buttons
                     Destroy(myButtons);
+                countDownBar.RemoveUnit(this); // Remove countdown bar icon
             }
         }
     }
