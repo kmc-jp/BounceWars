@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 // Original author: Tinaxd
 // Attach this script to all units
 public class BasicUnit : MonoBehaviour
@@ -156,10 +156,14 @@ public class BasicUnit : MonoBehaviour
             myButtons.GetComponent<ButtonsUIManager>().CloseAll();
         }
     }
-
+    public Image hpBar;
     // Update is called once per frame
     protected virtual void Update()
     {
+        if (unit.owner != simulator.isClient)
+        {
+            hpBar.color = Color.red;
+        }
         currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;

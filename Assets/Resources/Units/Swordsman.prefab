@@ -1193,6 +1193,7 @@ MonoBehaviour:
   LockdownStartTime: 0
   LastMoveTime: 0
   Owned: 0
+  hpBar: {fileID: 9006663367339465452}
   MovementLocked: 0
 --- !u!54 &7760682452326880213
 Rigidbody:
