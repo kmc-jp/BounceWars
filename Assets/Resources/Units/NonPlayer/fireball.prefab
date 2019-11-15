@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5889235973823184568}
   - component: {fileID: 5889235973824314488}
   - component: {fileID: 7696722970254353979}
-  - component: {fileID: 2902798103021325494}
   - component: {fileID: 4074971392508948758}
   - component: {fileID: 8007237639167644188}
   m_Layer: 0
@@ -96,57 +95,8 @@ MonoBehaviour:
   uuid: 0
   red: {fileID: 2100000, guid: fcb56e0e56fe15f42b8f100e452f8a6a, type: 3}
   owned: 0
-  basicUnit: {fileID: 2902798103021325494}
+  basicUnit: {fileID: 0}
   sim: {fileID: 0}
---- !u!114 &2902798103021325494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5889235973822046904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5235719024dba0c4b87b7cf7193d60c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unit:
-    x: 0
-    z: 0
-    x1: 0
-    z1: 0
-    vx: 0
-    vz: 0
-    vx1: 0
-    vz1: 0
-    uuid: 0
-    type: 0
-    owner: 0
-    HP: 999
-    MP: 0
-    isDead: 0
-    buff: 0
-  isDead: 0
-  damagePopup: {fileID: 0}
-  canvas: {fileID: 0}
-  buttonsUI: {fileID: 0}
-  buttons: {fileID: 0}
-  buttonsUICloseDelay: 0.3
-  MouseOn: 0
-  currentTile:
-    type: 0
-    buildingType: 0
-    height: 0
-    position: {x: 0, y: 0, z: 0}
-    index: {x: 0, y: 0}
-  CountDownIconPath: 
-  BaseCountDownTime: 8
-  Moved: 0
-  LockdownPenalty: 0
-  LockdownStartTime: 0
-  LastMoveTime: 0
-  Owned: 0
-  MovementLocked: 0
 --- !u!114 &4074971392508948758
 MonoBehaviour:
   m_ObjectHideFlags: 0
