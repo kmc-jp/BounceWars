@@ -121,12 +121,18 @@ public class Simulator : MonoBehaviour
         if (!isHostAlive)
         {
             //sendGameSetCmd(false);
-            openResultScene(true);
+            if (isClient == 0)
+                openResultScene(true);
+            else
+                sendGameSetCmd(false);
         }
         else if (!isClientAlive)
         {
             //sendGameSetCmd(true);
-            openResultScene(false);
+            if (isClient == 0)
+                openResultScene(false);
+            else
+                sendGameSetCmd(true);
         }
     }
 
