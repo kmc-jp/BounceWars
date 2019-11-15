@@ -35,7 +35,7 @@ public class AutoBow : MonoBehaviour
                 continue;
             }
             u.projectileReload -= dt;
-            if (u.owner != sim.isClient)
+            if (u.owner != sim.isClient&&(!AutoPlay.isOffline))
             {
                 continue;
             }
@@ -64,7 +64,7 @@ public class AutoBow : MonoBehaviour
         for (int i = 0; i < units.Count; i++)
         {
             Unit u = units[i];
-            if (u.owner == from.owner||u.owner<0)
+            if ((u.owner == from.owner)||u.owner<0)
             {
                 continue;
             }
@@ -82,10 +82,48 @@ public class AutoBow : MonoBehaviour
             {
                 continue;
             }
+            if (AutoPlay.isOffline)
+            {
+                if (from.owner == sim.isClient && (!hideUnit.spotted))
+                {
+                    continue;
+                }
+                bool spotted = false;
+
+                Tile tile1 = MapBehaviour.instance.GetTile(new Vector3(u.x, 0, u.z));
+                if (tile1 == null)
+                {
+                    continue;
+                }
+                if (tile1.type == 1)
+                {
+                    for (int n = 0; n < units.Count; n++)
+                    {
+                        Unit enemy = units[n];
+                        if (enemy.owner == 0)
+                        {
+                            continue;
+                        }
+                        float dx = enemy.x - u.x;
+                        float dz = enemy.z - u.z;
+                        if (dx * dx + dz * dz < 4f)
+                        {
+                            spotted = true;
+                            break;
+                        }
+                    }
+                    if (!spotted)
+                    {
+                        continue;
+                    }
+                }
+            }
+            else
             if (!hideUnit.spotted)
             {
                 continue;
             }
+
 
             Vector3 p = new Vector3(from.x, 0, from.z);
             Vector3 q = new Vector3(u.x, 0, u.z);
@@ -123,7 +161,6 @@ public class AutoBow : MonoBehaviour
         {
             return false;
         }
-        //Debug.Log("approach" + approachData);
 
         Vector3 pp = new Vector3(from.x, 0, from.z);
         Vector3 qq = new Vector3(target.x, 0, target.z);

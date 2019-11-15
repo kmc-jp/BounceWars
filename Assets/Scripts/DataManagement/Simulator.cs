@@ -387,27 +387,35 @@ public class Simulator : MonoBehaviour
                 //TODO if c is GameSetCmd
                 //SceneManager.LoadScene("Result");
                 //clientBattleScene, isHostWin = GameSetCmd.isHostWin
-                if (isClient > 0)
+                if (isClient > 0 && (!AutoPlay.isOffline))
+                {
                     c.processed = true;
+                }
             }
             if (c1 is NewUnitCmd)
             {
+                Debug.Log(GetUnit(((NewUnitCmd)c1).fromUnitId).owner);
                 NewUnitCmd c = (NewUnitCmd)c1;
                 switch (c.unitType)
                 {
                     case 2: // Arrow
-                        if (GetUnit(c.fromUnitId).projectileReload < 0)
                         {
-                            GetUnit(c.fromUnitId).projectileReload = 2;
-                            CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                            Unit u = GetUnit(c.fromUnitId);
+                            if (u.projectileReload <= 0)
+                            {
+                                u.projectileReload = 2;
+                                CreateArrow(GetUnit(c.fromUnitId), c.velocity);
+                            }
                         }
                         break;
                     case 3: // Fireball
-                        var u = GetUnit(c.fromUnitId);
-                        if (u.MP > 25)
                         {
-                            u.MP -= 25;
-                            CreateFireball(u, c.velocity);
+                            var u = GetUnit(c.fromUnitId);
+                            if (u.MP > 25)
+                            {
+                                u.MP -= 25;
+                                CreateFireball(u, c.velocity);
+                            }
                         }
                         break;
                 }
@@ -510,7 +518,7 @@ public class Simulator : MonoBehaviour
     }
     void CreateUnitFromHost(int owner, int type, Vector2 velocity, Vector2 position)//should be called only for initialization from host
     {
-        Debug.Log("Creating an item");
+//        Debug.Log("Creating an item");
         Unit u = new Unit();
         // Set velocity
         u.vx = velocity.x;
@@ -535,7 +543,7 @@ public class Simulator : MonoBehaviour
     // Tinaxd Used by host only 
     private void CreateArrow(Unit fromUnit, Vector3 velocity)
     {
-        Debug.Log("Creating arrow");
+//        Debug.Log("Creating arrow");
         Unit u = new Unit();
         // Set velocity
         u.vx = velocity.x;

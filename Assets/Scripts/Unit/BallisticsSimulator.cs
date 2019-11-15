@@ -44,7 +44,7 @@ public class BallisticsSimulator : MonoBehaviour
             PhysicsSimulator.SimulateIntegral(unit, dt, MapBehaviour.instance);
             if (!PhysicsSimulator.CollideMap(unit, MapBehaviour.instance))
             {
-                Debug.Log("collided");
+//                Debug.Log("collided");
                 unit.vx = unit.vx1;
                 unit.vz = unit.vz1;
                 PhysicsSimulator.SimulateIntegral(unit, dt, MapBehaviour.instance);
