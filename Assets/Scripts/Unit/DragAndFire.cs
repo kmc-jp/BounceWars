@@ -76,7 +76,9 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
                 targetPlane.Raycast(ray, out enter);
 //                Debug.Log(localOrigin - ray.GetPoint(enter));
                 Vector3 vel = localOrigin - ray.GetPoint(enter);
+                vel *= 2;
                 DragType dt = target.GetComponent<BasicUnit>().DragMode;
+                vel = GetVelocity(vel);
                 switch (dt) 
                 {
                     case DragType.NORMAL:
@@ -139,12 +141,20 @@ public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
             targetPlane.Raycast(ray, out enter);
             var point = ray.GetPoint(enter);
             Vector3 diff = -point + localOrigin;
-
+            diff *= 2;
+            diff = GetVelocity(diff);
             ballisticsSimulator.UpdateTrails(target.transform.position, diff);
             basicUnit.NotifyDragUpdate(point);
         }
     }
-
+    public Vector3 GetVelocity(Vector3 diff)
+    {
+        if (diff.magnitude < 5)
+        {
+            return diff;
+        }
+        return diff.normalized * 5;
+    }
     public void TurnOnDrag()
     {
         DragEnabled = true;

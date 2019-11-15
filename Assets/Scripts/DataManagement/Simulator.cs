@@ -194,6 +194,19 @@ public class Simulator : MonoBehaviour
 
     void UpdateInstances()
     {
+        List<UnitInfoTag> remains=new List<UnitInfoTag>();
+        for (int i = 0; i < instances.Count; i++)
+        {
+            if (GetUnit(instances[i].uuid) == null)
+            {
+                Destroy(instances[i].gameObject);
+            }
+            else
+            {
+                remains.Add(instances[i]);
+            }
+        }
+        instances = remains;
         for (int i = 0; i < units.Count; i++)
         {
             bool found = false;
@@ -222,6 +235,7 @@ public class Simulator : MonoBehaviour
                 instances.Add(tag);
             }
         }
+
     }
 
     // Update is called once per frame
