@@ -105,8 +105,10 @@ public class CountDownBar : MonoBehaviour
     }
 
     // Add units to the countdown bar
-    public void RegisterUnit(BasicUnit unit, string iconPath)
+    public void RegisterUnit(BasicUnit unit)
     {
+        if (!UnitTypeCDIconMapper.map.TryGetValue(unit.unit.type, out string iconPath))
+            return;
         var texture = (Texture)Resources.Load(iconPath);
         GameObject icon = Instantiate(modelIcon);
 
@@ -194,4 +196,13 @@ class CountDownUnitIcon
     public GameObject Icon;
     public int Position;
     public bool Unlocked;
+}
+
+public sealed class UnitTypeCDIconMapper
+{
+    public static readonly Dictionary<int, string> map = new Dictionary<int, string>
+    {
+        [UnitType.TYPE_CHESS] = "Icons/sword",
+        [UnitType.TYPE_ARCHER] = "Icons/bow",
+    };
 }
