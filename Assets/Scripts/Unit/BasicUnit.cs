@@ -290,7 +290,7 @@ public class BasicUnit : MonoBehaviour
         //        Debug.Log("CollisionEvent");
 
         //        Debug.Log("Attacked!");
-        float damage = 10;
+        float damage =Mathf.Abs( Mathf.Floor(info.normalVelocity));
 
         if (UnitType.isItem(info.other.type))
         {

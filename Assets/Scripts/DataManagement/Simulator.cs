@@ -61,6 +61,7 @@ public class Simulator : MonoBehaviour
             if (unitInfoTag != null)
                 unitInfoTag.CollisionEvent(collision);
         }
+        List<Unit> remains = new List<Unit>();
         for (int i = 0; i < targets.Count; i++)
         {
             Unit curUnit = targets[i];
@@ -77,7 +78,12 @@ public class Simulator : MonoBehaviour
                     curUnit.isDead = true;
                 }
             }
+            if (!curUnit.isDead)
+            {
+                remains.Add(curUnit);
+            }
         }
+        units = remains;
         checkGameSet();
     }
 
