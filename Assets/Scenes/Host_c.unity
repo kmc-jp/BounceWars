@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641275, b: 0.5748174, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 229535174}
   - component: {fileID: 229535177}
   - component: {fileID: 229535178}
+  - component: {fileID: 229535179}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ef8c68bade09b41aca258d42a632f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lastTab: 2
+  lastTab: 0
   movementSettingsFoldout: 0
   zoomingSettingsFoldout: 0
   rotationSettingsFoldout: 0
@@ -236,13 +237,13 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  maxHeight: 4
-  minHeight: 2
-  heightDampening: 5
+  maxHeight: 6
+  minHeight: 3
+  heightDampening: 8
   keyboardZoomingSensitivity: 2
   scrollWheelZoomingSensitivity: -90
   limitMap: 1
-  limitX: 5
+  limitX: 10
   limitY: 5
   targetFollow: {fileID: 0}
   targetOffset: {x: 0, y: 0, z: 0}
@@ -263,6 +264,19 @@ MonoBehaviour:
   rotateLeftKey: 122
   useMouseRotation: 0
   mouseRotationKey: 324
+--- !u!114 &229535179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229535173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: ba50a9058149f6041bce742bc0a81d8d, type: 2}
 --- !u!1 &529672024
 GameObject:
   m_ObjectHideFlags: 0

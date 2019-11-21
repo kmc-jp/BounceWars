@@ -112,13 +112,26 @@ public class BasicUnit : MonoBehaviour
     {
         if (!LockdownPenalty)
         {
-            unitUI.WaitTimeText = string.Format("{0:0.#}s", WaitTime);
-            unitUI.WaitTimeColor = Color.black;
+            if (WaitTime < 0.1) {
+                unitUI.WaitTimeText = "";
+            }
+            else
+            {
+                unitUI.WaitTimeText = string.Format("{0:#}s", System.Math.Ceiling(WaitTime));//0:0.#
+                unitUI.WaitTimeColor = Color.black;
+            }
         }
         else
         {
-            unitUI.WaitTimeText = string.Format("{0:0.#}s [LOCKDOWN +{1:0.0}s]", WaitTime, Time.time - LockdownStartTime);
-            unitUI.WaitTimeColor = Color.red;
+            if (WaitTime < 0.1)
+            {
+                unitUI.WaitTimeText = "";
+            }
+            else
+            {
+                unitUI.WaitTimeText = string.Format("{0:0.#}s [LOCKDOWN +{1:0.0}s]", System.Math.Ceiling(WaitTime), Time.time - LockdownStartTime);
+                unitUI.WaitTimeColor = Color.red;
+            }
         }
     }
 

@@ -20,6 +20,9 @@ public class ResultScene : IntersceneBehaviour
         var resultCmd = new GameSetCmd(IsHostWin);
         tosendCmds.Add(resultCmd);
 
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+
         Text resultTitleSelf = GameObject.Find("ResultTitleSelf").GetComponent<Text>();
         Text ResultTitleOpponent = GameObject.Find("ResultTitleOpponent").GetComponent<Text>();
 
@@ -28,15 +31,18 @@ public class ResultScene : IntersceneBehaviour
         // set players' names
         //GameObject.Find("selfName").GetComponent<Text>().text = G_username;
         //GameObject.Find("opponentName").GetComponent<Text>().text = G_opponentName;
-
         if (G_isHost == IsHostWin)// Current Player wins.
         {
+            audioMgr.PlayMusic("victory");
+
             resultTitleSelf.text = "You Won!";
             ResultTitleOpponent.text = "";
             ButtonText.text = "Yeah!";
         }
         else// Current Player loses.
         {
+            audioMgr.PlayMusic("lose");
+
             resultTitleSelf.text = "You Lost!";
             ResultTitleOpponent.text = "";
             ButtonText.text = "Alright..";
@@ -71,6 +77,7 @@ public class ResultScene : IntersceneBehaviour
     }
     public void onReturnToMainBtnClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         SceneManager.LoadScene("MainMenu");
     }
     public override List<Command> GetCmd()

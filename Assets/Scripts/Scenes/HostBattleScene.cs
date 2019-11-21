@@ -10,6 +10,10 @@ public class HostBattleScene : IntersceneBehaviour
     void Start()
     {
         isClientInGame = false;
+
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("battleConflict");
     }
     void Update()
     {
@@ -48,8 +52,9 @@ public class HostBattleScene : IntersceneBehaviour
     }
     public void onQuitBattleBtnClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         //CloseHttpListener();
-        SetWinner(true);
+        SetWinner(!G_isHost);
         SceneManager.LoadScene("ResultHost");
 
         //TODO clear user info

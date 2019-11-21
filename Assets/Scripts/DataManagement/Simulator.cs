@@ -409,6 +409,7 @@ public class Simulator : MonoBehaviour
                     case 2: // Arrow
                         {
                             Unit u = GetUnit(c.fromUnitId);
+                            if (u == null) break;
                             if (u.projectileReload <= 0)
                             {
                                 u.projectileReload = 7;

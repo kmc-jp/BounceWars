@@ -119,6 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitTypes: 0000000000000000000000000000000000000000
+  IsSelected: 0
+  ColorSelected: {r: 0, g: 1, b: 0, a: 1}
+  ColorUnselected: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &2192082191573181950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,14 +181,14 @@ RectTransform:
   m_GameObject: {fileID: 6205175155410626985}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 6621926737580133681}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.22100002, y: 0.31960657}
   m_AnchorMax: {x: 0.80200005, y: 0.652}
-  m_AnchoredPosition: {x: -10, y: 7}
+  m_AnchoredPosition: {x: 3.399994, y: -3.699997}
   m_SizeDelta: {x: 364, y: 326}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1364538085995375357
@@ -263,6 +266,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6621926737580133681}
     m_Modifications:
+    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
+        type: 3}
+      propertyPath: m_Name
+      value: Chara_elf_Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 8284074205821232062, guid: 005af6a13c1c3284892210153468b31c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -383,11 +391,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
-        type: 3}
-      propertyPath: m_Name
-      value: Chara_elf_Sword
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 005af6a13c1c3284892210153468b31c, type: 3}
 --- !u!224 &6718122148152845299 stripped
@@ -403,6 +406,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6621926737580133681}
     m_Modifications:
+    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
+        type: 3}
+      propertyPath: m_Name
+      value: Chara_elf_Sword (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 8284074205821232062, guid: 005af6a13c1c3284892210153468b31c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -523,11 +531,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
-        type: 3}
-      propertyPath: m_Name
-      value: Chara_elf_Sword (6)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 005af6a13c1c3284892210153468b31c, type: 3}
 --- !u!224 &4970235517435777093 stripped
@@ -543,6 +546,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6621926737580133681}
     m_Modifications:
+    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
+        type: 3}
+      propertyPath: m_Name
+      value: Chara_elf_Sword (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 8284074205821232062, guid: 005af6a13c1c3284892210153468b31c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -663,11 +671,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
-        type: 3}
-      propertyPath: m_Name
-      value: Chara_elf_Sword (4)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 005af6a13c1c3284892210153468b31c, type: 3}
 --- !u!224 &5576086878818257489 stripped
@@ -683,6 +686,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6621926737580133681}
     m_Modifications:
+    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
+        type: 3}
+      propertyPath: m_Name
+      value: Chara_elf_Sword (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 8284074205821232062, guid: 005af6a13c1c3284892210153468b31c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -803,11 +811,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
-        type: 3}
-      propertyPath: m_Name
-      value: Chara_elf_Sword (2)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 005af6a13c1c3284892210153468b31c, type: 3}
 --- !u!224 &2409144918974733399 stripped
@@ -823,6 +826,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6621926737580133681}
     m_Modifications:
+    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
+        type: 3}
+      propertyPath: m_Name
+      value: Chara_elf_Sword (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 8284074205821232062, guid: 005af6a13c1c3284892210153468b31c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -942,11 +950,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1331615950830665903, guid: 005af6a13c1c3284892210153468b31c,
-        type: 3}
-      propertyPath: m_Name
-      value: Chara_elf_Sword (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 005af6a13c1c3284892210153468b31c, type: 3}
