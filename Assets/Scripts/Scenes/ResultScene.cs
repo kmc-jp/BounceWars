@@ -16,11 +16,9 @@ public class ResultScene : IntersceneBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Client tell host its entering result scene, 6is ID for client result scene.
-        if(!G_isHost)
-            tosendCmds.Add((Command)new ClientJoinedCmd(6));
-
-        isClientInResultScene = false;
+        // Tell client to go to ResultScene
+        var resultCmd = new GameSetCmd(IsHostWin);
+        tosendCmds.Add(resultCmd);
 
         Text resultTitleSelf = GameObject.Find("ResultTitleSelf").GetComponent<Text>();
         Text ResultTitleOpponent = GameObject.Find("ResultTitleOpponent").GetComponent<Text>();
@@ -50,7 +48,7 @@ public class ResultScene : IntersceneBehaviour
         for (int i = receivedCmds.Count - 1; i >= 0; i--)
         {
             Command cTemp = receivedCmds[i];
-            // the client is already in result scene.
+            /*// the client is already in result scene.
             // CLIENT send again in case of Package lose
             if (cTemp is GameSetCmd)
             {
@@ -63,7 +61,7 @@ public class ResultScene : IntersceneBehaviour
                     isClientInResultScene = true;
             }
             // The unprocessed commands are saved for other child of IntersceneBehaviour
-            else
+            else*/
             {
                 //remove unnecessary leftover commands.
                 receivedCmds.RemoveAt(i);

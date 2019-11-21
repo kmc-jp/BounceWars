@@ -58,6 +58,7 @@ public class MainMenuScene : IntersceneBehaviour
     public void onHostBtnClick()
     {
         ishost = true;
+        G_isHost = ishost;
         audioMgr.PlaySFX("buttonLow");
         SceneManager.LoadScene("HostLobby");
     }

@@ -167,9 +167,11 @@ public class BasicUnit : MonoBehaviour
         currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
-        if (!unit.isDead
+        if (unitUI.isActiveAndEnabled
+          && !unit.isDead
           && unit.owner == simulator.isClient
-          && !Locked)
+          && !Locked
+          )
         {
             ShowEmotion(EmotionType.CD_READY, 5.0f);
         }
