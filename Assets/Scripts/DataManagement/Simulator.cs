@@ -413,7 +413,7 @@ public class Simulator : MonoBehaviour
                             Unit u = GetUnit(c.fromUnitId);
                             if (u.projectileReload <= 0)
                             {
-                                u.projectileReload = 3;
+                                u.projectileReload = 7;
                                 CreateArrow(GetUnit(c.fromUnitId), c.velocity);
                             }
                         }
