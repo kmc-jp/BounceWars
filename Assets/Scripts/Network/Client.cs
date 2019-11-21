@@ -17,7 +17,7 @@ public class Client : MonoBehaviour
 
     static Thread _responseThread;
 
-    static bool simulateLag = true;
+    static bool simulateLag = false;
 
     // Start is called before the first frame update
     void Awake()

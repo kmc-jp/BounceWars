@@ -18,7 +18,7 @@ public class Host : MonoBehaviour
     static HttpListener _httpListener;
     static Thread _responseThread;
 
-    static bool simulateLag = true;
+    static bool simulateLag = false;
 
     private static CommandJsonList inList;
     private static CommandJsonList outList;
