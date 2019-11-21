@@ -177,12 +177,12 @@ public class Simulator : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Initial Unit Types");
-        for (int i = 0; i < InitialUnitTypes.Count; i++)
+        //Debug.Log("Initial Unit Types");
+        /*for (int i = 0; i < InitialUnitTypes.Count; i++)
         {
             Debug.Log(InitialUnitTypes[i]);
-        }
-        Debug.Log("Initiating units...");
+        }*/
+        //Debug.Log("Initiating units...");
         for (int n = -1; n < 2; n += 2)
         {
             for (int i = 0; i < 5; i++) // Tinaxd reduced the number of units
@@ -191,11 +191,11 @@ public class Simulator : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < InitialItems.Count; i++)    //marot
+        /*for (int i = 0; i < InitialItems.Count; i++)    //marot
         {
             Debug.Log("TestTest");
             CreateUnitFromHost(-1, InitialItems[i].type, Vector2.zero, new Vector2(InitialItems[i].x, InitialItems[i].z));
-        }
+        }*/
 
         UpdateInstances();
     }
@@ -404,7 +404,7 @@ public class Simulator : MonoBehaviour
             }
             if (c1 is NewUnitCmd)
             {
-                Debug.Log(GetUnit(((NewUnitCmd)c1).fromUnitId).owner);
+                //Debug.Log(GetUnit(((NewUnitCmd)c1).fromUnitId).owner);
                 NewUnitCmd c = (NewUnitCmd)c1;
                 switch (c.unitType)
                 {

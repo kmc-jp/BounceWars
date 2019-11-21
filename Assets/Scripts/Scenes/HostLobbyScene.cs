@@ -84,10 +84,10 @@ public class HostLobbyScene : IntersceneBehaviour
             audioMgr.PlaySFX("buttonLow");
 
             List<int> HostUnitTypes = GetHostUnits();
-            Debug.Log(GetHostUnits());
+            //Debug.Log(GetHostUnits());
             if (HostUnitTypes == null)
             {
-                Debug.Log("null");
+                //Debug.Log("null");
                 return;
             }
             Debug.Assert(HostUnitTypes.Count == 5);
@@ -102,7 +102,7 @@ public class HostLobbyScene : IntersceneBehaviour
                 combined.AddRange(ClientUnitTypes);
             Simulator.InitialUnitTypes = combined;
 
-            Debug.Log("nonnull");
+            //Debug.Log("nonnull");
             //send LobbyStartgameCmd after loading new scene.
             SceneManager.LoadScene("Host_c");
         }
@@ -115,13 +115,13 @@ public class HostLobbyScene : IntersceneBehaviour
         var units = GetHostUnits();
         if (units == null)
         {
-            Debug.Log("Units null");
+            //Debug.Log("Units null");
         }
         else
         {
             foreach (var unit in units)
             {
-                Debug.Log(unit);
+                //Debug.Log(unit);
             }
         }
     }

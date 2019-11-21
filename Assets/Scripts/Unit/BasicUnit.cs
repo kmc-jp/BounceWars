@@ -198,7 +198,7 @@ public class BasicUnit : MonoBehaviour
 
     private void PopupDamage(float damage)
     {
-        Debug.Log("HP: " + HP);
+        //Debug.Log("HP: " + HP);
 
         GameObject popup = Instantiate(damagePopup);
         popup.transform.SetParent(canvas.transform);
