@@ -107,6 +107,8 @@ public class Simulator : MonoBehaviour
     //ゲームが決着したかどうかの判定
     public void checkGameSet()
     {
+        if (isClient == 1) // Host only
+            return;
         bool isHostAlive = false, isClientAlive = false;
         //それぞれのチームで生存しているユニットがいるかどうかを調べる
         for (int i = 0; i < units.Count; i++)
@@ -120,19 +122,11 @@ public class Simulator : MonoBehaviour
         }
         if (!isHostAlive)
         {
-            //sendGameSetCmd(false);
-            if (isClient == 0)
-                openResultScene(true);
-            else
-                sendGameSetCmd(false);
+            openResultScene(false);
         }
         else if (!isClientAlive)
         {
-            //sendGameSetCmd(true);
-            if (isClient == 0)
-                openResultScene(false);
-            else
-                sendGameSetCmd(true);
+            openResultScene(true);
         }
     }
 
