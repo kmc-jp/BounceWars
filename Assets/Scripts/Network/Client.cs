@@ -91,7 +91,6 @@ public class Client : MonoBehaviour
                     using (Stream postStream = request.GetRequestStream())
                 {
                     postStream.Write(binary, 0, binary.Length);
-                    postStream.Close();
                 }
 
             ////        receiving HTTP Request        ////
