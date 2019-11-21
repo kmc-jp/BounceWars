@@ -6,7 +6,7 @@ public class HideUnit : MonoBehaviour
 {
     public List<GameObject> visibleObjects;
     public UnitInfoTag unit;
-    private void Start()
+    private void Awake()
     {
         if (unit.owned)
         {

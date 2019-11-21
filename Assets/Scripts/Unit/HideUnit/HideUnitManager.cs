@@ -15,6 +15,8 @@ public class HideUnitManager : MonoBehaviour
             if (sim.instances[i].owned)
             {
                 allies.Add(sim.instances[i]);
+                HideUnit allyHideUnit = sim.instances[i].GetComponent<HideUnit>();
+                allyHideUnit.spotted = true;
             }
         }
         for (int i = 0; i < sim.instances.Count; i++)
