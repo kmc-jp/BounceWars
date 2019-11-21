@@ -92,8 +92,9 @@ MonoBehaviour:
   SubButtonOffsetRadian: 0.7
   SubButtonInterval: 0.9
   SubButtons:
-  - {fileID: 3510973154002126592, guid: 6d5c63835f3bc7e41bc78e158c873ac1, type: 3}
-  - {fileID: 3510973154002126592, guid: 6d5c63835f3bc7e41bc78e158c873ac1, type: 3}
+  - {fileID: 3510973154002126592, guid: 2a63dfef4f41ec8479d52236a86dca23, type: 3}
+  - {fileID: 3510973154002126592, guid: 2531fbdb82fc06741b119028631ef7e1, type: 3}
+  - {fileID: 3510973154002126592, guid: 289949d519319a4409ced95271a1994e, type: 3}
 --- !u!114 &5338667123978229328
 MonoBehaviour:
   m_ObjectHideFlags: 0

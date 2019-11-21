@@ -20,8 +20,6 @@ public class CountDownBar : MonoBehaviour
 
     public float Threshold = 2.0f;
 
-    private int myUnlockedUnitsPos = 0;
-
     private GameObject modelIcon;
 
     private void Awake()
@@ -72,7 +70,7 @@ public class CountDownBar : MonoBehaviour
                 targets[i] = cdui;
             }
         }
-        Debug.Assert(targets.Where(i => !i.Unit.Owned).All(i => i.Position >= 5));
+        //Debug.Assert(targets.Where(i => !i.Unit.Owned).All(i => i.Position >= 5));
     }
 
     private void UpdateIconPosition(CountDownUnitIcon cdui)
@@ -107,8 +105,10 @@ public class CountDownBar : MonoBehaviour
     }
 
     // Add units to the countdown bar
-    public void RegisterUnit(BasicUnit unit, string iconPath)
+    public void RegisterUnit(BasicUnit unit)
     {
+        if (!UnitTypeCDIconMapper.map.TryGetValue(unit.unit.type, out string iconPath))
+            return;
         var texture = (Texture)Resources.Load(iconPath);
         GameObject icon = Instantiate(modelIcon);
 
@@ -142,7 +142,6 @@ public class CountDownBar : MonoBehaviour
     private void SetYPosition(CountDownUnitIcon cdui, int posId)
     {
         int[] candidates = { 1, 2, 3, 4, 5, -1, -2, -3, -4, -5 };
-        Debug.Log("posID" + posId);
         var y = candidates[posId] * IconYOffset;
 
         cdui.Icon.transform.localPosition = new Vector3(cdui.Icon.transform.localPosition.x, y, 0);
@@ -173,7 +172,6 @@ public class CountDownBar : MonoBehaviour
             {
                 for (int j = i+1; j < len; j++)
                 {
-                    Debug.Log(array[i].Position);
                     if (array[j].Unit.Locked && array[i].Position == array[j].Position)
                     {
                         float diff = array[j].Unit.WaitTime - array[i].Unit.WaitTime;
@@ -198,4 +196,13 @@ class CountDownUnitIcon
     public GameObject Icon;
     public int Position;
     public bool Unlocked;
+}
+
+public sealed class UnitTypeCDIconMapper
+{
+    public static readonly Dictionary<int, string> map = new Dictionary<int, string>
+    {
+        [UnitType.TYPE_CHESS] = "Icons/sword",
+        [UnitType.TYPE_ARCHER] = "Icons/bow",
+    };
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragAndFire : MonoBehaviour
+public class DragAndFire : MonoBehaviour, IDragAndFireEventHandler
 {
     GameObject target;
     UnitInfoTag targetScript;
@@ -12,9 +12,38 @@ public class DragAndFire : MonoBehaviour
     Vector3 localOrigin;
     public Simulator simulator;
 
+    private bool DragEnabled = true;
+
+    BallisticsSimulator ballisticsSimulator;
+    void Start()
+    {
+        ballisticsSimulator = GameObject.Find("BallisticsViewer").GetComponent<BallisticsSimulator>();
+
+    }
     // Update is called once per frame
     void Update()
     {
+        if (!DragEnabled)
+        {
+            grabbing = false;
+            target = null;
+            targetScript = null;
+            return;
+        }
+        if (target == null)
+        {
+            grabbing = false;
+            target = null;
+            targetScript = null;
+        }
+        if (target != null && Input.GetKeyDown(KeyCode.Escape)) // Tinaxd Press Esc to cancel dragging
+        {
+            target.GetComponent<BasicUnit>().NotifyDragEnd();
+            grabbing = false;
+            target = null;
+            targetScript = null;
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -31,11 +60,15 @@ public class DragAndFire : MonoBehaviour
                     targetPlane.Raycast(ray, out enter);
                     localOrigin = ray.GetPoint(enter);
                     targetUnit = simulator.GetUnit(targetScript.uuid);
-                    if (targetUnit.owner!=simulator.isClient)//0:host 1:client
+                    if (targetUnit.owner != simulator.isClient)//0:host 1:client
                     {
                         grabbing = false;
                         target = null;
                         targetScript = null;
+                    }
+                    else // Tinaxd show DragUI
+                    {
+                        target.GetComponent<BasicUnit>().NotifyDragStart();
                     }
                 }
             }
@@ -47,16 +80,48 @@ public class DragAndFire : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 float enter = 0;
                 targetPlane.Raycast(ray, out enter);
-                Debug.Log(localOrigin - ray.GetPoint(enter));
+//                Debug.Log(localOrigin - ray.GetPoint(enter));
                 Vector3 vel = localOrigin - ray.GetPoint(enter);
-                Command c = new Command();
-                c.sent = false;
-                c.vx = vel.x;
-                c.vz = vel.z;
-                c.uuid = targetUnit.uuid;
-                c.owner = simulator.isClient;
+                vel *= 2;
+                DragType dt = DragType.NORMAL;
+                vel = GetVelocity(vel);
+                switch (dt) 
+                {
+                    case DragType.NORMAL:
+                        UnitMovedCmd c = new UnitMovedCmd();
+                        c.sent = false;
+                        c.vx = vel.x;
+                        c.vz = vel.z;
+                        c.uuid = targetUnit.uuid;
+                        c.owner = simulator.isClient;
 
-                simulator.commands.Add(c);
+                        simulator.commands.Add(c);
+                        break;
+
+                    case DragType.ARCHER:
+                        //target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
+                        NewUnitCmd cmd = new NewUnitCmd
+                        {
+                            fromUnitId = target.GetComponent<BasicUnit>().unit.uuid,
+                            velocity = new Vector3(vel.x*3, 0, vel.z*3),
+                            unitType = 2, // Unit type Arrow
+                        };
+
+                        simulator.commands.Add(cmd);
+                        break;
+
+                    case DragType.FIREBALL:
+                        //target.GetComponent<BasicUnit>().DragMode = DragType.NORMAL;
+                        NewUnitCmd cmd2 = new NewUnitCmd
+                        {
+                            fromUnitId = target.GetComponent<BasicUnit>().unit.uuid,
+                            velocity = new Vector3(vel.x * 3, 0, vel.z * 3),
+                            unitType = 3, // Unit type Fireball
+                        };
+
+                        simulator.commands.Add(cmd2);
+                        break;
+                }
                 //targetScript.rg.AddForce(vel, ForceMode.VelocityChange);
                 /*
                 CommandData c = new CommandData();
@@ -69,7 +134,42 @@ public class DragAndFire : MonoBehaviour
 
                 targetScript.command = c;*/
                 grabbing = false;
+                target.GetComponent<BasicUnit>().NotifyDragEnd(); // Tinaxd disable DragUI
             }
         }
+        ballisticsSimulator.lr.enabled = grabbing;
+        // Tinaxd update DragUI
+        if (grabbing)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var basicUnit = target.GetComponent<BasicUnit>();
+            float enter = 0;
+            targetPlane.Raycast(ray, out enter);
+            var point = ray.GetPoint(enter);
+            Vector3 diff = -point + localOrigin;
+            diff *= 2;
+            diff = GetVelocity(diff);
+            ballisticsSimulator.UpdateTrails(target.transform.position, diff);
+            basicUnit.NotifyDragUpdate(point);
+        }
+    }
+    public Vector3 GetVelocity(Vector3 diff)
+    {
+        if (diff.magnitude < 5)
+        {
+            return diff;
+        }
+        return diff.normalized * 5;
+    }
+    public void TurnOnDrag()
+    {
+        DragEnabled = true;
+        //Debug.Log("Drag detection enabled");
+    }
+
+    public void TurnOffDrag()
+    {
+        DragEnabled = false;
+        //Debug.Log("Drag detection disabled");
     }
 }

@@ -1,30 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 // Original author: Tinaxd
 // Attach this script to all units
 public class BasicUnit : MonoBehaviour
 {
+    BuffParticleManager buffParticleManager;
+
+    public UnitInfoTag infoTag;
     public Unit unit;
 
-    private float hp;
-    private float mp;
+    private bool _isDead = false;
+    protected float hp;
+    protected float mp;
 
-    private UnitUI unitUI;
+    protected UnitUI unitUI;
 
     public GameObject damagePopup;
     public GameObject canvas;
-    public GameObject buttonsUI;
-    public GameObject buttons;
 
     public float buttonsUICloseDelay = 0.3f;
 
-    private GameObject myButtons;
+    [SerializeField]
+    private GameObject myButtons = default;
 
     public bool MouseOn;
 
+    public Tile currentTile;
+
+    private Simulator simulator;
 
     // Tinaxd countdown timer
     private float waitTime = 0;
@@ -58,12 +64,17 @@ public class BasicUnit : MonoBehaviour
         get => 1.5f * (LastMoveTime - LockdownStartTime);
     }
 
+    public float WaitTimePenaltyTime
+    {
+        get => LockdownPenalty ? LockdownPenaltyTime : 0;
+    }
+
     public float LockdownStartTime;
     public float LastMoveTime;
 
     public bool Owned;
 
-    public float HP
+    public virtual float HP
     {
         get => hp;
         set
@@ -74,7 +85,7 @@ public class BasicUnit : MonoBehaviour
         }
     }
 
-    public float MP
+    public virtual float MP
     {
         get => mp;
         set
@@ -83,6 +94,18 @@ public class BasicUnit : MonoBehaviour
             this.unit.MP = value;
             unitUI.MP = value;
         }
+    }
+
+    public virtual float MaxHP
+    {
+        get => unitUI.HPMax;
+        set => unitUI.HPMax = value;
+    }
+
+    public virtual float MaxMP
+    {
+        get => unitUI.MPMax;
+        set => unitUI.MPMax = value;
     }
 
     private void UpdateWaitTimeText()
@@ -99,57 +122,63 @@ public class BasicUnit : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         unitUI = transform.Find("UnitUI").gameObject.GetComponent<UnitUI>();
         //Debug.Log(transform.Find("UnitUI").gameObject.GetComponent<UnitUI>());
 
-        unitUI.HPMax = 50;
-        unitUI.MPMax = 100;
+        //unitUI.HPMax = 50;
+        //unitUI.MPMax = 100;
 
         WaitTime = 0;
 
-        var iconTest = new string[] { "archer", "fire", "gear", "scout", "shield" };
-        var iconTestIndex = Random.Range(0, 5);
-        CountDownIconPath = "test/" + iconTest[iconTestIndex];
-
         // bind CountDownUI OBJ Tinaxd
-        countDownBar = GameObject.Find("CountDownUIObj").GetComponentInChildren<CountDownBar>();
+        countDownBar = GameObject.Find("ScreenUIObj").GetComponentInChildren<CountDownBar>();
 
+        simulator = GameObject.Find("Obelisk").GetComponent<Simulator>();
+
+        myButtons.GetComponent<ButtonsUIManager>().basicunit = this;
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        HP = 50;
-        MP = 100;
-        // bind ButtonsUI OBJ Schin
-        buttonsUI = GameObject.Find("ButtonsUIObj");
-
-        myButtons = Instantiate(buttons, new Vector3(0, 0, 0), Quaternion.identity);
-        myButtons.transform.SetParent(buttonsUI.transform);
-        myButtons.GetComponent<ButtonsUI>().Target = this;
-        myButtons.GetComponent<ButtonsUI>().UpdateActive();
+        buffParticleManager = GetComponent<BuffParticleManager>();
+        //HP = 50;
+        //MP = 100;
 
         // Tinaxd register units to CountDownBar
-        countDownBar.RegisterUnit(this, CountDownIconPath);
-    }
+        countDownBar.RegisterUnit(this);
 
+        if (unit.owner != simulator.isClient)
+        {
+            myButtons.GetComponent<ButtonsUIManager>().disabled = true;
+            myButtons.GetComponent<ButtonsUIManager>().CloseAll();
+        }
+    }
+    public Image hpBar;
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
+        if (unit.owner != simulator.isClient)
+        {
+            hpBar.color = Color.red;
+        }
+        currentTile = MapBehaviour.instance.GetTile(transform.position);
         HP = unit.HP;
         MP = unit.MP;
+        if (!unit.isDead
+          && unit.owner == simulator.isClient
+          && !Locked)
+        {
+            ShowEmotion(EmotionType.CD_READY, 5.0f);
+        }
 
         float delta = Time.deltaTime;
         if (Locked)
         {
             WaitTime -= delta;
         }
-
-        // Lockdown
-        if (!LockdownPenalty && Input.GetKeyDown(KeyCode.L))
-            MarkLockdown();
 
         if (LockdownPenalty)
         {
@@ -169,10 +198,11 @@ public class BasicUnit : MonoBehaviour
 
     private void PopupDamage(float damage)
     {
-        Debug.Log("HP: " + HP);
+        //Debug.Log("HP: " + HP);
 
-        GameObject popup = Instantiate(damagePopup, Vector3.zero, Quaternion.identity);
+        GameObject popup = Instantiate(damagePopup);
         popup.transform.SetParent(canvas.transform);
+        popup.transform.localPosition = new Vector3(0, 1, 0);
         popup.GetComponent<DamagePopup>().Unit = this.gameObject;
         popup.GetComponent<DamagePopup>().Canvas = canvas.GetComponent<Canvas>();
         popup.GetComponent<DamagePopup>().Text = (-damage).ToString();
@@ -181,14 +211,11 @@ public class BasicUnit : MonoBehaviour
     private void OnMouseEnter()
     {
         MouseOn = true;
-        if (!Locked)
-            myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     private void OnMouseExit()
     {
         MouseOn = false;
-        myButtons.GetComponent<ButtonsUI>().UpdateActive();
     }
 
     public void NotifyOperation(string operation, object args)
@@ -219,6 +246,8 @@ public class BasicUnit : MonoBehaviour
         LockdownPenalty = true;
     }
 
+    public bool MovementLocked = false;
+
     /* // Tinaxd removed method
     public void UseCountDown(bool b)
     {
@@ -236,15 +265,124 @@ public class BasicUnit : MonoBehaviour
     // Emotion Icon Tinaxd
     public void ShowEmotion(string emotionName, float length)
     {
-        unitUI.ShowEmotion(emotionName, length);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ShowEmotion(emotionName, length);
+        }
     }
-    public void CollisionEvent(CollisionInfo info)
+    public void ExpireEmotion(string emotionName)//schin hide specific emotion
     {
-        Debug.Log("CollisionEvent");
-
-        Debug.Log("Attacked!");
-        float damage =Mathf.Abs(info.normalVelocity);
-        HP = HP - damage;
-        PopupDamage(damage);
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                unitUI.ExpireEmotion(emotionName);
+        }
     }
+    public bool HasEmotion(string emotionName)// schin check is Unit is showing some emotion
+    {
+        if (unitUI != null) // Tinaxd some units do not have unitUI
+        {
+            if (!unit.isDead)
+                return unitUI.HasEmotion(emotionName);
+            return false;
+        }
+        return false;
+    }
+    public virtual void CollisionEvent(CollisionInfo info)
+    {
+        float damage = info.myDamage;
+        if (UnitType.isItem(info.other.type))
+        {
+            AddBuff(0);
+            UpdateBuff(GetBuffs());
+            return;
+        }
+        HP = HP - damage;
+
+        if (HP < 0) HP = 0;
+        //TODO check UI update
+
+        PopupDamage(-damage);
+    }
+
+    // Tinaxd DragUI
+    public void NotifyDragStart()
+    {
+        unitUI.DragUI.ShowDragUI(true);
+        // close ButtonsUI
+        MouseOn = false;
+        myButtons.GetComponent<ButtonsUIManager>().CloseAll();
+    }
+
+    public void NotifyDragUpdate(Vector3 worldPos)
+    {
+        float radius = Vector3.Distance(transform.position, worldPos);
+        var dir = worldPos - transform.position;
+        unitUI.DragUI.UpdateDragUI(dir);
+    }
+
+    public void NotifyDragEnd()
+    {
+        unitUI.DragUI.ShowDragUI(false);
+        // open ButtonsUI
+        myButtons.GetComponent<ButtonsUIManager>().OpenAll();
+    }
+
+    public DragType DragMode
+    {
+        get
+        {
+            return myButtons.GetComponent<ButtonsUIManager>().CurrentDragType;
+        }
+    }
+
+    // Tinaxd added buff related operations
+    public int GetBuffs()
+    {
+        return unit.buff;
+    }
+
+    public void AddBuff(int buffType)
+    {
+        unit.buff |= (1 << buffType);
+    }
+
+    public void RemoveBuff(int buffType)
+    {
+        unit.buff &= ~(1 << buffType);
+    }
+    public void RemoveBuffAll()
+    {
+        unit.buff = 0;
+    }
+
+    public void UpdateBuff(int buffs)
+    {
+        Debug.Log("UpdateBuff");
+        unit.buff = buffs;
+    }
+
+    public bool isDead
+    {
+        get => _isDead;
+        set
+        {
+            _isDead = value;
+            if (value) // If Dead
+            {
+                if (myButtons != null) // If unit has buttons
+                    Destroy(myButtons);
+                countDownBar.RemoveUnit(this); // Remove countdown bar icon
+            }
+        }
+    }
+}
+
+public enum DragType
+{
+    NORMAL,
+    ARCHER,
+    FIREBALL,
+    HEALING_BUFF,
 }
