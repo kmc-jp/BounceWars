@@ -269,9 +269,13 @@ public class Simulator : MonoBehaviour
 
     void ProcessMyCommand()
     {
-        for (int i = 0; i < commands.Count; i++)
+        for (int i = commands.Count - 1; i != 0; i--)
         {
             Command c1 = commands[i];
+            if (c1 == null)
+            {
+                commands.RemoveAt(i);
+            }
             if (c1.processed)
             {
                 continue;
