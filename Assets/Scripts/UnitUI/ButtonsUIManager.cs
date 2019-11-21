@@ -14,7 +14,7 @@ public class ButtonsUIManager : MonoBehaviour, IButtonSignalHandler
     private Vector2 Offset = new Vector2(-50, 25);
 
     [SerializeField]
-    private List<GameObject> children;
+    private List<GameObject> children = default;
     public List<GameObject> Children
     {
         get => children;

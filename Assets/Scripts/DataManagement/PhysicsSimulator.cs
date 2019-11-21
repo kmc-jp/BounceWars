@@ -152,6 +152,7 @@ public class PhysicsSimulator
                     if (UnitType.isProjectile(u1.type)) // tinaxd u1 is arrow or fireball
                     {
                         if (u1.owner == u2.owner) continue;
+                        collision1.myDamage = Mathf.Ceil(Mathf.Abs(collision.normalVelocity));
                         u1.vx1 = u1.vx;
                         u1.vz1 = u1.vz;
                         u1.HP = 0;
@@ -161,6 +162,7 @@ public class PhysicsSimulator
                     else if (UnitType.isProjectile(u2.type)) // tinaxd u2 is arrow or fireball
                     {
                         if (u1.owner == u2.owner) continue;
+                        collision.myDamage = Mathf.Ceil(Mathf.Abs(collision.normalVelocity));
                         u1.vx1 = u1.vx + dx * 0.05f * sizeVertical;
                         u1.vz1 = u1.vz + dz * 0.05f * sizeVertical;
                         u2.vx1 = u2.vx;
@@ -171,6 +173,18 @@ public class PhysicsSimulator
                     }
                     else // neither u1 nor u2 is arrow or fireball
                     {
+                        var u1vel = Mathf.Pow(u1.vx, 2) + Mathf.Pow(u1.vz, 2);
+                        var u2vel = Mathf.Pow(u2.vx, 2) + Mathf.Pow(u2.vz, 2);
+                        if (u1vel > u2vel)
+                        {
+                            collision1.myDamage = Mathf.Ceil(5 * Mathf.Abs(collision.normalVelocity));
+                            collision.myDamage = Mathf.Ceil(collision1.myDamage / 2);
+                        }
+                        else
+                        {
+                            collision.myDamage = Mathf.Ceil(5 * Mathf.Abs(collision.normalVelocity));
+                            collision1.myDamage = Mathf.Ceil(collision.myDamage / 2);
+                        }
                         u1.vx1 = u1.vx + dx * sizeVertical;
                         u1.vz1 = u1.vz + dz * sizeVertical;
                         u2.vx1 = u2.vx - dx * sizeVertical;

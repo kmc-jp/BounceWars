@@ -24,7 +24,7 @@ public class BasicUnit : MonoBehaviour
     public float buttonsUICloseDelay = 0.3f;
 
     [SerializeField]
-    private GameObject myButtons;
+    private GameObject myButtons = default;
 
     public bool MouseOn;
 
@@ -291,18 +291,7 @@ public class BasicUnit : MonoBehaviour
     }
     public virtual void CollisionEvent(CollisionInfo info)
     {
-        //        Debug.Log("CollisionEvent");
-
-        //        Debug.Log("Attacked!");
-        float damage =info.normalVelocity;
-        if (info.me.owner != info.other.owner)
-        {
-            if (info.other.type == UnitType.TYPE_CHESS)
-            {
-                damage *= 5;
-            }
-        }
-        damage=Mathf.Abs(Mathf.Floor(damage));
+        float damage = info.myDamage;
         if (UnitType.isItem(info.other.type))
         {
             AddBuff(0);
@@ -314,7 +303,7 @@ public class BasicUnit : MonoBehaviour
         if (HP < 0) HP = 0;
         //TODO check UI update
 
-        PopupDamage(damage);
+        PopupDamage(-damage);
     }
 
     // Tinaxd DragUI
