@@ -269,12 +269,12 @@ public class Simulator : MonoBehaviour
 
     void ProcessMyCommand()
     {
-        for (int i = commands.Count - 1; i != 0; i--)
+        for (int i = 0; i < commands.Count; i++)
         {
             Command c1 = commands[i];
             if (c1 == null)
             {
-                commands.RemoveAt(i);
+                continue;
             }
             if (c1.processed)
             {
