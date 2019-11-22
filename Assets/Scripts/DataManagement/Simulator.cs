@@ -201,6 +201,8 @@ public class Simulator : MonoBehaviour
         {
             if (GetUnit(instances[i].uuid) == null)
             {
+                if (instances[i].basicUnit != null && !instances[i].basicUnit.isDead)
+                    instances[i].basicUnit.isDead = true;
                 Destroy(instances[i].gameObject);
             }
             else
