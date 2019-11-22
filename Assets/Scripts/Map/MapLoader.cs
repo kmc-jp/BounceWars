@@ -10,6 +10,7 @@ public class MapLoader
     public static int ynum = 20;
     public static GameMap loadMap(string fileName)
     {
+        Debug.Log(fileName);
         TextAsset textasset = new TextAsset(); //テキストファイルのデータを取得するインスタンスを作成
         textasset = Resources.Load(fileName, typeof(TextAsset)) as TextAsset; //Resourcesフォルダから対象テキストを取得
         string mapJson = textasset.text; //テキスト全体をstring型で入れる変数を用意して入れる

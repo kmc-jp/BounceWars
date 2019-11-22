@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 641574250}
-  interScene: {fileID: 0}
+  interScene: {fileID: 641574254}
 --- !u!114 &641574249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,10 +381,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646015b928ca6dd48a99c7d19c71db40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapname: Map_Small
+  mapname: Map_Wilder
   map:
     id: 0
     mapType: 0
+  interScene: {fileID: 641574254}
 --- !u!114 &641574253
 MonoBehaviour:
   m_ObjectHideFlags: 0

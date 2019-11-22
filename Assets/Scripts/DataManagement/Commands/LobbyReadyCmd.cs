@@ -7,7 +7,7 @@ public class LobbyReadyCmd : Command
     public int isReady = 0;
     public string opponentName;
     public List<int> unitTypes;
-    public int MapID;
+    public string mapName;
 
     public LobbyReadyCmd()
     {
@@ -26,10 +26,11 @@ public class LobbyReadyCmd : Command
         type = 101;
     }
 
-    public LobbyReadyCmd(int r, string name, List<int> unittypes)
+    public LobbyReadyCmd(int r, string name, List<int> unittypes, string mapname)
     {
         isReady = r;
         opponentName = name;
         unitTypes = unittypes;
+        mapName = mapname;
     }
 }

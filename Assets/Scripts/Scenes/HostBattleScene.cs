@@ -46,7 +46,7 @@ public class HostBattleScene : IntersceneBehaviour
         if (isClientInGame == false)
         {
             //Tell client to start match
-            tosendCmds.Add((Command)new LobbyStartgameCmd());
+            tosendCmds.Add((Command)new LobbyStartgameCmd(MapName));
         }
         return base.GetCmd();
     }

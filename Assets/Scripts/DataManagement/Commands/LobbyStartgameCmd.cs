@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LobbyStartgameCmd : Command
 {
-    public int mapID;
+    public string mapName;
     public List<Unit> hostUnits;
     public List<Unit> clientUnits;
 
-    public LobbyStartgameCmd()
+    public LobbyStartgameCmd(string mapname)
     {
         //set type
         type = 105;
-        mapID = 0;
+        mapName = mapname;
         hostUnits = new List<Unit>();
         clientUnits = new List<Unit>();
     }

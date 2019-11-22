@@ -535,10 +535,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646015b928ca6dd48a99c7d19c71db40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapname: Map_Small
+  mapname: Map_Forrest
   map:
     id: 0
     mapType: 0
+  interScene: {fileID: 657742909}
 --- !u!114 &657742905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 657742907}
-  interScene: {fileID: 0}
+  interScene: {fileID: 657742909}
 --- !u!114 &657742906
 MonoBehaviour:
   m_ObjectHideFlags: 0

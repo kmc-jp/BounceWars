@@ -25,6 +25,8 @@ public class MainMenuScene : IntersceneBehaviour
         ipErrText = GameObject.Find("IllegalIpAddrWarning");
         //If Http port is on, close it
         CloseHttpListener();
+        //Showing map for main title
+        MapName = "Map_Maintitle";
     }
 
     void Start()
@@ -51,6 +53,7 @@ public class MainMenuScene : IntersceneBehaviour
     public void onOfflineBtnClick()
     {
         ishost = true;
+        G_isHost = ishost;
         AutoPlay.isOffline = true;
         audioMgr.PlaySFX("buttonLow");
         SceneManager.LoadScene("HostLobby");

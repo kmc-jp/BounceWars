@@ -3008,6 +3008,7 @@ MonoBehaviour:
   map:
     id: 0
     mapType: 0
+  interScene: {fileID: 94682040}
 --- !u!4 &1265651723
 Transform:
   m_ObjectHideFlags: 0

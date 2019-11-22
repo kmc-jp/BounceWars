@@ -10,9 +10,12 @@ public class MapBehaviour : MonoBehaviour
     //public string jsonData = "{\"id\": 1, \"mapType\": 3}";
     public GameMap map;
     public static MapBehaviour instance;
+    public IntersceneBehaviour interScene;
     // Start is called before the first frame update
     void Awake()
     {
+        if(interScene!=null)
+            mapname = interScene.MapName;
         map=MapLoader.loadMap(mapname);
         instance = this;
     }

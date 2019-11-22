@@ -365,7 +365,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646015b928ca6dd48a99c7d19c71db40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapname: Map_Small
+  mapname: Map_Forest
   map:
     id: 0
     mapType: 0
+  interScene: {fileID: 0}

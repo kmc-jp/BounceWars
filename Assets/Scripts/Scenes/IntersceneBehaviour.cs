@@ -11,6 +11,7 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     protected static bool g_isHost;
     protected static string g_username;
     protected static string g_opponentName;
+    protected static string mapName;
     protected static List<Unit> units;
     protected static bool isHostWin;
     protected static string selfURL;
@@ -36,7 +37,8 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     public string G_username { get => g_username; set => g_username = value; }
     protected static string G_opponentName { get => g_opponentName; set => g_opponentName = value; }
     public List<Unit> Units { get => units; set => units = value; }
-    protected static bool IsHostWin { get => isHostWin; set => isHostWin = value; }
+    public static bool IsHostWin { get => isHostWin; }//set => isHostWin = value; 
+    public string MapName { get => mapName; set => mapName = value; }//
 
     //For network System
     public HttpListener GetHttpListener()

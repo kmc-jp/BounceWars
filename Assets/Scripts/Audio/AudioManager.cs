@@ -83,7 +83,7 @@ namespace AudioManager
 
         public void PlayMusic(string _name)
         {
-            Debug.Log("Playing Music");
+            //Debug.Log("Playing Music");
             AudioData t_data = Array.Find(m_backgroundMusicList, bgm => bgm.m_name == _name);
             if (t_data == null)
             {

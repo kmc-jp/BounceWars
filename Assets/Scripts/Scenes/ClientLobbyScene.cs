@@ -13,6 +13,8 @@ public class ClientLobbyScene : IntersceneBehaviour
     private int isReadyRequest;
     private List<int> HostUnitTypes;
 
+    private Image mapImg;
+
     [SerializeField]
     private UnitChooserManager UCManager = default;
 
@@ -24,6 +26,12 @@ public class ClientLobbyScene : IntersceneBehaviour
 
         isClientReady = 0;
         isReadyRequest = 0;
+
+
+        //set map selection
+        mapImg = GameObject.Find("MapImg").GetComponent<Image>();
+        MapName = "Map_Wildland";
+        mapImg.sprite = Resources.Load<Sprite>(MapName);
     }
 
     // Start is called before the first frame update
@@ -61,9 +69,15 @@ public class ClientLobbyScene : IntersceneBehaviour
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0, 0, 0);
 
                 HostUnitTypes = c.unitTypes;
+
+                MapName = c.mapName;
+                mapImg.sprite = Resources.Load<Sprite>(MapName);
             }
             else if (cTemp is LobbyStartgameCmd)
             {
+                LobbyStartgameCmd c = (LobbyStartgameCmd)cTemp;
+                MapName = c.mapName;
+                mapImg.sprite = Resources.Load<Sprite>(MapName);
                 SceneManager.LoadScene("Client_c");
             }
             // The unprocessed commands are saved for other child of IntersceneBehaviour
@@ -105,7 +119,7 @@ public class ClientLobbyScene : IntersceneBehaviour
             var cunits = GetClientUnits();
             if (cunits != null)
             {
-                outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username, cunits)));
+                outCmdTmp.Add((Command)(new LobbyReadyCmd(isReadyRequest, G_username, cunits, MapName)));
             }
         }
         return outCmdTmp;

@@ -1,0 +1,46 @@
+{ 
+	"id": 10, 
+	"mapType": 3,
+ 	"mapData":
+		[
+
+		[ { "type":0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 ,"buildingType":2}, { "type": 1 },
+		{ "type": 1}, {"type": 0,"buildingType":2}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1},
+		{ "type": 1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1},
+		{ "type": 1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1},
+		{ "type": 1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 1},
+			{ "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+        
+        
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1},
+            { "type": 1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 1 },
+			{ "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 1 },
+			{ "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0, "buildingType":1}, { "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0 ,"buildingType":1}, { "type": 0 }, { "type": 0}],
+        
+		[ { "type":0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 1 },
+			{ "type": 0,"buildingType":1}, {"type": 0,"buildingType":1}, { "type": 0,"buildingType":1}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}],
+
+		[ { "type":0}, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 ,"buildingType":2}, { "type": 1 },
+			{ "type": 1}, {"type": 0,"buildingType":2}, { "type": 0 }, { "type": 0}, {"type": 0}, { "type": 0 }, { "type": 0 }, { "type": 0}]
+
+
+
+
+
+		
+
+		] 
+}
