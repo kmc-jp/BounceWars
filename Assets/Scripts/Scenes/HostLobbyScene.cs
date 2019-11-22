@@ -9,9 +9,15 @@ public class HostLobbyScene : IntersceneBehaviour
 {
 
     private GameObject startGameButton;
+    private GameObject leftMapButton;
+    private GameObject rightMapButton;
     private Text HostSceneInfo;
     private int isClientReady;
     private List<int> ClientUnitTypes;
+
+    private Image mapImg;
+    private List<string> mapList;
+    private int mapID;
 
     [SerializeField]
     private UnitChooserManager UCManager = default;
@@ -19,6 +25,8 @@ public class HostLobbyScene : IntersceneBehaviour
     void OnEnable()
     {
         startGameButton = GameObject.Find("StartGameBtn");
+        leftMapButton = GameObject.Find("BtnPrevMap");
+        rightMapButton = GameObject.Find("BtnNextMap");
         HostSceneInfo = GameObject.Find("HostSceneInfo").GetComponent<Text>();
         if (!AutoPlay.isOffline)
             startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
@@ -27,6 +35,14 @@ public class HostLobbyScene : IntersceneBehaviour
 
         if (AutoPlay.isOffline)
             isClientReady = 1;
+
+        //set map selection
+        mapImg = GameObject.Find("MapImg").GetComponent<Image>();
+        mapList = new List<string>();
+        mapList.Add("Map_Wildland");
+        mapList.Add("Map_Forest");
+        SwitchToMap(0);
+        
     }
     // Start is called before the first frame update
     void Start()
@@ -36,11 +52,15 @@ public class HostLobbyScene : IntersceneBehaviour
         audioMgr.PlayMusic("menuTheme");
 
 
-        if (AutoPlay.isOffline) return;
+        if (AutoPlay.isOffline)
+            HostSceneInfo.text =
+                "Playing Offline";
         //set UI username and ip address.
-        HostSceneInfo.text =
+        else
+            HostSceneInfo.text =
             "Host:  " + G_username
             + " \n Host IP Address " + SelfURL;
+
 
     }
     void Update()
@@ -70,7 +90,7 @@ public class HostLobbyScene : IntersceneBehaviour
                     startGameButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
                 // return this cmd back to Client for checking
                 // Tinaxd added unit type field
-                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username, GetHostUnits())));
+                tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username, GetHostUnits(),mapList[mapID])));
             }
             else
                 continue;
@@ -123,6 +143,39 @@ public class HostLobbyScene : IntersceneBehaviour
             {
                 //Debug.Log(unit);
             }
+        }
+    }
+
+    private void SwitchToMap(int ID)
+    {
+        mapID = ID;
+        MapName = mapList[ID];
+        tosendCmds.Add((Command)(new LobbyReadyCmd(isClientReady, G_username, GetHostUnits(), MapName)));
+        mapImg.sprite = Resources.Load<Sprite>(mapList[ID]);
+        if(ID==0)
+            leftMapButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
+        else
+            leftMapButton.GetComponentInChildren<Text>().color = new Color(0f, 0f, 0f);
+        if (ID == mapList.Count-1)
+            rightMapButton.GetComponentInChildren<Text>().color = new Color(0.5f, 0.5f, 0.5f);
+        else
+            rightMapButton.GetComponentInChildren<Text>().color = new Color(0f, 0f, 0f);
+    }
+    public void onLeftMapClick()
+    {
+        if (mapID > 0)
+        {
+            mapID--;
+            SwitchToMap(mapID);
+        }
+    }
+    
+    public void onRightMapClick()
+    {
+        if (mapID< mapList.Count - 1)
+        {
+            mapID++;
+            SwitchToMap(mapID);
         }
     }
 

@@ -11,6 +11,10 @@ public class ClientBattleScene : IntersceneBehaviour
         //4 is the ID of clientBattleScene
         tosendCmds.Add((Command)new ClientJoinedCmd(4));
         //if units are null ask host battle scene
+
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("battleConflict");
     }
 
     // Update is called once per frame
@@ -34,9 +38,10 @@ public class ClientBattleScene : IntersceneBehaviour
     }
     public void onQuitBattleBtnClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         //CloseHttpListener();
         //In ResultScene, it tells HostBattleScene that the client quitted game.
-        IsHostWin = true;
+        SetWinner(!G_isHost);
         SceneManager.LoadScene("ResultClient");
         //TODO clear user info
     }

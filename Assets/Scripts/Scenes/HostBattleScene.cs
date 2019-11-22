@@ -10,6 +10,10 @@ public class HostBattleScene : IntersceneBehaviour
     void Start()
     {
         isClientInGame = false;
+
+        //get audio manager instance
+        audioMgr = audioMgr ?? AudioManager.AudioManager.m_instance;
+        audioMgr.PlayMusic("battleConflict");
     }
     void Update()
     {
@@ -42,14 +46,15 @@ public class HostBattleScene : IntersceneBehaviour
         if (isClientInGame == false)
         {
             //Tell client to start match
-            tosendCmds.Add((Command)new LobbyStartgameCmd());
+            tosendCmds.Add((Command)new LobbyStartgameCmd(MapName));
         }
         return base.GetCmd();
     }
     public void onQuitBattleBtnClick()
     {
+        audioMgr.PlaySFX("buttonLow");
         //CloseHttpListener();
-        SetWinner(true);
+        SetWinner(!G_isHost);
         SceneManager.LoadScene("ResultHost");
 
         //TODO clear user info
