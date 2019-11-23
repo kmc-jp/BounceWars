@@ -54,6 +54,7 @@ public class Client : MonoBehaviour
     void ResponseThread()
     {
         int timedoutNum = 0;
+        var unprocessedCmds = new Queue<Command>();
         while (true)
         {
             //Simulate Lag
@@ -120,7 +121,18 @@ public class Client : MonoBehaviour
                                     case "UnitUpdateCmd":
                                     case "UnitTimerCmd":
                                     case "GameSetCmd":
-                                        simulator.commands.Add(c);
+                                        if (simulator == null) // simulator is not prepared
+                                        {
+                                            unprocessedCmds.Enqueue(c);
+                                        }
+                                        else
+                                        {
+                                            foreach (var upc in unprocessedCmds)
+                                            {
+                                                simulator.commands.Add(upc);
+                                            }
+                                            simulator.commands.Add(c);
+                                        }
                                         break;
                                     case "LobbyReadyCmd":
                                     case "LobbyStartgameCmd":
@@ -142,7 +154,6 @@ public class Client : MonoBehaviour
                             catch (System.Exception e)
                             {
                                 Debug.LogWarning(e);
-
                             }
                         }
                     }
@@ -158,6 +169,7 @@ public class Client : MonoBehaviour
             }
             catch(WebException we)
             {
+                Debug.LogWarning(we.StackTrace);
                 Debug.LogWarning(we.Message);
                 // Possibly Host has quit game
                 // Assume Host loses and client wins.

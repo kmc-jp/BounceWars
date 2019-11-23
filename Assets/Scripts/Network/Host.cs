@@ -64,6 +64,7 @@ public class Host : MonoBehaviour
     }
     void ResponseThread()
     {
+        var unprocessedCmds = new Queue<Command>();
         while (true)
         {
             //Simulate Lag
@@ -95,7 +96,18 @@ public class Host : MonoBehaviour
                         case "UnitMovedCmd":
                         case "NewUnitCmd":
                         case "HealingBuffRequestCmd":
-                            simulator.commands.Add(c);
+                            if (simulator == null) // simulator is not prepared
+                            {
+                                unprocessedCmds.Enqueue(c);
+                            }
+                            else
+                            {
+                                foreach (var upc in unprocessedCmds)
+                                {
+                                    simulator.commands.Add(upc);
+                                }
+                                simulator.commands.Add(c);
+                            }
                             break;
                         case "UnitTimerCmd":
                             if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
