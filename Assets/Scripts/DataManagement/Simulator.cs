@@ -192,6 +192,8 @@ public class Simulator : MonoBehaviour
         }*/
 
         UpdateInstances();
+
+        gameStatusUI.SetAlly(isClient + 1);
     }
 
     void UpdateInstances()
@@ -263,6 +265,7 @@ public class Simulator : MonoBehaviour
         autoBow.ProcessArrow(Time.deltaTime);
         SimulateCollision(units);
         UpdateInstances();
+        UpdateGameTimeUI();
     }
 
     private float RegenTimer = 0;
@@ -612,6 +615,14 @@ public class Simulator : MonoBehaviour
     private void Awake()
     {
         PhysicsSimulator.mapPhysicsMaterials = mapPhysicsMaterials;
+        gameStatusUI = GameObject.Find("ScreenUIObj").GetComponentInChildren<GameStatusUI>();
+    }
+
+    private GameStatusUI gameStatusUI;
+
+    private void UpdateGameTimeUI()
+    {
+        gameStatusUI.UpdateGameTimeText(this.time);
     }
 }
 
