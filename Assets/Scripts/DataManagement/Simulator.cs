@@ -147,8 +147,10 @@ public class Simulator : MonoBehaviour
             SceneManager.LoadScene("ResultClient");
     }
 
-
-
+    public void openMainMenuScene()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 
     // Used by Host
     public List<UnitSpec> UnitSpecs;

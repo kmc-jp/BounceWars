@@ -19,6 +19,8 @@ public class Client : MonoBehaviour
 
     static bool simulateLag = false;
 
+    private bool threadAborted = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -30,6 +32,7 @@ public class Client : MonoBehaviour
         Debug.Log("Starting thread...");
         closeResponseThread();
         _responseThread = new Thread(ResponseThread);
+        threadAborted = false;
         _responseThread.Start();
     }
     private void RefreshThread(Scene s)
@@ -38,8 +41,8 @@ public class Client : MonoBehaviour
     }
     public void closeResponseThread()
     {
-        if (_responseThread != null && _responseThread.IsAlive)
-            _responseThread.Abort();
+        threadAborted = true;
+        _responseThread = null;
     }
     private void OnApplicationQuit()
     {
@@ -47,15 +50,16 @@ public class Client : MonoBehaviour
     }
     private void hostTimedOut()
     {
-        Debug.LogWarning("Host Timed Out Several Times");
+        Debug.LogError("Host Timed Out Several Times");
         closeResponseThread();
-        SceneManager.LoadScene("MainMenu");
+        if (simulator != null) // simulator is null in ResultScene
+            simulator.openMainMenuScene();
     }
     void ResponseThread()
     {
         int timedoutNum = 0;
         var unprocessedCmds = new Queue<Command>();
-        while (true)
+        while (!threadAborted)
         {
             //Simulate Lag
             if (simulateLag)
@@ -159,18 +163,15 @@ public class Client : MonoBehaviour
                     }
                 }
             }
-            catch(TimeoutException)
-            {
-                if(timedoutNum++ >= 5)
-                {
-                    hostTimedOut();
-                    break;
-                }
-            }
             catch(WebException we)
             {
                 Debug.LogWarning(we.StackTrace);
                 Debug.LogWarning(we.Message);
+                if (we.Status == WebExceptionStatus.Timeout && timedoutNum++ >= 5)
+                {
+                    hostTimedOut();
+                    break;
+                }
                 // Possibly Host has quit game
                 // Assume Host loses and client wins.
                 //if (simulator!= null)
@@ -178,6 +179,7 @@ public class Client : MonoBehaviour
             }
                 
         }
+        Debug.Log("Client thread ended");
     }
 }
 
