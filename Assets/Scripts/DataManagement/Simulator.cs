@@ -167,6 +167,9 @@ public class Simulator : MonoBehaviour
             };
         }
         gameMap = mapBehaviour.map;
+
+        gameStatusUI.SetAlly(isClient + 1);
+
         if (isClient > 0)
         {
             return;
@@ -192,8 +195,6 @@ public class Simulator : MonoBehaviour
         }*/
 
         UpdateInstances();
-
-        gameStatusUI.SetAlly(isClient + 1);
     }
 
     void UpdateInstances()
@@ -204,8 +205,23 @@ public class Simulator : MonoBehaviour
             if (GetUnit(instances[i].uuid) == null)
             {
                 if (instances[i].basicUnit != null && !instances[i].basicUnit.isDead)
+                {
                     instances[i].basicUnit.isDead = true;
+                }
                 Destroy(instances[i].gameObject);
+
+                { // Count remaining units
+                    int player1 = 0, player2 = 0;
+                    foreach (var unit in units)
+                    {
+                        if (!unit.isDead && UnitType.isPlayer(unit.type))
+                        {
+                            if (unit.owner == 0) player1++; else player2++;
+                        }
+                    }
+                    gameStatusUI.UpdatePlayer1UnitText(player1);
+                    gameStatusUI.UpdatePlayer2UnitText(player2);
+                }
             }
             else
             {
