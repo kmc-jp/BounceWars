@@ -15,8 +15,10 @@ public class Host : MonoBehaviour
 
     //public static Host host { get => host; }
 
-    static HttpListener _httpListener;
-    static Thread _responseThread;
+    private HttpListener _httpListener;
+    private Thread _responseThread;
+
+    private bool threadAborted = false;
 
     static bool simulateLag = false;
 
@@ -45,6 +47,7 @@ public class Host : MonoBehaviour
         Debug.Log("Starting thread...");
         closeResponseThread();
         _responseThread = new Thread(ResponseThread);
+        threadAborted = false;
         _responseThread.Start();
     }
     private void RefreshThread(Scene s)
@@ -54,8 +57,8 @@ public class Host : MonoBehaviour
 
     public void closeResponseThread()
     {
-        if (_responseThread != null && _responseThread.IsAlive)
-            _responseThread.Abort();
+        threadAborted = true;
+        _responseThread = null;
     }
     private void OnApplicationQuit()
     {
@@ -64,7 +67,8 @@ public class Host : MonoBehaviour
     }
     void ResponseThread()
     {
-        while (true)
+        var unprocessedCmds = new Queue<Command>();
+        while (!threadAborted)
         {
             //Simulate Lag
             if (simulateLag)
@@ -95,7 +99,18 @@ public class Host : MonoBehaviour
                         case "UnitMovedCmd":
                         case "NewUnitCmd":
                         case "HealingBuffRequestCmd":
-                            simulator.commands.Add(c);
+                            if (simulator == null) // simulator is not prepared
+                            {
+                                unprocessedCmds.Enqueue(c);
+                            }
+                            else
+                            {
+                                foreach (var upc in unprocessedCmds)
+                                {
+                                    simulator.commands.Add(upc);
+                                }
+                                simulator.commands.Add(c);
+                            }
                             break;
                         case "UnitTimerCmd":
                             if (((UnitTimerCmd)c).timerType == 2) // Accept CLIENT LOCKDOWN only
@@ -149,6 +164,7 @@ public class Host : MonoBehaviour
 
             //Debug.Log("Respone given to a request.");
         }
+        Debug.Log("Host thread ended");
     }
 }
 
