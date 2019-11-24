@@ -74,6 +74,8 @@ public class BasicUnit : MonoBehaviour
 
     public bool Owned;
 
+    private AudioManager.AudioManager audioMgr;
+
     public virtual float HP
     {
         get => hp;
@@ -151,6 +153,8 @@ public class BasicUnit : MonoBehaviour
         simulator = GameObject.Find("Obelisk").GetComponent<Simulator>();
 
         myButtons.GetComponent<ButtonsUIManager>().basicunit = this;
+
+        audioMgr = IntersceneBehaviour.audioMgr;
     }
 
     // Start is called before the first frame update
@@ -221,6 +225,8 @@ public class BasicUnit : MonoBehaviour
         popup.GetComponent<DamagePopup>().Unit = this.gameObject;
         popup.GetComponent<DamagePopup>().Canvas = canvas.GetComponent<Canvas>();
         popup.GetComponent<DamagePopup>().Text = (-damage).ToString();
+
+        audioMgr.PlaySFX("unitDamage");
     }
 
     private void OnMouseEnter()
@@ -386,6 +392,7 @@ public class BasicUnit : MonoBehaviour
             _isDead = value;
             if (value) // If Dead
             {
+                audioMgr.PlaySFX("unitDeath");
                 if (myButtons != null) // If unit has buttons
                     Destroy(myButtons);
                 countDownBar.RemoveUnit(this); // Remove countdown bar icon

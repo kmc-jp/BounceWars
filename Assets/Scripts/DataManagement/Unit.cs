@@ -52,6 +52,11 @@ public sealed class UnitType
     {
         return type == UnitType.TYPE_ARROW || type == UnitType.TYPE_FIREBALL;
     }
+
+    public static bool isPlayer(int type)
+    {
+        return type == TYPE_CHESS || type == TYPE_ARCHER;
+    }
 }
 
 // Tinaxd added BuffFlag

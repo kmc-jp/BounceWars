@@ -17,7 +17,7 @@ public abstract class IntersceneBehaviour : MonoBehaviour
     protected static string selfURL;
     protected static string targetURL;
     // Audio Manager
-    protected static AudioManager.AudioManager audioMgr;
+    public static AudioManager.AudioManager audioMgr;
 
     //For network
     static HttpListener _httpListener;
